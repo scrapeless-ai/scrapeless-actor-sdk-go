@@ -27,7 +27,10 @@ type StorageHttp struct {
 // GetKv returns a kv instance
 func (sh *StorageHttp) GetKv(namespaceId ...string) kv.KV {
 	if len(namespaceId) == 0 {
-		return sh.kvs[Default]
+		if _, ok := sh.kvs[Default]; ok {
+			return sh.kvs[Default]
+		}
+		panic("storage not init")
 	}
 	sh.lock.Lock()
 	defer sh.lock.Unlock()
@@ -40,7 +43,10 @@ func (sh *StorageHttp) GetKv(namespaceId ...string) kv.KV {
 // GetObject returns a object instance
 func (sh *StorageHttp) GetObject(bucketId ...string) object.Object {
 	if len(bucketId) == 0 {
-		return sh.objs[Default]
+		if _, ok := sh.objs[Default]; ok {
+			return sh.objs[Default]
+		}
+		panic("storage not init")
 	}
 	sh.lock.Lock()
 	defer sh.lock.Unlock()
@@ -53,7 +59,10 @@ func (sh *StorageHttp) GetObject(bucketId ...string) object.Object {
 // GetQueue returns a queue instance
 func (sh *StorageHttp) GetQueue(queueId ...string) queue.Queue {
 	if len(queueId) == 0 {
-		return sh.queues[Default]
+		if _, ok := sh.queues[Default]; ok {
+			return sh.queues[Default]
+		}
+		panic("storage not init")
 	}
 	sh.lock.Lock()
 	defer sh.lock.Unlock()
@@ -66,7 +75,10 @@ func (sh *StorageHttp) GetQueue(queueId ...string) queue.Queue {
 // GetDataset returns a dataset instance
 func (sh *StorageHttp) GetDataset(datasetId ...string) dataset.Dataset {
 	if len(datasetId) == 0 {
-		return sh.datasets[Default]
+		if _, ok := sh.datasets[Default]; ok {
+			return sh.datasets[Default]
+		}
+		panic("storage not init")
 	}
 	sh.lock.Lock()
 	defer sh.lock.Unlock()
