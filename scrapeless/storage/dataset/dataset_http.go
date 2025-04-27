@@ -13,7 +13,7 @@ type DSHttp struct {
 }
 
 func NewDSHttp(datasetId ...string) Dataset {
-	log.Info("dataset http init", storage_http.Default())
+	log.Info("dataset http init")
 	if storage_http.Default() == nil {
 		storage_http.Init()
 	}

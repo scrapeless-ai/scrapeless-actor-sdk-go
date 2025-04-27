@@ -19,7 +19,7 @@ type BHttp struct {
 }
 
 func NewBHttp() Browser {
-	log.Info("browser http init", http.Default())
+	log.Info("browser http init")
 	if http.Default() == nil {
 		http.Init()
 	}

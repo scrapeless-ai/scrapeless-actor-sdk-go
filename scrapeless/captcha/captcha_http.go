@@ -15,7 +15,7 @@ type CaHttp struct {
 }
 
 func NewCaHttp() Captcha {
-	log.Info("captcha http init", http.Default())
+	log.Info("captcha http init")
 	if http.Default() == nil {
 		http.Init()
 	}

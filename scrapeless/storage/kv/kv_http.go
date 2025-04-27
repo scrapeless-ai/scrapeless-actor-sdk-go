@@ -13,7 +13,7 @@ type KvHttp struct {
 }
 
 func NewKVHttp(namespaceId ...string) KV {
-	log.Info("kv http init", storage_http.Default())
+	log.Info("kv http init")
 	if storage_http.Default() == nil {
 		storage_http.Init()
 	}

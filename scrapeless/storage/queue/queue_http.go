@@ -15,7 +15,7 @@ type QueueHttp struct {
 
 // NewQueueHttp new queue http
 func NewQueueHttp(queueId ...string) Queue {
-	log.Info("queue http init", storage_http.Default())
+	log.Info("queue http init")
 	if storage_http.Default() == nil {
 		storage_http.Init()
 	}

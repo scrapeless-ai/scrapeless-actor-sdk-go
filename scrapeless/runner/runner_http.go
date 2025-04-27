@@ -12,7 +12,7 @@ type RunHttp struct {
 }
 
 func NewRunHttp() Runner {
-	log.Info("runner http init", http.Default())
+	log.Info("runner http init")
 	if http.Default() == nil {
 		http.Init()
 	}

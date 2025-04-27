@@ -14,7 +14,7 @@ type ObjHttp struct {
 }
 
 func NewObjHttp(bucketId ...string) Object {
-	log.Info("object http init", storage_http.Default())
+	log.Info("object http init")
 	if storage_http.Default() == nil {
 		storage_http.Init()
 	}

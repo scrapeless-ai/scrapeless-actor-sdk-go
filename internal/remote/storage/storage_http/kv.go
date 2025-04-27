@@ -145,10 +145,19 @@ func (c *Client) RenameNamespace(ctx context.Context, namespaceId string, name s
 }
 
 func (c *Client) SetValue(ctx context.Context, req *SetValue) (bool, error) {
+	reqBody := map[string]any{
+		"expiration": req.Expiration,
+		"key":        req.Key,
+		"value":      req.Value,
+	}
+	reqBodyStr, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodPut,
 		Url:    fmt.Sprintf("%s/scrapeless/actor/api/v1/kv/%s/key", config.StorageServiceHost, req.NamespaceId),
-		Body:   fmt.Sprintf(`{"expiration":%d,"key":"%s","value":"%s"}`, req.Expiration, req.Key, req.Value),
+		Body:   string(reqBodyStr),
 		Headers: map[string]string{
 			env.HTTPHeader: config.Token,
 		},

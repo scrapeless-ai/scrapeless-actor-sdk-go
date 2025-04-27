@@ -13,7 +13,7 @@ type PHttp struct {
 }
 
 func NewPHttp() Proxy {
-	log.Info("proxy http init", http.Default())
+	log.Info("proxy http init")
 	if http.Default() == nil {
 		http.Init()
 	}

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/helper"
+	_ "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/log"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/browser"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/captcha"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxy"
