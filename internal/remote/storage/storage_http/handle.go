@@ -47,7 +47,7 @@ func regisHttpHandleFunc() {
 	queueHandel = map[HandleFuncName]*HttpHandle[request2.RespInfo]{
 		createQueue: {
 			Method:         http.MethodPost,
-			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue/create", config.StorageServiceHost),
+			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue", config.StorageServiceHost),
 			NeedMarshalReq: true,
 		},
 		getQueue: {
@@ -64,7 +64,7 @@ func regisHttpHandleFunc() {
 		},
 		getQueues: {
 			Method:         http.MethodGet,
-			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue/list", config.StorageServiceHost),
+			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue/queues", config.StorageServiceHost),
 			NeedMarshalReq: true,
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*GetQueuesRequest)
@@ -76,8 +76,15 @@ func regisHttpHandleFunc() {
 		},
 		updateQueue: {
 			Method:         http.MethodPut,
-			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue/update", config.StorageServiceHost),
+			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue", config.StorageServiceHost),
 			NeedMarshalReq: true,
+			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
+				req, ok := h.Req.(*UpdateQueueRequest)
+				if !ok {
+					return "", errors.New(fmt.Sprintf("type err need DelQueueRequest, but get %T", h.Req))
+				}
+				return fmt.Sprintf("%s/%s", h.Url, req.QueueId), nil
+			},
 		},
 		delQueue: {
 			Method: http.MethodDelete,
@@ -92,18 +99,39 @@ func regisHttpHandleFunc() {
 		},
 		createMsg: {
 			Method:         http.MethodPost,
-			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue/msg/create", config.StorageServiceHost),
+			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue", config.StorageServiceHost),
 			NeedMarshalReq: true,
+			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
+				req, ok := h.Req.(*CreateMsgRequest)
+				if !ok {
+					return "", errors.New(fmt.Sprintf("type err need DelQueueRequest, but get %T", h.Req))
+				}
+				return fmt.Sprintf("%s/%s/push", h.Url, req.QueueId), nil
+			},
 		},
 		getMsg: {
 			Method:         http.MethodPost,
-			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue/msg/list", config.StorageServiceHost),
+			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue", config.StorageServiceHost),
 			NeedMarshalReq: true,
+			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
+				req, ok := h.Req.(*GetMsgRequest)
+				if !ok {
+					return "", errors.New(fmt.Sprintf("type err need DelQueueRequest, but get %T", h.Req))
+				}
+				return fmt.Sprintf("%s/%s/pull", h.Url, req.QueueId), nil
+			},
 		},
 		ackMsg: {
 			Method:         http.MethodPost,
-			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue/msg/ack", config.StorageServiceHost),
+			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue", config.StorageServiceHost),
 			NeedMarshalReq: true,
+			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
+				req, ok := h.Req.(*AckMsgRequest)
+				if !ok {
+					return "", errors.New(fmt.Sprintf("type err need DelQueueRequest, but get %T", h.Req))
+				}
+				return fmt.Sprintf("%s/%s/ack/%s", h.Url, req.QueueId, req.MsgId), nil
+			},
 		},
 	}
 }

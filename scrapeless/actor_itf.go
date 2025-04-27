@@ -25,7 +25,6 @@ type Actor struct {
 // New creates a new Actor with some options.
 func New(opts ...Option) *Actor {
 	var actor = new(Actor)
-	withRunner().Apply(actor)
 	for _, opt := range opts {
 		opt.Apply(actor)
 	}
