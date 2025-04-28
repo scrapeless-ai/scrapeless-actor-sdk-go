@@ -11,7 +11,6 @@ var Env = &actorEnv{}
 const (
 	EnvActorId       = "SCRAPELESS_ACTOR_ID"
 	EnvRunId         = "SCRAPELESS_RUN_ID"
-	EnvUserId        = "SCRAPELESS_USER_ID"
 	EnvTeamId        = "SCRAPELESS_TEAM_ID"
 	EnvInput         = "SCRAPELESS_INPUT"
 	EnvApiKey        = "SCRAPELESS_API_KEY"
@@ -26,7 +25,6 @@ const (
 
 func init() {
 	Env = &actorEnv{
-		UserId:  helper.GetString(EnvUserId, ""),
 		TeamId:  helper.GetString(EnvTeamId, ""),
 		ActorId: helper.GetString(EnvActorId, ""),
 		RunId:   helper.GetString(EnvRunId, ""),
@@ -44,9 +42,6 @@ func init() {
 }
 
 func (ae *actorEnv) param() error {
-	if ae.UserId == "" {
-		return errors.New("invalid env param user_Id")
-	}
 	if ae.TeamId == "" {
 		return errors.New("invalid env param team_Id")
 	}
@@ -63,7 +58,6 @@ func (ae *actorEnv) param() error {
 }
 
 type actorEnv struct {
-	UserId  string
 	TeamId  string
 	ActorId string
 	RunId   string

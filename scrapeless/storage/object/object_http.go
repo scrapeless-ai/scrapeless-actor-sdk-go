@@ -70,8 +70,9 @@ func (oh *ObjHttp) ListBuckets(ctx context.Context, page int, pageSize int) (*Li
 //	ctx: The context for the request.
 //	name: Bucket name, must comply with storage service naming rules.
 //	description: Optional description for the bucket.
-func (oh *ObjHttp) CreateBucket(ctx context.Context, name string, description string) (string, error) {
-	bucketId, err := storage_http.Default().CreateBucket(ctx, &storage_http.CreateBucketRequest{
+func (oh *ObjHttp) CreateBucket(ctx context.Context, name string, description string) (bucketId string, bucketName string, err error) {
+	name = name + "-" + env.Env.RunId
+	bucketId, err = storage_http.Default().CreateBucket(ctx, &storage_http.CreateBucketRequest{
 		Name:        name,
 		Description: description,
 		ActorId:     env.Env.ActorId,
@@ -79,9 +80,9 @@ func (oh *ObjHttp) CreateBucket(ctx context.Context, name string, description st
 	})
 	if err != nil {
 		log.Errorf("failed to create bucket: %v\n", code.Format(err))
-		return "", code.Format(err)
+		return "", "", code.Format(err)
 	}
-	return bucketId, nil
+	return bucketId, bucketName, nil
 }
 
 // DeleteBucket delete bucket.

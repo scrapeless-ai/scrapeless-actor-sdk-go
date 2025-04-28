@@ -67,17 +67,18 @@ func (kh *KvHttp) ListNamespaces(ctx context.Context, page int, pageSize int, de
 //
 //	ctx:The request context.
 //	name: The name of the namespace to create.
-func (kh *KvHttp) CreateNamespace(ctx context.Context, name string) (string, error) {
-	namespaceID, err := storage_http.Default().CreateNamespace(ctx, &storage_http.CreateKvNamespaceRequest{
+func (kh *KvHttp) CreateNamespace(ctx context.Context, name string) (namespaceId string, namespaceName string, err error) {
+	name = name + "-" + env.Env.RunId
+	namespaceId, err = storage_http.Default().CreateNamespace(ctx, &storage_http.CreateKvNamespaceRequest{
 		Name:    name,
 		ActorId: env.Env.ActorId,
 		RunId:   env.Env.RunId,
 	})
 	if err != nil {
 		log.Errorf("failed to create kv namespace: %v\n", code.Format(err))
-		return "", code.Format(err)
+		return "", "", code.Format(err)
 	}
-	return namespaceID, nil
+	return namespaceId, name, nil
 }
 
 // GetNamespace retrieves namespace information by name
@@ -121,13 +122,14 @@ func (kh *KvHttp) DelNamespace(ctx context.Context) (bool, error) {
 //
 //	ctx: The request context.
 //	name: New namespace name
-func (kh *KvHttp) RenameNamespace(ctx context.Context, name string) (bool, error) {
-	ok, err := storage_http.Default().RenameNamespace(ctx, kh.namespaceId, name)
+func (kh *KvHttp) RenameNamespace(ctx context.Context, name string) (ok bool, namespaceName string, err error) {
+	name = name + "-" + env.Env.RunId
+	ok, err = storage_http.Default().RenameNamespace(ctx, kh.namespaceId, name)
 	if err != nil {
 		log.Errorf("failed to rename kv namespace: %v\n", code.Format(err))
-		return false, code.Format(err)
+		return false, "", code.Format(err)
 	}
-	return ok, nil
+	return ok, name, nil
 }
 
 // ListKeys retrieves key list with pagination from the current namespace

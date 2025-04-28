@@ -56,7 +56,6 @@ func (c *Client) CreateDataset(ctx context.Context, req *CreateDatasetRequest) (
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(body)
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {

@@ -1,7 +1,6 @@
 package http
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -10,7 +9,6 @@ var (
 )
 
 func Init() {
-	fmt.Println("proxy init")
 	var err error
 	defaultGatewayClient, err = New()
 	if err != nil {

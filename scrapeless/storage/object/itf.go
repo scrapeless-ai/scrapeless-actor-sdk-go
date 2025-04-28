@@ -8,7 +8,7 @@ import (
 
 type Object interface {
 	ListBuckets(ctx context.Context, page int, pageSize int) (*ListBucketsResponse, error)
-	CreateBucket(ctx context.Context, name string, description string) (string, error)
+	CreateBucket(ctx context.Context, name string, description string) (bucketId string, bucketName string, err error)
 	DeleteBucket(ctx context.Context) (bool, error)
 	GetBucket(ctx context.Context) (*Bucket, error)
 	List(ctx context.Context, fuzzyFileName string, page int64, pageSize int64) (*ListObjectsResponse, error)

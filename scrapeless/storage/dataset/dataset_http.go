@@ -62,7 +62,8 @@ func (ds *DSHttp) ListDatasets(ctx context.Context, page int64, pageSize int64, 
 	}, nil
 }
 
-func (ds *DSHttp) CreateDataset(ctx context.Context, name string) (id string, err error) {
+func (ds *DSHttp) CreateDataset(ctx context.Context, name string) (id string, datasetName string, err error) {
+	name = name + "-" + env.Env.RunId
 	dataset, err := storage_http.Default().CreateDataset(ctx, &storage_http.CreateDatasetRequest{
 		Name:    name,
 		ActorId: &env.Env.ActorId,
@@ -70,18 +71,19 @@ func (ds *DSHttp) CreateDataset(ctx context.Context, name string) (id string, er
 	})
 	if err != nil {
 		log.Errorf("failed to create dataset: %v\n", code.Format(err))
-		return "", code.Format(err)
+		return "", "", code.Format(err)
 	}
-	return dataset.Id, nil
+	return dataset.Id, name, nil
 }
 
-func (ds *DSHttp) UpdateDataset(ctx context.Context, name string) (bool, error) {
-	ok, err := storage_http.Default().UpdateDataset(ctx, ds.datasetId, name)
+func (ds *DSHttp) UpdateDataset(ctx context.Context, name string) (ok bool, datasetName string, err error) {
+	name = name + "-" + env.Env.RunId
+	ok, err = storage_http.Default().UpdateDataset(ctx, ds.datasetId, name)
 	if err != nil {
 		log.Errorf("failed to update dataset: %v\n", code.Format(err))
-		return false, code.Format(err)
+		return false, "", code.Format(err)
 	}
-	return ok, nil
+	return ok, name, nil
 }
 
 func (ds *DSHttp) DelDataset(ctx context.Context) (bool, error) {
