@@ -10,7 +10,6 @@ import (
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxy"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/runner"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage"
-	"os"
 	"reflect"
 )
 
@@ -37,7 +36,6 @@ func (a *Actor) Close() {
 	for _, f := range a.CloseFun {
 		f()
 	}
-	os.Exit(0)
 }
 
 // Input get input data from env.
