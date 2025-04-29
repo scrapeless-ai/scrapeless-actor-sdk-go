@@ -3,6 +3,7 @@ package scrapeless
 import (
 	"encoding/json"
 	"errors"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/helper"
 	_ "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/log"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/browser"
@@ -24,6 +25,8 @@ type Actor struct {
 
 // New creates a new Actor with some options.
 func New(opts ...Option) *Actor {
+	_ = env.LoadEnv()
+
 	var actor = new(Actor)
 	for _, opt := range opts {
 		opt.Apply(actor)
