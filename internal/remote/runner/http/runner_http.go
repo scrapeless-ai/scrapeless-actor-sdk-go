@@ -14,7 +14,7 @@ import (
 func (c *Client) Abort(ctx context.Context, runId, actorId string) (bool, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodDelete,
-		Url:    fmt.Sprintf("%s/scrapeless/actor/api/v1/actors/%s/runs/%s", config.StorageServiceHost, actorId, runId),
+		Url:    fmt.Sprintf("%s/api/v1/actors/%s/runs/%s", config.StorageServiceHost, actorId, runId),
 		Headers: map[string]string{
 			env.HTTPHeader: config.Token,
 		},

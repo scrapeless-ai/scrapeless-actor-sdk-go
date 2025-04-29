@@ -50,7 +50,6 @@ func (c *Client) ScrapingBrowserCreate(ctx context.Context, req *browser.CreateB
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "parse url error: %s", err.Error())
 	}
-	//wss://browser.scrapeless.com/browser?token=APIKey&session_ttl=180&proxy_country=ANY
 	devValue := &url.Values{}
 	devValue.Set("token", req.ApiKey)
 	if req.Input != nil {

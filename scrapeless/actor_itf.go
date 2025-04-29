@@ -34,7 +34,7 @@ func New(opts ...Option) *Actor {
 // Close closes the actor.
 func (a *Actor) Close() {
 	for _, f := range a.CloseFun {
-		f()
+		_ = f()
 	}
 }
 

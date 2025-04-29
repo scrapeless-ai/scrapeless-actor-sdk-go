@@ -47,12 +47,12 @@ func regisHttpHandleFunc() {
 	queueHandel = map[HandleFuncName]*HttpHandle[request2.RespInfo]{
 		createQueue: {
 			Method:         http.MethodPost,
-			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue", config.StorageServiceHost),
+			Url:            fmt.Sprintf("%s/api/v1/queue", config.StorageServiceHost),
 			NeedMarshalReq: true,
 		},
 		getQueue: {
 			Method:         http.MethodGet,
-			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue", config.StorageServiceHost),
+			Url:            fmt.Sprintf("%s/api/v1/queue", config.StorageServiceHost),
 			NeedMarshalReq: false,
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*GetQueueRequest)
@@ -64,7 +64,7 @@ func regisHttpHandleFunc() {
 		},
 		getQueues: {
 			Method:         http.MethodGet,
-			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue/queues", config.StorageServiceHost),
+			Url:            fmt.Sprintf("%s/api/v1/queue/queues", config.StorageServiceHost),
 			NeedMarshalReq: true,
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*GetQueuesRequest)
@@ -76,7 +76,7 @@ func regisHttpHandleFunc() {
 		},
 		updateQueue: {
 			Method:         http.MethodPut,
-			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue", config.StorageServiceHost),
+			Url:            fmt.Sprintf("%s/api/v1/queue", config.StorageServiceHost),
 			NeedMarshalReq: true,
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*UpdateQueueRequest)
@@ -88,7 +88,7 @@ func regisHttpHandleFunc() {
 		},
 		delQueue: {
 			Method: http.MethodDelete,
-			Url:    fmt.Sprintf("%s/scrapeless/actor/api/v1/queue", config.StorageServiceHost),
+			Url:    fmt.Sprintf("%s/api/v1/queue", config.StorageServiceHost),
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*DelQueueRequest)
 				if !ok {
@@ -99,7 +99,7 @@ func regisHttpHandleFunc() {
 		},
 		createMsg: {
 			Method:         http.MethodPost,
-			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue", config.StorageServiceHost),
+			Url:            fmt.Sprintf("%s/api/v1/queue", config.StorageServiceHost),
 			NeedMarshalReq: true,
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*CreateMsgRequest)
@@ -111,7 +111,7 @@ func regisHttpHandleFunc() {
 		},
 		getMsg: {
 			Method:         http.MethodPost,
-			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue", config.StorageServiceHost),
+			Url:            fmt.Sprintf("%s/api/v1/queue", config.StorageServiceHost),
 			NeedMarshalReq: true,
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*GetMsgRequest)
@@ -123,7 +123,7 @@ func regisHttpHandleFunc() {
 		},
 		ackMsg: {
 			Method:         http.MethodPost,
-			Url:            fmt.Sprintf("%s/scrapeless/actor/api/v1/queue", config.StorageServiceHost),
+			Url:            fmt.Sprintf("%s/api/v1/queue", config.StorageServiceHost),
 			NeedMarshalReq: true,
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*AckMsgRequest)

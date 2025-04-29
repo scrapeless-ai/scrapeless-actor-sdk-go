@@ -20,6 +20,12 @@ func NewPHttp() Proxy {
 	return &PHttp{}
 }
 
+// Proxy retrieves proxy information.
+//
+// Parameters:
+//
+//	ctx: context.Context - Context for the request.
+//	proxy: ProxyActor - Struct containing proxy request parameters like country, session duration, etc.
 func (ph *PHttp) Proxy(ctx context.Context, proxy ProxyActor) (string, error) {
 	proxyUrl, err := http.Default().ProxyGetProxy(ctx, &proxy2.GetProxyRequest{
 		ApiKey:          env.Env.ApiKey,

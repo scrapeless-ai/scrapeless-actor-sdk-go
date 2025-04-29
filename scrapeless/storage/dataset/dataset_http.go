@@ -24,6 +24,13 @@ func NewDSHttp(datasetId ...string) Dataset {
 	return dh
 }
 
+// ListDatasets retrieves a list of dataset with pagination and sorting options.
+// Parameters:
+//
+//	ctx: The request context.
+//	page: Page number (starting from 1). Defaults to 1 if <=0.
+//	pageSize:  Number of items per page. Minimum 10, defaults to 10 if smaller.
+//	desc: Sort namespaces in descending order by creation time if true.
 func (ds *DSHttp) ListDatasets(ctx context.Context, page int64, pageSize int64, desc bool) (*ListDatasetsResponse, error) {
 	if page < 1 {
 		page = 1
@@ -62,6 +69,11 @@ func (ds *DSHttp) ListDatasets(ctx context.Context, page int64, pageSize int64, 
 	}, nil
 }
 
+// CreateDataset Creates a new dataset storage.
+// Parameters:
+//
+//	ctx:The request context.
+//	name: The name of the dataset to create.
 func (ds *DSHttp) CreateDataset(ctx context.Context, name string) (id string, datasetName string, err error) {
 	name = name + "-" + env.Env.RunId
 	dataset, err := storage_http.Default().CreateDataset(ctx, &storage_http.CreateDatasetRequest{
@@ -76,6 +88,12 @@ func (ds *DSHttp) CreateDataset(ctx context.Context, name string) (id string, da
 	return dataset.Id, name, nil
 }
 
+// UpdateDataset updates the dataset name by appending the current runtime ID to ensure uniqueness.
+//
+// Parameters:
+//
+//	ctx: The request context.
+//	name: Original dataset name (will be combined with runtime ID internally)
 func (ds *DSHttp) UpdateDataset(ctx context.Context, name string) (ok bool, datasetName string, err error) {
 	name = name + "-" + env.Env.RunId
 	ok, err = storage_http.Default().UpdateDataset(ctx, ds.datasetId, name)
@@ -86,6 +104,11 @@ func (ds *DSHttp) UpdateDataset(ctx context.Context, name string) (ok bool, data
 	return ok, name, nil
 }
 
+// DelDataset deletes a dataset asynchronously.
+//
+// Parameters:
+//
+//	ctx: The context for the request, used for cancellation and timeouts.
 func (ds *DSHttp) DelDataset(ctx context.Context) (bool, error) {
 	ok, err := storage_http.Default().DelDataset(ctx, ds.datasetId)
 	if err != nil {
@@ -131,9 +154,23 @@ func (ds *DSHttp) getItemsWithId(ctx context.Context, page int, pageSize int, de
 	}, nil
 }
 
+// AddItems adds a list of items to the dataset data store.
+//
+// Parameters:
+//   - ctx: The context for the request.
+//   - items: A slice of maps representing the items to add. Each map contains key-value pairs of any type.
 func (ds *DSHttp) AddItems(ctx context.Context, items []map[string]any) (bool, error) {
 	return ds.addItemsWithId(ctx, items)
 }
+
+// GetItems retrieves a list of items based on the provided pagination and sorting parameters.
+//
+// Parameters:
+//
+//	ctx: The context for the request.
+//	page: The page number to retrieve (starting from 1).
+//	pageSize: The number of items to return per page.
+//	desc: Whether to sort items in descending order (true) or ascending (false).
 func (ds *DSHttp) GetItems(ctx context.Context, page int, pageSize int, desc bool) (*ItemsResponse, error) {
 	return ds.getItemsWithId(ctx, page, pageSize, desc)
 }
