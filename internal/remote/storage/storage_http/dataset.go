@@ -14,7 +14,7 @@ import (
 func (c *Client) ListDatasets(ctx context.Context, req *ListDatasetsRequest) (*ListDatasetsResponse, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/dataset?actorId=%s&desc=%v&page=%d&pageSize=%d&runId=%s", config.StorageServiceHost, *req.ActorId, req.Desc, req.Page, req.PageSize, *req.RunId),
+		Url:    fmt.Sprintf("%s/api/v1/dataset?actorId=%s&desc=%v&page=%d&pageSize=%d&runId=%s", config.ScrapelessApiHost, *req.ActorId, req.Desc, req.Page, req.PageSize, *req.RunId),
 		Body:   "",
 		Headers: map[string]string{
 			env.HTTPHeader: config.Token,
@@ -47,7 +47,7 @@ func (c *Client) CreateDataset(ctx context.Context, req *CreateDatasetRequest) (
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodPost,
-		Url:    fmt.Sprintf("%s/api/v1/dataset", config.StorageServiceHost),
+		Url:    fmt.Sprintf("%s/api/v1/dataset", config.ScrapelessApiHost),
 		Body:   string(reqBody),
 		Headers: map[string]string{
 			env.HTTPHeader: config.Token,
@@ -76,7 +76,7 @@ func (c *Client) CreateDataset(ctx context.Context, req *CreateDatasetRequest) (
 func (c *Client) UpdateDataset(ctx context.Context, datasetID, name string) (bool, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodPut,
-		Url:    fmt.Sprintf("%s/api/v1/dataset/%s", config.StorageServiceHost, datasetID),
+		Url:    fmt.Sprintf("%s/api/v1/dataset/%s", config.ScrapelessApiHost, datasetID),
 		Body:   fmt.Sprintf(`{"name":"%s"}`, name),
 		Headers: map[string]string{
 			env.HTTPHeader: config.Token,
@@ -99,7 +99,7 @@ func (c *Client) UpdateDataset(ctx context.Context, datasetID, name string) (boo
 func (c *Client) DelDataset(ctx context.Context, datasetID string) (bool, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodDelete,
-		Url:    fmt.Sprintf("%s/api/v1/dataset/%s", config.StorageServiceHost, datasetID),
+		Url:    fmt.Sprintf("%s/api/v1/dataset/%s", config.ScrapelessApiHost, datasetID),
 		Headers: map[string]string{
 			env.HTTPHeader: config.Token,
 		},
@@ -122,7 +122,7 @@ func (c *Client) DelDataset(ctx context.Context, datasetID string) (bool, error)
 func (c *Client) GetDataset(ctx context.Context, req *GetDataset) (*DatasetItem, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/dataset/%s/items?page=%d&pageSize=%d&desc=%v", config.StorageServiceHost, req.DatasetId, req.Page, req.PageSize, req.Desc),
+		Url:    fmt.Sprintf("%s/api/v1/dataset/%s/items?page=%d&pageSize=%d&desc=%v", config.ScrapelessApiHost, req.DatasetId, req.Page, req.PageSize, req.Desc),
 		Headers: map[string]string{
 			env.HTTPHeader: config.Token,
 		},
@@ -158,7 +158,7 @@ func (c *Client) AddDatasetItem(ctx context.Context, datasetId string, data []ma
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodPost,
-		Url:    fmt.Sprintf("%s/api/v1/dataset/%s/items", config.StorageServiceHost, datasetId),
+		Url:    fmt.Sprintf("%s/api/v1/dataset/%s/items", config.ScrapelessApiHost, datasetId),
 		Body:   string(reqBody),
 		Headers: map[string]string{
 			env.HTTPHeader: config.Token,

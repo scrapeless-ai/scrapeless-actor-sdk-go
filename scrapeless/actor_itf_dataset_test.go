@@ -15,14 +15,14 @@ func TestListDatasets(t *testing.T) {
 
 func TestCreateDataset(t *testing.T) {
 	ac := New(WithStorage())
-	ds, err := ac.Storage.GetDataset().CreateDataset(context.TODO(), "sitmap")
+	ds, _, err := ac.Storage.GetDataset().CreateDataset(context.TODO(), "sitmap")
 	t.Log(ds)
 	t.Error(err)
 }
 
 func TestUpdateDataset(t *testing.T) {
 	ac := New(WithStorage())
-	ds, err := ac.Storage.GetDataset().UpdateDataset(context.TODO(), "test")
+	ds, _, err := ac.Storage.GetDataset().UpdateDataset(context.TODO(), "test")
 	t.Log(ds)
 	t.Error(err)
 }

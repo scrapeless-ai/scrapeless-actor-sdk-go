@@ -16,7 +16,7 @@ func TestStorageListBuckets(t *testing.T) {
 
 func TestStorageCreateBucket(t *testing.T) {
 	ac := New(WithStorage())
-	value, err := ac.Storage.GetObject().CreateBucket(context.Background(), "test", "test")
+	value, _, err := ac.Storage.GetObject().CreateBucket(context.Background(), "test", "test")
 	t.Log(value)
 	t.Error(err)
 }

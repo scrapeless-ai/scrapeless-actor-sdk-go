@@ -90,7 +90,7 @@ func TestActor_kvListNamespace(t *testing.T) {
 
 func TestActor_kvCreatNamespace(t *testing.T) {
 	ac := New(WithStorage())
-	namespaces, err := ac.Storage.GetKv().CreateNamespace(context.TODO(), "test")
+	namespaces, _, err := ac.Storage.GetKv().CreateNamespace(context.TODO(), "test")
 	fmt.Println(err)
 	fmt.Printf("%+v", namespaces)
 }
@@ -111,7 +111,7 @@ func TestActor_kvDelNamespace(t *testing.T) {
 
 func TestActor_kvRenameNamespace(t *testing.T) {
 	ac := New(WithStorage())
-	namespace, err := ac.Storage.GetKv().RenameNamespace(context.Background(), "test-cy-2")
+	namespace, _, err := ac.Storage.GetKv().RenameNamespace(context.Background(), "test-cy-2")
 	fmt.Println(err)
 	fmt.Printf("%+v", namespace)
 }

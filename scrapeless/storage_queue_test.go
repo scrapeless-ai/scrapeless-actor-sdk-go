@@ -26,7 +26,7 @@ func Test_GetQueues(t *testing.T) {
 
 func Test_CreateQueue(t *testing.T) {
 	s := New(WithStorage())
-	queueId, err := s.Storage.GetQueue().Create(context.Background(), &queue.CreateQueueReq{
+	queueId, _, err := s.Storage.GetQueue().Create(context.Background(), &queue.CreateQueueReq{
 		Name:        "test_0001",
 		Description: "desc_0001",
 	})
