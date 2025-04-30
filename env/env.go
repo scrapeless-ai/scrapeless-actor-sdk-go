@@ -23,7 +23,7 @@ const (
 	HTTPHeader       = "x-api-token"
 )
 
-func init() {
+func LoadEnv() error {
 	Env = &actorEnv{
 		TeamId:  helper.GetString(EnvTeamId, ""),
 		ActorId: helper.GetString(EnvActorId, ""),
@@ -36,9 +36,11 @@ func init() {
 		QueueId:       helper.GetString(EnvQueueId, ""),
 	}
 	if err := Env.param(); err != nil {
-		panic(err)
+		log.Errorf("LoadEnv param err: %v", err)
+		return err
 	}
 	log.Info("actor env init", Env)
+	return nil
 }
 
 func (ae *actorEnv) param() error {
