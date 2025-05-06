@@ -24,7 +24,7 @@ const (
 )
 
 func LoadEnv() error {
-	viper.SetConfigFile(`C:\Users\Administrator\Desktop\dc\ai\scrapeless-actor-sdk-go\.env`)
+	viper.SetConfigFile(`.env`)
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
