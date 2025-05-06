@@ -48,8 +48,11 @@ func LoadEnv() error {
 	ProxyCountry = viper.GetString("SCRAPELESS_PROXY_COUNTRY")
 	ProxySessionDurationMax = viper.GetInt64("SCRAPELESS_PROXY_SESSION_DURATION_MAX")
 	ProxyGatewayHost = viper.GetString("SCRAPELESS_PROXY_GATEWAY_HOST")
-	ScrapelessApiHost = viper.GetString("SCRAPELESS_API_HOST")         // captcha
-	ScrapelessCaptchaHost = viper.GetString("SCRAPELESS_CAPTCHA_HOST") // captcha
+	ScrapelessApiHost = viper.GetString("SCRAPELESS_API_HOST")
+	ScrapelessCaptchaHost = viper.GetString("SCRAPELESS_CAPTCHA_HOST")
+	if ScrapelessCaptchaHost == "" {
+		ScrapelessCaptchaHost = ScrapelessApiHost
+	}
 	if err := Env.param(); err != nil {
 		log.Errorf("LoadEnv param err: %v", err)
 		return err

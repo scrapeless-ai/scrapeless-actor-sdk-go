@@ -1,12 +1,12 @@
 package env
 
 var (
-	LogLevel                string
-	ScrapingBrowserApiHost  string
+	LogLevel                = "debug"
+	ScrapingBrowserApiHost  = "https://api.scrapeless.com"
 	Token                   string
-	ProxyCountry            string
-	ProxySessionDurationMax int64
-	ProxyGatewayHost        string
-	ScrapelessApiHost       string // captcha
+	ProxyCountry            = "ANY"
+	ProxySessionDurationMax = int64(120)
+	ProxyGatewayHost        = "gw-us.scrapeless.io:8789"
+	ScrapelessApiHost       string
 	ScrapelessCaptchaHost   string // captcha
 )
