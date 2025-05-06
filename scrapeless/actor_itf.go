@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/helper"
 	_ "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/log"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/browser"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/captcha"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxy"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/runner"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage"
+	"github.com/spf13/viper"
 	"reflect"
 )
 
@@ -43,7 +43,7 @@ func (a *Actor) Close() {
 
 // Input get input data from env.
 func (a *Actor) Input(data any) error {
-	input := helper.GetString("SCRAPELESS_INPUT", ``)
+	input := viper.GetString("SCRAPELESS_INPUT")
 	tf := reflect.TypeOf(data)
 	if tf.Kind() != reflect.Ptr {
 		return errors.New("data must be ptr")
