@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/config"
 	request2 "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/request"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -14,10 +13,10 @@ import (
 func (c *Client) ListDatasets(ctx context.Context, req *ListDatasetsRequest) (*ListDatasetsResponse, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/dataset?actorId=%s&desc=%v&page=%d&pageSize=%d&runId=%s", config.ScrapelessApiHost, *req.ActorId, req.Desc, req.Page, req.PageSize, *req.RunId),
+		Url:    fmt.Sprintf("%s/api/v1/dataset?actorId=%s&desc=%v&page=%d&pageSize=%d&runId=%s", env.ScrapelessApiHost, *req.ActorId, req.Desc, req.Page, req.PageSize, *req.RunId),
 		Body:   "",
 		Headers: map[string]string{
-			env.HTTPHeader: config.Token,
+			env.HTTPHeader: env.Token,
 		},
 	})
 	if err != nil {
@@ -47,10 +46,10 @@ func (c *Client) CreateDataset(ctx context.Context, req *CreateDatasetRequest) (
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodPost,
-		Url:    fmt.Sprintf("%s/api/v1/dataset", config.ScrapelessApiHost),
+		Url:    fmt.Sprintf("%s/api/v1/dataset", env.ScrapelessApiHost),
 		Body:   string(reqBody),
 		Headers: map[string]string{
-			env.HTTPHeader: config.Token,
+			env.HTTPHeader: env.Token,
 		},
 	})
 	if err != nil {
@@ -76,10 +75,10 @@ func (c *Client) CreateDataset(ctx context.Context, req *CreateDatasetRequest) (
 func (c *Client) UpdateDataset(ctx context.Context, datasetID, name string) (bool, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodPut,
-		Url:    fmt.Sprintf("%s/api/v1/dataset/%s", config.ScrapelessApiHost, datasetID),
+		Url:    fmt.Sprintf("%s/api/v1/dataset/%s", env.ScrapelessApiHost, datasetID),
 		Body:   fmt.Sprintf(`{"name":"%s"}`, name),
 		Headers: map[string]string{
-			env.HTTPHeader: config.Token,
+			env.HTTPHeader: env.Token,
 		},
 	})
 	if err != nil {
@@ -99,9 +98,9 @@ func (c *Client) UpdateDataset(ctx context.Context, datasetID, name string) (boo
 func (c *Client) DelDataset(ctx context.Context, datasetID string) (bool, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodDelete,
-		Url:    fmt.Sprintf("%s/api/v1/dataset/%s", config.ScrapelessApiHost, datasetID),
+		Url:    fmt.Sprintf("%s/api/v1/dataset/%s", env.ScrapelessApiHost, datasetID),
 		Headers: map[string]string{
-			env.HTTPHeader: config.Token,
+			env.HTTPHeader: env.Token,
 		},
 	})
 	if err != nil {
@@ -122,9 +121,9 @@ func (c *Client) DelDataset(ctx context.Context, datasetID string) (bool, error)
 func (c *Client) GetDataset(ctx context.Context, req *GetDataset) (*DatasetItem, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/dataset/%s/items?page=%d&pageSize=%d&desc=%v", config.ScrapelessApiHost, req.DatasetId, req.Page, req.PageSize, req.Desc),
+		Url:    fmt.Sprintf("%s/api/v1/dataset/%s/items?page=%d&pageSize=%d&desc=%v", env.ScrapelessApiHost, req.DatasetId, req.Page, req.PageSize, req.Desc),
 		Headers: map[string]string{
-			env.HTTPHeader: config.Token,
+			env.HTTPHeader: env.Token,
 		},
 	})
 	if err != nil {
@@ -158,10 +157,10 @@ func (c *Client) AddDatasetItem(ctx context.Context, datasetId string, data []ma
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodPost,
-		Url:    fmt.Sprintf("%s/api/v1/dataset/%s/items", config.ScrapelessApiHost, datasetId),
+		Url:    fmt.Sprintf("%s/api/v1/dataset/%s/items", env.ScrapelessApiHost, datasetId),
 		Body:   string(reqBody),
 		Headers: map[string]string{
-			env.HTTPHeader: config.Token,
+			env.HTTPHeader: env.Token,
 		},
 	})
 	if err != nil {

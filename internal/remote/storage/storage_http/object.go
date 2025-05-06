@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/config"
 	request2 "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/request"
 	"github.com/tidwall/gjson"
 	"io"
@@ -17,9 +16,9 @@ import (
 func (c *Client) ListBuckets(ctx context.Context, page, size int) (*Object, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/object/buckets?page=%d&pageSize=%d", config.ScrapelessApiHost, page, size),
+		Url:    fmt.Sprintf("%s/api/v1/object/buckets?page=%d&pageSize=%d", env.ScrapelessApiHost, page, size),
 		Headers: map[string]string{
-			env.HTTPHeader: config.Token,
+			env.HTTPHeader: env.Token,
 		},
 	})
 	if err != nil {
@@ -49,10 +48,10 @@ func (c *Client) CreateBucket(ctx context.Context, req *CreateBucketRequest) (st
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodPost,
-		Url:    fmt.Sprintf("%s/api/v1/object/buckets", config.ScrapelessApiHost),
+		Url:    fmt.Sprintf("%s/api/v1/object/buckets", env.ScrapelessApiHost),
 		Body:   string(reqBody),
 		Headers: map[string]string{
-			env.HTTPHeader: config.Token,
+			env.HTTPHeader: env.Token,
 		},
 	})
 	if err != nil {
@@ -76,9 +75,9 @@ func (c *Client) CreateBucket(ctx context.Context, req *CreateBucketRequest) (st
 func (c *Client) DeleteBucket(ctx context.Context, bucketId string) (bool, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodDelete,
-		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s", config.ScrapelessApiHost, bucketId),
+		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s", env.ScrapelessApiHost, bucketId),
 		Headers: map[string]string{
-			env.HTTPHeader: config.Token,
+			env.HTTPHeader: env.Token,
 		},
 	})
 	if err != nil {
@@ -100,9 +99,9 @@ func (c *Client) DeleteBucket(ctx context.Context, bucketId string) (bool, error
 func (c *Client) GetBucket(ctx context.Context, bucketId string) (*Bucket, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s", config.ScrapelessApiHost, bucketId),
+		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s", env.ScrapelessApiHost, bucketId),
 		Headers: map[string]string{
-			env.HTTPHeader: config.Token,
+			env.HTTPHeader: env.Token,
 		},
 	})
 	if err != nil {
@@ -128,9 +127,9 @@ func (c *Client) GetBucket(ctx context.Context, bucketId string) (*Bucket, error
 func (c *Client) ListObjects(ctx context.Context, req *ListObjectsRequest) (*ObjectList, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s/objects", config.ScrapelessApiHost, req.BucketId),
+		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s/objects", env.ScrapelessApiHost, req.BucketId),
 		Headers: map[string]string{
-			env.HTTPHeader: config.Token,
+			env.HTTPHeader: env.Token,
 		},
 	})
 	if err != nil {
@@ -156,9 +155,9 @@ func (c *Client) ListObjects(ctx context.Context, req *ListObjectsRequest) (*Obj
 func (c *Client) GetObject(ctx context.Context, req *ObjectRequest) ([]byte, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s/%s", config.ScrapelessApiHost, req.BucketId, req.ObjectId),
+		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s/%s", env.ScrapelessApiHost, req.BucketId, req.ObjectId),
 		Headers: map[string]string{
-			env.HTTPHeader: config.Token,
+			env.HTTPHeader: env.Token,
 		},
 	})
 	if err != nil {
@@ -178,9 +177,9 @@ func (c *Client) GetObject(ctx context.Context, req *ObjectRequest) ([]byte, err
 func (c *Client) DeleteObject(ctx context.Context, req *ObjectRequest) (bool, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodDelete,
-		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s/%s", config.ScrapelessApiHost, req.BucketId, req.ObjectId),
+		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s/%s", env.ScrapelessApiHost, req.BucketId, req.ObjectId),
 		Headers: map[string]string{
-			env.HTTPHeader: config.Token,
+			env.HTTPHeader: env.Token,
 		},
 	})
 	if err != nil {
@@ -209,10 +208,10 @@ func (c *Client) PutObject(ctx context.Context, req *PutObjectRequest) (string, 
 	writer.WriteField("runId", req.RunId)
 	writer.Close()
 
-	url := fmt.Sprintf("%s/api/v1/object/buckets/%s/object", config.ScrapelessApiHost, req.BucketId)
+	url := fmt.Sprintf("%s/api/v1/object/buckets/%s/object", env.ScrapelessApiHost, req.BucketId)
 	request, _ := http.NewRequestWithContext(ctx, http.MethodPost, url, body)
 	request.Header.Set("Content-Type", writer.FormDataContentType())
-	request.Header.Set(env.HTTPHeader, config.Token)
+	request.Header.Set(env.HTTPHeader, env.Token)
 	resp, _ := c.client.Do(request)
 	defer resp.Body.Close()
 	all, _ := io.ReadAll(resp.Body)

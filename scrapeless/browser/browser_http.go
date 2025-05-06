@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/code"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/config"
 	remote_brwoser "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/browser"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/browser/http"
 	log "github.com/sirupsen/logrus"
@@ -54,7 +53,7 @@ func (bh *BHttp) Create(ctx context.Context, req Actor) (*CreateResp, error) {
 }
 
 func (bh *BHttp) CreateOnce(ctx context.Context, req ActorOnce) (*CreateResp, error) {
-	u, err := url.Parse(config.ScrapingBrowserApiHost)
+	u, err := url.Parse(env.ScrapingBrowserApiHost)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "parse url error: %s", err.Error())
 	}

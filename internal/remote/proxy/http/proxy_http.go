@@ -3,7 +3,7 @@ package http
 import (
 	"context"
 	"fmt"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/config"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/proxy"
 	"github.com/thoas/go-funk"
 	"google.golang.org/grpc/codes"
@@ -15,17 +15,17 @@ func (c *Client) ProxyGetProxy(ctx context.Context, req *proxy.GetProxyRequest) 
 		return "", status.Errorf(codes.InvalidArgument, "api key is required")
 	}
 	if req.Country == "" {
-		req.Country = config.ProxyCountry
+		req.Country = env.ProxyCountry
 	}
-	if int64(req.SessionDuration) > config.ProxySessionDurationMax {
-		req.SessionDuration = uint64(config.ProxySessionDurationMax)
+	if int64(req.SessionDuration) > env.ProxySessionDurationMax {
+		req.SessionDuration = uint64(env.ProxySessionDurationMax)
 	}
 	if req.SessionId == "" {
 
 		req.SessionId = funk.RandomString(10)
 	}
 	if req.Gateway == "" {
-		req.Gateway = config.ProxyGatewayHost
+		req.Gateway = env.ProxyGatewayHost
 	}
 
 	proxyURL := fmt.Sprintf(
