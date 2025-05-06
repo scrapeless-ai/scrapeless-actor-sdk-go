@@ -2,8 +2,8 @@ package env
 
 import (
 	"errors"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/helper"
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 var Env = &actorEnv{}
@@ -24,22 +24,29 @@ const (
 )
 
 func LoadEnv() error {
-	Env = &actorEnv{
-		TeamId:  helper.GetString(EnvTeamId, ""),
-		ActorId: helper.GetString(EnvActorId, ""),
-		RunId:   helper.GetString(EnvRunId, ""),
-		ApiKey:  helper.GetString(EnvApiKey, ""),
+	viper.SetConfigFile(`C:\Users\Administrator\Desktop\dc\ai\scrapeless-actor-sdk-go\.env`)
+	viper.AutomaticEnv()
 
-		KvNamespaceId: helper.GetString(EnvKvNamespaceId, ""),
-		DatasetId:     helper.GetString(EnvDatasetId, ""),
-		BucketId:      helper.GetString(EnvBucketId, ""),
-		QueueId:       helper.GetString(EnvQueueId, ""),
+	if err := viper.ReadInConfig(); err != nil {
+		log.Error("Error reading config file: %v", err)
+		return err
+	}
+	Env = &actorEnv{
+		TeamId:  viper.GetString(EnvTeamId),
+		ActorId: viper.GetString(EnvActorId),
+		RunId:   viper.GetString(EnvRunId),
+		ApiKey:  viper.GetString(EnvApiKey),
+
+		KvNamespaceId: viper.GetString(EnvKvNamespaceId),
+		DatasetId:     viper.GetString(EnvDatasetId),
+		BucketId:      viper.GetString(EnvBucketId),
+		QueueId:       viper.GetString(EnvQueueId),
 	}
 	if err := Env.param(); err != nil {
 		log.Errorf("LoadEnv param err: %v", err)
 		return err
 	}
-	log.Info("actor env init", Env)
+	log.Infof("actor env init %+v", Env)
 	return nil
 }
 
