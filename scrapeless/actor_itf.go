@@ -43,10 +43,11 @@ func (a *Actor) Close() {
 
 // Input get input data from env.
 func (a *Actor) Input(data any) error {
-	input := viper.GetString("SCRAPELESS_INPUT")
+	input := viper.GetStringMapString("SCRAPELESS_INPUT")
+	inputData, _ := json.Marshal(input)
 	tf := reflect.TypeOf(data)
 	if tf.Kind() != reflect.Ptr {
 		return errors.New("data must be ptr")
 	}
-	return json.Unmarshal([]byte(input), data)
+	return json.Unmarshal(inputData, data)
 }
