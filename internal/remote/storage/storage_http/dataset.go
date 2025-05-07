@@ -164,15 +164,17 @@ func (c *Client) AddDatasetItem(ctx context.Context, datasetId string, data []ma
 		},
 	})
 	if err != nil {
+		log.Error("add dataset item err:%v\n", err)
 		return false, err
 	}
-	fmt.Println(body)
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
+		log.Error("unmarshal dataset item err:%v\n", err)
 		return false, err
 	}
 	if resp.Err {
+		log.Error("add dataset item err:%s\n", resp.Msg)
 		return false, fmt.Errorf("add dataset item err:%s", resp.Msg)
 	}
 	return true, nil

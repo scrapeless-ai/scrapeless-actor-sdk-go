@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	request2 "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/request"
+	log "github.com/sirupsen/logrus"
 	"github.com/tidwall/gjson"
 	"net/http"
 )
@@ -151,6 +152,7 @@ func (c *Client) SetValue(ctx context.Context, req *SetValue) (bool, error) {
 	}
 	reqBodyStr, err := json.Marshal(reqBody)
 	if err != nil {
+		log.Error("marshal reqBody error :", err)
 		return false, err
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
@@ -162,15 +164,18 @@ func (c *Client) SetValue(ctx context.Context, req *SetValue) (bool, error) {
 		},
 	})
 	if err != nil {
+		log.Error("request error :", err)
 		return false, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
+		log.Error("unmarshal resp error :", err)
 		return false, err
 	}
 	if resp.Err {
-		return false, fmt.Errorf("get namespace err:%s", resp.Msg)
+		log.Error("set value err :", resp.Msg)
+		return false, fmt.Errorf("set value err:%s", resp.Msg)
 	}
 	ok := gjson.Parse(body).Get("data.success").Bool()
 
