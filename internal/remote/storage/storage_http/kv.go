@@ -20,13 +20,15 @@ func (c *Client) ListNamespaces(ctx context.Context, page int, pageSize int, des
 			env.HTTPHeader: env.Token,
 		},
 	})
+	log.Infof("list namespaces body:%s\n", body)
 	if err != nil {
+		log.Errorf("list namespaces err:%v\n", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
-	fmt.Println(body)
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
+		log.Error("unmarshal resp error :", err)
 		return nil, err
 	}
 	if resp.Err {
@@ -36,6 +38,7 @@ func (c *Client) ListNamespaces(ctx context.Context, page int, pageSize int, des
 	var respData KvNamespace
 	err = json.Unmarshal(marshal, &respData)
 	if err != nil {
+		log.Error("unmarshal resp error :", err)
 		return nil, err
 	}
 	return &respData, nil
@@ -54,12 +57,15 @@ func (c *Client) CreateNamespace(ctx context.Context, req *CreateKvNamespaceRequ
 			env.HTTPHeader: env.Token,
 		},
 	})
+	log.Infof("create namespace body:%s\n", body)
 	if err != nil {
+		log.Errorf("create namespace err:%v\n", err)
 		return "", err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
+		log.Error("unmarshal resp error :", err)
 		return "", err
 	}
 	if resp.Err {
@@ -76,12 +82,15 @@ func (c *Client) GetNamespace(ctx context.Context, namespaceId string) (*KvNames
 			env.HTTPHeader: env.Token,
 		},
 	})
+	log.Infof("get namespace body:%s\n", body)
 	if err != nil {
+		log.Errorf("get namespace err:%v\n", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
+		log.Error("unmarshal resp error :", err)
 		return nil, err
 	}
 	if resp.Err {
@@ -90,6 +99,7 @@ func (c *Client) GetNamespace(ctx context.Context, namespaceId string) (*KvNames
 	data := gjson.Parse(body).Get("data").String()
 	var kvi KvNamespaceItem
 	if err = json.Unmarshal([]byte(data), &kvi); err != nil {
+		log.Error("unmarshal resp error :", err)
 		return nil, err
 	}
 	return &kvi, nil
@@ -103,7 +113,9 @@ func (c *Client) DelNamespace(ctx context.Context, namespaceId string) (bool, er
 			env.HTTPHeader: env.Token,
 		},
 	})
+	log.Infof("del namespace body:%s\n", body)
 	if err != nil {
+		log.Errorf("del namespace err:%v\n", err)
 		return false, err
 	}
 	var resp request2.RespInfo
@@ -128,12 +140,15 @@ func (c *Client) RenameNamespace(ctx context.Context, namespaceId string, name s
 			env.HTTPHeader: env.Token,
 		},
 	})
+	log.Infof("rename namespace body:%s\n", body)
 	if err != nil {
+		log.Errorf("rename namespace err:%v\n", err)
 		return false, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
+		log.Error("unmarshal resp error :", err)
 		return false, err
 	}
 	if resp.Err {
@@ -155,7 +170,6 @@ func (c *Client) SetValue(ctx context.Context, req *SetValue) (bool, error) {
 		log.Error("marshal reqBody error :", err)
 		return false, err
 	}
-	log.Println(fmt.Sprintf("%s/api/v1/kv/%s/key", env.ScrapelessApiHost, req.NamespaceId))
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodPut,
 		Url:    fmt.Sprintf("%s/api/v1/kv/%s/key", env.ScrapelessApiHost, req.NamespaceId),
@@ -164,6 +178,7 @@ func (c *Client) SetValue(ctx context.Context, req *SetValue) (bool, error) {
 			env.HTTPHeader: env.Token,
 		},
 	})
+	log.Infof("set value body :%s\n", body)
 	if err != nil {
 		log.Error("request error :", err)
 		return false, err
@@ -192,12 +207,15 @@ func (c *Client) ListKeys(ctx context.Context, req *ListKeyInfo) (*KvKeys, error
 			env.HTTPHeader: env.Token,
 		},
 	})
+	log.Infof("list keys body :%s\n", body)
 	if err != nil {
+		log.Error("request error :", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
+		log.Error("unmarshal resp error :", err)
 		return nil, err
 	}
 	if resp.Err {
@@ -207,6 +225,7 @@ func (c *Client) ListKeys(ctx context.Context, req *ListKeyInfo) (*KvKeys, error
 	var respData KvKeys
 	err = json.Unmarshal(marshal, &respData)
 	if err != nil {
+		log.Error("unmarshal resp error :", err)
 		return nil, err
 	}
 	return &respData, nil
@@ -220,12 +239,15 @@ func (c *Client) GetValue(ctx context.Context, namespaceId string, key string) (
 			env.HTTPHeader: env.Token,
 		},
 	})
+	log.Infof("get value body :%s\n", body)
 	if err != nil {
+		log.Error("request error :", err)
 		return "", err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
+		log.Error("unmarshal resp error :", err)
 		return "", err
 	}
 	if resp.Err {
@@ -243,12 +265,15 @@ func (c *Client) DelValue(ctx context.Context, namespaceId string, key string) (
 			env.HTTPHeader: env.Token,
 		},
 	})
+	log.Infof("del value body :%s\n", body)
 	if err != nil {
+		log.Error("request error :", err)
 		return false, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
+		log.Error("unmarshal resp error :", err)
 		return false, err
 	}
 	if resp.Err {
@@ -271,18 +296,19 @@ func (c *Client) BulkSetValue(ctx context.Context, req *BulkSet) (int64, error) 
 			env.HTTPHeader: env.Token,
 		},
 	})
+	log.Infof("bulk set value body :%s\n", body)
 	if err != nil {
 		return 0, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
+		log.Error("unmarshal resp error :", err)
 		return 0, err
 	}
 	if resp.Err {
 		return 0, fmt.Errorf("bulk set value err:%s", resp.Msg)
 	}
-	fmt.Println(body)
 	successfulKeyCount := gjson.Parse(body).Get("data.successful_key_count").Int()
 	return successfulKeyCount, nil
 }
@@ -300,12 +326,15 @@ func (c *Client) BulkDelValue(ctx context.Context, namespaceId string, keys []st
 			env.HTTPHeader: env.Token,
 		},
 	})
+	log.Infof("bulk del value body :%s\n", body)
 	if err != nil {
+		log.Error("request error :", err)
 		return false, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
+		log.Error("unmarshal resp error :", err)
 		return false, err
 	}
 	if resp.Err {
