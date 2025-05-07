@@ -155,6 +155,7 @@ func (c *Client) SetValue(ctx context.Context, req *SetValue) (bool, error) {
 		log.Error("marshal reqBody error :", err)
 		return false, err
 	}
+	log.Println(fmt.Sprintf("%s/api/v1/kv/%s/key", env.ScrapelessApiHost, req.NamespaceId))
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodPut,
 		Url:    fmt.Sprintf("%s/api/v1/kv/%s/key", env.ScrapelessApiHost, req.NamespaceId),
@@ -167,6 +168,7 @@ func (c *Client) SetValue(ctx context.Context, req *SetValue) (bool, error) {
 		log.Error("request error :", err)
 		return false, err
 	}
+	log.Info("set value body :", body)
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {

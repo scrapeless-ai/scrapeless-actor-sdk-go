@@ -29,7 +29,6 @@ func LoadEnv() error {
 
 	if err := viper.ReadInConfig(); err != nil {
 		log.Error("Error reading config file: %v", err)
-		return err
 	}
 	Env = &actorEnv{
 		TeamId:  viper.GetString(EnvTeamId),
