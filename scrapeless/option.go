@@ -3,6 +3,7 @@ package scrapeless
 import (
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/browser"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/captcha"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/httpserver"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxy"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/runner"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage"
@@ -131,4 +132,20 @@ func withRunner(tp ...string) Option {
 	return &RunnerOption{
 		tp: tp[0],
 	}
+}
+
+type ServerOption struct {
+	mode httpserver.ServerMode
+}
+
+func (s *ServerOption) Apply(a *Actor) {
+	a.Server = httpserver.New(s.mode)
+}
+
+// WithServer choose server mode.
+func WithServer(mode ...httpserver.ServerMode) Option {
+	if len(mode) == 0 {
+		mode = append(mode, httpserver.ReleaseMode)
+	}
+	return &ServerOption{mode: mode[0]}
 }
