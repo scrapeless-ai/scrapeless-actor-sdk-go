@@ -18,6 +18,7 @@ func Init() {
 		err error
 	)
 	defaultStorageClient, err = New()
+	regisHttpHandleFunc()
 	if err != nil {
 		panic(err)
 	}

@@ -134,11 +134,6 @@ func regisHttpHandleFunc() {
 		},
 	}
 }
-
-func init() {
-	regisHttpHandleFunc()
-}
-
 func (h *HttpHandle[T]) setReq(req any) *HttpHandle[T] {
 	h.Req = req
 	return h
