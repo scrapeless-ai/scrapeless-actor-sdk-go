@@ -10,15 +10,12 @@ import (
 	"time"
 )
 
-// TraceIDHook 是一个自定义的logrus Hook，用于从context中提取trace_id
 type TraceIDHook struct{}
 
-// Levels 返回Hook监听的日志级别
 func (hook *TraceIDHook) Levels() []log.Level {
 	return log.AllLevels
 }
 
-// Fire 是Hook的核心方法，用于在日志记录时添加trace_id
 func (hook *TraceIDHook) Fire(entry *log.Entry) error {
 	if entry.Context != nil {
 		traceID := entry.Context.Value("trace-id")
@@ -51,7 +48,6 @@ func InitLogrus(levelStr string) {
 	log.SetReportCaller(true)
 	log.SetLevel(level)
 
-	// 添加自定义的TraceIDHook
 	log.AddHook(&TraceIDHook{})
 }
 

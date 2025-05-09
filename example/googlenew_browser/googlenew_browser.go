@@ -50,11 +50,9 @@ func chromedpScrape(url string, devtoolsWsURL string) string {
 	defer cancel()
 	ctx, cancel := chromedp.NewContext(allocatorCtx)
 	defer cancel()
-	// 设置超时时间
 	ctx, cancel = context.WithTimeout(ctx, 60*time.Second)
 	defer cancel()
 
-	// 执行任务
 	err := chromedp.Run(ctx,
 		chromedp.Tasks{
 			chromedp.Navigate(url),

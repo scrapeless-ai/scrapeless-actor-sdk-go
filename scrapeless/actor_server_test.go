@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/httpserver"
 	log "github.com/sirupsen/logrus"
-	"net/http"
 	"testing"
 )
 
@@ -19,17 +18,20 @@ var (
 
 func TestWithServer(t *testing.T) {
 	actor = New(WithServer(httpserver.DebugMode))
-	input := &Input{}
-	actor.Server.AddHandle(http.MethodGet, "", input, getData)
+	actor.Server.AddHandle("", getData)
 	if err := actor.Start(); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func getData(inputStruct any) (any, error) {
-	fmt.Println(inputStruct)
+func getData(inputStruct []byte) (httpserver.Response, error) {
+	fmt.Println(string(inputStruct))
 	// proxy
 	// browser
 	// get data
-	return "test", nil
+	return httpserver.Response{
+		Code: 200,
+		Data: string(inputStruct),
+		Msg:  "good",
+	}, nil
 }
