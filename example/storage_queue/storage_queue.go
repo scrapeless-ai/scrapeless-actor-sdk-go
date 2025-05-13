@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage/queue"
-	log "github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -19,23 +19,23 @@ func main() {
 		Deadline: 0,
 	})
 	if err != nil {
-		log.Error(err)
+		log.GetLogger().Error().Msg("failed to push to queue")
 		return
 	}
-	log.Info(msgId)
+	log.GetLogger().Info().Msg(msgId)
 
 	// pull a message from queue
 	pullResp, err := sl.Storage.GetQueue().Pull(context.Background(), 100)
 	if err != nil {
-		log.Error(err)
+		log.GetLogger().Error().Msg(err.Error())
 		return
 	}
-	log.Info(pullResp)
+	log.GetLogger().Info().Msgf("%v", pullResp)
 	for _, v := range pullResp {
 		// ack message
 		err = sl.Storage.GetQueue().Ack(context.Background(), v.QueueID)
 		if err != nil {
-			log.Error(err)
+			log.GetLogger().Error().Msg(err.Error())
 		}
 	}
 
