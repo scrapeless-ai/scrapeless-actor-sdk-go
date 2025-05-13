@@ -110,15 +110,14 @@ func regisHttpHandleFunc() {
 			},
 		},
 		getMsg: {
-			Method:         http.MethodGet,
-			Url:            fmt.Sprintf("%s/api/v1/queue", env.ScrapelessApiHost),
-			NeedMarshalReq: true,
+			Method: http.MethodGet,
+			Url:    fmt.Sprintf("%s/api/v1/queue", env.ScrapelessApiHost),
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*GetMsgRequest)
 				if !ok {
 					return "", errors.New(fmt.Sprintf("type err need DelQueueRequest, but get %T", h.Req))
 				}
-				return fmt.Sprintf("%s/%s/pull", h.Url, req.QueueId), nil
+				return fmt.Sprintf("%s/%s/pull?limit=%d", h.Url, req.QueueId, req.Limit), nil
 			},
 		},
 		ackMsg: {
