@@ -42,9 +42,8 @@ var (
 )
 
 func init() {
-	_ = env.LoadEnv()
+	env.LoadEnv()
 	runId := env.Env.RunId
-	runId = "test-run-id-1"
 	if runId == "" {
 		panic("scrapeless: runId is empty")
 	}

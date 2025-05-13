@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	request2 "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/request"
-	log "github.com/sirupsen/logrus"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"github.com/tidwall/gjson"
 	"io"
 	"mime/multipart"
@@ -22,15 +22,15 @@ func (c *Client) ListBuckets(ctx context.Context, page, size int) (*Object, erro
 			env.HTTPHeader: env.Token,
 		},
 	})
-	log.Infof("list buckets body :%s\n", body)
+	log.GetLogger().Info().Msgf("list buckets body :%s\n", body)
 	if err != nil {
-		log.Errorf("list buckets err:%v\n", err)
+		log.GetLogger().Error().Msgf("list buckets err:%v\n", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.Error("unmarshal resp error :", err)
+		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	if resp.Err {
@@ -40,7 +40,7 @@ func (c *Client) ListBuckets(ctx context.Context, page, size int) (*Object, erro
 	var respData Object
 	err = json.Unmarshal(marshal, &respData)
 	if err != nil {
-		log.Error("unmarshal resp error :", err)
+		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	return &respData, nil
@@ -59,15 +59,15 @@ func (c *Client) CreateBucket(ctx context.Context, req *CreateBucketRequest) (st
 			env.HTTPHeader: env.Token,
 		},
 	})
-	log.Infof("create bucket body :%s\n", body)
+	log.GetLogger().Info().Msgf("create bucket body :%s\n", body)
 	if err != nil {
-		log.Errorf("create bucket err:%v\n", err)
+		log.GetLogger().Error().Msgf("create bucket err:%v\n", err)
 		return "", err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.Error("unmarshal resp error :", err)
+		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
 		return "", err
 	}
 	if resp.Err {
@@ -88,15 +88,15 @@ func (c *Client) DeleteBucket(ctx context.Context, bucketId string) (bool, error
 			env.HTTPHeader: env.Token,
 		},
 	})
-	log.Infof("del bucket body :%s\n", body)
+	log.GetLogger().Info().Msgf("del bucket body :%s\n", body)
 	if err != nil {
-		log.Errorf("del bucket err:%v\n", err)
+		log.GetLogger().Error().Msgf("del bucket err:%v\n", err)
 		return false, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.Error("unmarshal resp error :", err)
+		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
 		return false, err
 	}
 	if resp.Err {
@@ -115,15 +115,15 @@ func (c *Client) GetBucket(ctx context.Context, bucketId string) (*Bucket, error
 			env.HTTPHeader: env.Token,
 		},
 	})
-	log.Infof("get bucket body :%s\n", body)
+	log.GetLogger().Info().Msgf("get bucket body :%s\n", body)
 	if err != nil {
-		log.Errorf("get bucket err:%v\n", err)
+		log.GetLogger().Error().Msgf("get bucket err:%v\n", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.Error("unmarshal resp error :", err)
+		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	if resp.Err {
@@ -133,7 +133,7 @@ func (c *Client) GetBucket(ctx context.Context, bucketId string) (*Bucket, error
 	var respData Bucket
 	err = json.Unmarshal(marshal, &respData)
 	if err != nil {
-		log.Error("unmarshal resp error :", err)
+		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	return &respData, nil
@@ -147,15 +147,15 @@ func (c *Client) ListObjects(ctx context.Context, req *ListObjectsRequest) (*Obj
 			env.HTTPHeader: env.Token,
 		},
 	})
-	log.Infof("list objects body :%s\n", body)
+	log.GetLogger().Info().Msgf("list objects body :%s\n", body)
 	if err != nil {
-		log.Errorf("list objects err:%v\n", err)
+		log.GetLogger().Error().Msgf("list objects err:%v\n", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.Error("unmarshal resp error :", err)
+		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	if resp.Err {
@@ -165,7 +165,7 @@ func (c *Client) ListObjects(ctx context.Context, req *ListObjectsRequest) (*Obj
 	var respData ObjectList
 	err = json.Unmarshal(marshal, &respData)
 	if err != nil {
-		log.Error("unmarshal resp error :", err)
+		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	return &respData, nil
@@ -179,15 +179,15 @@ func (c *Client) GetObject(ctx context.Context, req *ObjectRequest) ([]byte, err
 			env.HTTPHeader: env.Token,
 		},
 	})
-	log.Infof("get object body :%s\n", body)
+	log.GetLogger().Info().Msgf("get object body :%s\n", body)
 	if err != nil {
-		log.Errorf("get object err:%v\n", err)
+		log.GetLogger().Error().Msgf("get object err:%v\n", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.Error("unmarshal resp error :", err)
+		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
 		return []byte(body), nil
 	}
 	if resp.Err {
@@ -204,15 +204,15 @@ func (c *Client) DeleteObject(ctx context.Context, req *ObjectRequest) (bool, er
 			env.HTTPHeader: env.Token,
 		},
 	})
-	log.Infof("del object body :%s\n", body)
+	log.GetLogger().Info().Msgf("del object body :%s\n", body)
 	if err != nil {
-		log.Errorf("del object err:%v\n", err)
+		log.GetLogger().Error().Msgf("del object err:%v\n", err)
 		return false, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.Error("unmarshal resp error :", err)
+		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
 		return false, err
 	}
 	if resp.Err {
@@ -240,15 +240,15 @@ func (c *Client) PutObject(ctx context.Context, req *PutObjectRequest) (string, 
 	resp, err := c.client.Do(request)
 	defer resp.Body.Close()
 	all, _ := io.ReadAll(resp.Body)
-	log.Infof("put object body :%s\n", string(all))
+	log.GetLogger().Info().Msgf("put object body :%s\n", string(all))
 	if err != nil {
-		log.Error("request error :", err)
+		log.GetLogger().Error().Msgf("request error :%v\n", err)
 		return "", err
 	}
 	var respInfo request2.RespInfo
 	err = json.Unmarshal(all, &respInfo)
 	if err != nil {
-		log.Error("unmarshal resp error :", err)
+		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
 		return "", err
 	}
 	if respInfo.Err {

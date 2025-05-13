@@ -1,7 +1,6 @@
 package env
 
 var (
-	LogLevel                = "debug"
 	ScrapingBrowserApiHost  = "https://api.scrapeless.com"
 	Token                   string
 	ProxyCountry            = "ANY"

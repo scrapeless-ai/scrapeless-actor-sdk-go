@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/browser"
-	log "github.com/sirupsen/logrus"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 )
 
 func main() {
@@ -18,5 +18,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	log.Infof("%+v", browserInfo)
+	log.GetLogger().Info().Msgf("%+v", browserInfo)
 }

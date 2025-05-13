@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/captcha"
-	log "github.com/sirupsen/logrus"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"time"
 )
 
@@ -23,16 +23,16 @@ func main() {
 		},
 	})
 	if err != nil {
-		log.Info(err)
+		log.GetLogger().Error().Msg(err.Error())
 	}
-	log.Info(captchaTaskId)
+	log.GetLogger().Info().Msgf("%v", captchaTaskId)
 	// Wait for captcha task to be solved
 	time.Sleep(time.Second * 20)
 	captchaResult, err := scrapeless.Captcha.ResultGet(context.TODO(), &captcha.CaptchaSolverReq{
 		TaskId: captchaTaskId,
 	})
 	if err != nil {
-		log.Info(err)
+		log.GetLogger().Error().Msg(err.Error())
 	}
-	log.Info(captchaResult)
+	log.GetLogger().Info().Msgf("%v", captchaResult)
 }

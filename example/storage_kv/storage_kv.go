@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
-	log "github.com/sirupsen/logrus"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 )
 
 func main() {
@@ -14,14 +14,14 @@ func main() {
 	// Set value use default namespace
 	ok, err := scrapeless.Storage.GetKv().SetValue(context.Background(), "key", "nice boy", 20)
 	if err != nil {
-		log.Error(err)
+		log.GetLogger().Error().Msg(err.Error())
 	}
-	log.Info(ok)
+	log.GetLogger().Info().Msgf("ok:%v", ok)
 
 	// Get value use default namespace
 	value, err := scrapeless.Storage.GetKv().GetValue(context.Background(), "key")
 	if err != nil {
-		log.Error(err)
+		log.GetLogger().Error().Msg(err.Error())
 	}
-	log.Info("value:", value)
+	log.GetLogger().Info().Msgf("value:%v", value)
 }

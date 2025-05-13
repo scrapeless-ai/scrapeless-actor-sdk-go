@@ -5,7 +5,6 @@ import (
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/captcha"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/httpserver"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxy"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/runner"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage"
 )
 
@@ -107,29 +106,6 @@ func WithStorage(tp ...string) Option {
 		tp = append(tp, typeHttp)
 	}
 	return &StorageOption{
-		tp: tp[0],
-	}
-}
-
-type RunnerOption struct {
-	tp string
-}
-
-func (o *RunnerOption) Apply(a *Actor) {
-	if o.tp == typeGrpc {
-		a.CloseFun = append(a.CloseFun, a.Captcha.Close)
-	} else {
-		a.runner = runner.NewRunHttp()
-		a.CloseFun = append(a.CloseFun, a.runner.Close)
-	}
-}
-
-// WithRunner choose runner type.
-func withRunner(tp ...string) Option {
-	if len(tp) == 0 {
-		tp = append(tp, typeHttp)
-	}
-	return &RunnerOption{
 		tp: tp[0],
 	}
 }

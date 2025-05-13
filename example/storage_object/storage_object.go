@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
-	log "github.com/sirupsen/logrus"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 )
 
 func main() {
@@ -13,7 +13,7 @@ func main() {
 	// Put object The supported types include JSON、html、png
 	objectId, err := sl.Storage.GetObject().Put(context.Background(), "object.json", []byte("data"))
 	if err != nil {
-		log.Error(err)
+		log.GetLogger().Error().Msg(err.Error())
 		return
 	}
 	if objectId != "" {
@@ -22,6 +22,6 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		log.Info(string(resp))
+		log.GetLogger().Info().Msg(string(resp))
 	}
 }

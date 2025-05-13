@@ -7,7 +7,7 @@ import (
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/captcha"
 	request2 "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/request"
-	log "github.com/sirupsen/logrus"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"github.com/tidwall/gjson"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -59,7 +59,7 @@ func (c *Client) CaptchaSolverGetTaskResult(ctx context.Context, req *captcha.Ge
 		return nil, err
 	}
 	if ok := gjson.Parse(body).Get("success").Bool(); !ok {
-		log.Error(body)
+		log.GetLogger().Error().Msg(body)
 		return nil, fmt.Errorf("get task result err")
 	}
 	var solution map[string]any

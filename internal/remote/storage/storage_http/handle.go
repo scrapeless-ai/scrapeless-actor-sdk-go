@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	request2 "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/request"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"net/http"
 )
 
@@ -192,8 +193,10 @@ func (h *HttpHandle[T]) sendRequest(ctx context.Context) (*HttpHandle[T], error)
 		},
 	})
 	if err != nil {
+		log.GetLogger().Error().Msgf("request err:%v\n", err)
 		return h, err
 	}
+	log.GetLogger().Info().Msgf("request body:%s\n", body)
 	var resp T
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {

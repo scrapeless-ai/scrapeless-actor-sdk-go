@@ -6,14 +6,14 @@ import (
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/code"
 	proxy2 "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/proxy"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/proxy/http"
-	log "github.com/sirupsen/logrus"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 )
 
 type PHttp struct {
 }
 
 func NewPHttp() Proxy {
-	log.Info("proxy http init")
+	log.GetLogger().Info().Msgf("proxy http init")
 	if http.Default() == nil {
 		http.Init()
 	}
@@ -36,7 +36,7 @@ func (ph *PHttp) Proxy(ctx context.Context, proxy ProxyActor) (string, error) {
 		TaskId:          env.Env.RunId,
 	})
 	if err != nil {
-		log.Errorf("get proxy err:%v\n", err)
+		log.GetLogger().Error().Msgf("get proxy err:%v\n", err)
 		return "", code.Format(err)
 	}
 	return proxyUrl, nil

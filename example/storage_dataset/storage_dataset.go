@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
-	log "github.com/sirupsen/logrus"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 )
 
 func main() {
@@ -21,16 +21,16 @@ func main() {
 		},
 	})
 	if err != nil {
-		log.Error(err)
+		log.GetLogger().Error().Msg(err.Error())
 		return
 	}
 	if success {
 		items, err := sl.Storage.GetDataset().GetItems(context.Background(), 1, 10, false)
 		if err != nil {
-			log.Error(err)
+			log.GetLogger().Error().Msg(err.Error())
 			return
 		}
-		log.Println("items:", items)
+		log.GetLogger().Info().Msgf("%v", items)
 	}
 
 }

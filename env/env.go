@@ -4,74 +4,84 @@ import (
 	"errors"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"sync"
 )
 
-var Env = &actorEnv{}
-var LogEnv = &logEnv{}
+var (
+	Env    = &actorEnv{}
+	LogEnv = &logEnv{}
+	once   = sync.Once{}
+)
 
 const (
-	EnvActorId       = "SCRAPELESS_ACTOR_ID"
-	EnvRunId         = "SCRAPELESS_RUN_ID"
-	EnvTeamId        = "SCRAPELESS_TEAM_ID"
-	EnvInput         = "SCRAPELESS_INPUT"
-	EnvApiKey        = "SCRAPELESS_API_KEY"
-	EnvToken         = "SCRAPELESS_TOKEN"
-	EnvXApiKey       = "SCRAPELESS_X_API_KEY"
-	EnvKvNamespaceId = "SCRAPELESS_KV_NAMESPACE_ID"
-	EnvDatasetId     = "SCRAPELESS_DATASET_ID"
-	EnvBucketId      = "SCRAPELESS_BUCKET_ID"
-	EnvQueueId       = "SCRAPELESS_QUEUE_ID"
-	HTTPHeader       = "x-api-token"
+	HTTPHeader = "x-api-token"
 
-	_EnvScrapelessLogMaxSize    = "SCRAPELESS_LOG_MAX_SIZE"
-	_EnvScrapelessLogMaxBackups = "SCRAPELESS_LOG_MAX_BACKUPS"
-	_EnvScrapelessLogMaxAge     = "SCRAPELESS_LOG_MAX_AGE"
-	_EnvScrapelessLogRootDir    = "SCRAPELESS_LOG_ROOT_DIR"
+	envActorId       = "SCRAPELESS_ACTOR_ID"
+	envRunId         = "SCRAPELESS_RUN_ID"
+	envTeamId        = "SCRAPELESS_TEAM_ID"
+	envApiKey        = "SCRAPELESS_API_KEY"
+	envToken         = "SCRAPELESS_TOKEN"
+	envKvNamespaceId = "SCRAPELESS_KV_NAMESPACE_ID"
+	envDatasetId     = "SCRAPELESS_DATASET_ID"
+	envBucketId      = "SCRAPELESS_BUCKET_ID"
+	envQueueId       = "SCRAPELESS_QUEUE_ID"
+	envInput         = "SCRAPELESS_INPUT"
+	envXApiKey       = "SCRAPELESS_X_API_KEY"
+
+	envBrowserApiHost          = "SCRAPELESS_BROWSER_API_HOST"
+	envProxyCountry            = "SCRAPELESS_PROXY_COUNTRY"
+	envProxySessionDurationMax = "SCRAPELESS_PROXY_SESSION_DURATION_MAX"
+	envProxyGatewayHost        = "SCRAPELESS_PROXY_GATEWAY_HOST"
+	envApiHost                 = "SCRAPELESS_API_HOST"
+	envCaptchaHost             = "SCRAPELESS_CAPTCHA_HOST"
+
+	envLogMaxSize    = "SCRAPELESS_LOG_MAX_SIZE"
+	envLogMaxBackups = "SCRAPELESS_LOG_MAX_BACKUPS"
+	envLogMaxAge     = "SCRAPELESS_LOG_MAX_AGE"
+	envLogRootDir    = "SCRAPELESS_LOG_ROOT_DIR"
 )
 
-func LoadEnv() error {
-	viper.SetConfigFile(`.env`)
-	viper.AutomaticEnv()
+func LoadEnv() {
+	once.Do(func() {
+		viper.SetConfigFile(`.env`)
+		viper.AutomaticEnv()
 
-	if err := viper.ReadInConfig(); err != nil {
-		log.Error("Error reading config file: %v", err)
-	}
-	Env = &actorEnv{
-		TeamId:  viper.GetString(EnvTeamId),
-		ActorId: viper.GetString(EnvActorId),
-		RunId:   viper.GetString(EnvRunId),
-		ApiKey:  viper.GetString(EnvApiKey),
+		if err := viper.ReadInConfig(); err != nil {
+			log.Error("Error reading config file: %v", err)
+		}
+		Env = &actorEnv{
+			TeamId:  viper.GetString(envTeamId),
+			ActorId: viper.GetString(envActorId),
+			RunId:   viper.GetString(envRunId),
+			ApiKey:  viper.GetString(envApiKey),
 
-		KvNamespaceId: viper.GetString(EnvKvNamespaceId),
-		DatasetId:     viper.GetString(EnvDatasetId),
-		BucketId:      viper.GetString(EnvBucketId),
-		QueueId:       viper.GetString(EnvQueueId),
-	}
-	LogLevel = viper.GetString("SCRAPELESS_LOG_LEVEL")
-	ScrapingBrowserApiHost = viper.GetString("SCRAPELESS_BROWSER_API_HOST")
-	Token = viper.GetString("SCRAPELESS_TOKEN")
-	ProxyCountry = viper.GetString("SCRAPELESS_PROXY_COUNTRY")
-	ProxySessionDurationMax = viper.GetInt64("SCRAPELESS_PROXY_SESSION_DURATION_MAX")
-	ProxyGatewayHost = viper.GetString("SCRAPELESS_PROXY_GATEWAY_HOST")
-	ScrapelessApiHost = viper.GetString("SCRAPELESS_API_HOST")
-	ScrapelessCaptchaHost = viper.GetString("SCRAPELESS_CAPTCHA_HOST")
-	if ScrapelessCaptchaHost == "" {
-		ScrapelessCaptchaHost = ScrapelessApiHost
-	}
-
-	LogEnv = &logEnv{
-		MaxSize:    viper.GetInt(_EnvScrapelessLogMaxSize),
-		MaxBackups: viper.GetInt(_EnvScrapelessLogMaxBackups),
-		MaxAge:     viper.GetInt(_EnvScrapelessLogMaxAge),
-		LogRootDir: viper.GetString(_EnvScrapelessLogRootDir),
-	}
-
-	if err := Env.param(); err != nil {
-		log.Errorf("LoadEnv param err: %v", err)
-		return err
-	}
-	log.Infof("actor env init %+v", Env)
-	return nil
+			KvNamespaceId: viper.GetString(envKvNamespaceId),
+			DatasetId:     viper.GetString(envDatasetId),
+			BucketId:      viper.GetString(envBucketId),
+			QueueId:       viper.GetString(envQueueId),
+		}
+		ScrapingBrowserApiHost = viper.GetString(envBrowserApiHost)
+		Token = viper.GetString(envToken)
+		ProxyCountry = viper.GetString(envProxyCountry)
+		ProxySessionDurationMax = viper.GetInt64(envProxySessionDurationMax)
+		ProxyGatewayHost = viper.GetString(envProxyGatewayHost)
+		ScrapelessApiHost = viper.GetString(envApiHost)
+		ScrapelessCaptchaHost = viper.GetString(envCaptchaHost)
+		if ScrapelessCaptchaHost == "" {
+			ScrapelessCaptchaHost = ScrapelessApiHost
+		}
+		LogEnv = &logEnv{
+			MaxSize:    viper.GetInt(envLogMaxSize),
+			MaxBackups: viper.GetInt(envLogMaxBackups),
+			MaxAge:     viper.GetInt(envLogMaxAge),
+			LogRootDir: viper.GetString(envLogRootDir),
+		}
+		if err := Env.param(); err != nil {
+			log.Errorf("LoadEnv param err: %v", err)
+			return
+		}
+		log.Infof("actor env init %+v", Env)
+	})
 }
 
 func (ae *actorEnv) param() error {

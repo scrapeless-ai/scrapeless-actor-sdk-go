@@ -3,7 +3,7 @@ package storage_http
 import (
 	"context"
 	"fmt"
-	log "github.com/sirupsen/logrus"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 )
 
 func (c *Client) CreateQueue(ctx context.Context, req *CreateQueueRequest) (*CreateQueueResponse, error) {
@@ -67,7 +67,7 @@ func (c *Client) UpdateQueue(ctx context.Context, req *UpdateQueueRequest) error
 	}
 	handel, err := handel.setReq(req).sendRequest(ctx)
 	if err != nil {
-		log.Error(err)
+		log.GetLogger().Error().Msg(err.Error())
 		return err
 	}
 

@@ -3,7 +3,6 @@ package scrapeless
 import (
 	"fmt"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/httpserver"
-	log "github.com/sirupsen/logrus"
 	"testing"
 )
 
@@ -20,7 +19,6 @@ func TestWithServer(t *testing.T) {
 	actor = New(WithServer(httpserver.DebugMode))
 	actor.Server.AddHandle("", getData)
 	if err := actor.Start(); err != nil {
-		log.Fatal(err)
 	}
 }
 

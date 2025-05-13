@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	proxy2 "github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxy"
-	log "github.com/sirupsen/logrus"
 	"io"
 	"net/http"
 	"net/url"
@@ -22,7 +22,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	log.Info(proxy)
+	log.GetLogger().Info().Msg(proxy)
 	parse, err := url.Parse(proxy)
 	if err != nil {
 		panic(err)
@@ -42,5 +42,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	log.Info(string(body))
+	log.GetLogger().Info().Msg(string(body))
 }

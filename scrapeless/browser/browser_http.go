@@ -7,7 +7,7 @@ import (
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/code"
 	remote_brwoser "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/browser"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/browser/http"
-	log "github.com/sirupsen/logrus"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"net/url"
@@ -18,7 +18,7 @@ type BHttp struct {
 }
 
 func NewBHttp() Browser {
-	log.Info("browser http init")
+	log.GetLogger().Info().Msg("browser http init")
 	if http.Default() == nil {
 		http.Init()
 	}
@@ -40,7 +40,7 @@ func (bh *BHttp) Create(ctx context.Context, req Actor) (*CreateResp, error) {
 		},
 	})
 	if err != nil {
-		log.Errorf("scraping browser create err:%v\n", err)
+		log.GetLogger().Error().Msgf("scraping browser create err:%v\n", err)
 		return nil, code.Format(err)
 	}
 	if create != nil {

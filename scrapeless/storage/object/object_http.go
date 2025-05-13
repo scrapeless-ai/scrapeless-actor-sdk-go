@@ -6,7 +6,7 @@ import (
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/code"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/storage/storage_http"
-	log "github.com/sirupsen/logrus"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 )
 
 type ObjHttp struct {
@@ -14,7 +14,7 @@ type ObjHttp struct {
 }
 
 func NewObjHttp(bucketId ...string) Object {
-	log.Info("object http init")
+	log.GetLogger().Info().Msg("object http init")
 	if storage_http.Default() == nil {
 		storage_http.Init()
 	}
@@ -40,7 +40,7 @@ func (oh *ObjHttp) ListBuckets(ctx context.Context, page int, pageSize int) (*Li
 	}
 	buckets, err := storage_http.Default().ListBuckets(ctx, page, pageSize)
 	if err != nil {
-		log.Errorf("failed to list buckets: %v\n", code.Format(err))
+		log.GetLogger().Error().Msgf("failed to list buckets: %v\n", code.Format(err))
 		return nil, code.Format(err)
 	}
 	var bucketsArray []Bucket
@@ -79,7 +79,7 @@ func (oh *ObjHttp) CreateBucket(ctx context.Context, name string, description st
 		RunId:       env.Env.RunId,
 	})
 	if err != nil {
-		log.Errorf("failed to create bucket: %v\n", code.Format(err))
+		log.GetLogger().Error().Msgf("failed to create bucket: %v\n", code.Format(err))
 		return "", "", code.Format(err)
 	}
 	return bucketId, bucketName, nil
@@ -92,7 +92,7 @@ func (oh *ObjHttp) CreateBucket(ctx context.Context, name string, description st
 func (oh *ObjHttp) DeleteBucket(ctx context.Context) (bool, error) {
 	ok, err := storage_http.Default().DeleteBucket(ctx, oh.bucketId)
 	if err != nil {
-		log.Errorf("failed to delete bucket: %v\n", code.Format(err))
+		log.GetLogger().Error().Msgf("failed to delete bucket: %v\n", code.Format(err))
 		return false, code.Format(err)
 	}
 	return ok, nil
@@ -105,7 +105,7 @@ func (oh *ObjHttp) DeleteBucket(ctx context.Context) (bool, error) {
 func (oh *ObjHttp) GetBucket(ctx context.Context) (*Bucket, error) {
 	bucket, err := storage_http.Default().GetBucket(ctx, oh.bucketId)
 	if err != nil {
-		log.Errorf("failed to get bucket: %v\n", code.Format(err))
+		log.GetLogger().Error().Msgf("failed to get bucket: %v\n", code.Format(err))
 		return nil, code.Format(err)
 	}
 	b := &Bucket{
@@ -142,7 +142,7 @@ func (oh *ObjHttp) List(ctx context.Context, fuzzyFileName string, page int64, p
 		PageSize: pageSize,
 	})
 	if err != nil {
-		log.Errorf("failed to list objects: %v\n", code.Format(err))
+		log.GetLogger().Error().Msgf("failed to list objects: %v\n", code.Format(err))
 		return nil, code.Format(err)
 	}
 	var objectsArray []ObjectInfo
@@ -173,7 +173,7 @@ func (oh *ObjHttp) getWithId(ctx context.Context, objectId string) ([]byte, erro
 		ObjectId: objectId,
 	})
 	if err != nil {
-		log.Errorf("failed to get object: %v\n", code.Format(err))
+		log.GetLogger().Error().Msgf("failed to get object: %v\n", code.Format(err))
 		return nil, code.Format(err)
 	}
 	return object, nil
@@ -202,7 +202,7 @@ func (oh *ObjHttp) putWithId(ctx context.Context, filename string, data []byte) 
 		RunId:    env.Env.RunId,
 	})
 	if err != nil {
-		log.Errorf("failed to put object: %v\n", code.Format(err))
+		log.GetLogger().Error().Msgf("failed to put object: %v\n", code.Format(err))
 		return "", code.Format(err)
 	}
 	return object, nil
@@ -230,7 +230,7 @@ func (oh *ObjHttp) Delete(ctx context.Context, objectId string) (bool, error) {
 		ObjectId: objectId,
 	})
 	if err != nil {
-		log.Errorf("failed to delete object: %v\n", code.Format(err))
+		log.GetLogger().Error().Msgf("failed to delete object: %v\n", code.Format(err))
 		return false, code.Format(err)
 	}
 	return resp, nil
