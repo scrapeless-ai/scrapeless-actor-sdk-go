@@ -88,6 +88,7 @@ func init() {
 	consoleWriter := &zerolog.ConsoleWriter{
 		Out:        os.Stdout,
 		TimeFormat: time.RFC3339,
+		NoColor:    true,
 	}
 	fileWriter := &zerolog.ConsoleWriter{
 		Out:        lj,
