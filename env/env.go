@@ -7,6 +7,7 @@ import (
 )
 
 var Env = &actorEnv{}
+var LogEnv = &logEnv{}
 
 const (
 	EnvActorId       = "SCRAPELESS_ACTOR_ID"
@@ -21,6 +22,11 @@ const (
 	EnvBucketId      = "SCRAPELESS_BUCKET_ID"
 	EnvQueueId       = "SCRAPELESS_QUEUE_ID"
 	HTTPHeader       = "x-api-token"
+
+	_EnvScrapelessLogMaxSize    = "SCRAPELESS_LOG_MAX_SIZE"
+	_EnvScrapelessLogMaxBackups = "SCRAPELESS_LOG_MAX_BACKUPS"
+	_EnvScrapelessLogMaxAge     = "SCRAPELESS_LOG_MAX_AGE"
+	_EnvScrapelessLogRootDir    = "SCRAPELESS_LOG_ROOT_DIR"
 )
 
 func LoadEnv() error {
@@ -52,6 +58,14 @@ func LoadEnv() error {
 	if ScrapelessCaptchaHost == "" {
 		ScrapelessCaptchaHost = ScrapelessApiHost
 	}
+
+	LogEnv = &logEnv{
+		MaxSize:    viper.GetInt(_EnvScrapelessLogMaxSize),
+		MaxBackups: viper.GetInt(_EnvScrapelessLogMaxBackups),
+		MaxAge:     viper.GetInt(_EnvScrapelessLogMaxAge),
+		LogRootDir: viper.GetString(_EnvScrapelessLogRootDir),
+	}
+
 	if err := Env.param(); err != nil {
 		log.Errorf("LoadEnv param err: %v", err)
 		return err
@@ -86,4 +100,11 @@ type actorEnv struct {
 	DatasetId     string
 	BucketId      string
 	QueueId       string
+}
+
+type logEnv struct {
+	MaxSize    int
+	MaxBackups int
+	MaxAge     int
+	LogRootDir string
 }
