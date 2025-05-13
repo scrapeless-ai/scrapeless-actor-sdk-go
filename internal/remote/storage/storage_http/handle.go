@@ -109,7 +109,7 @@ func regisHttpHandleFunc() {
 			},
 		},
 		getMsg: {
-			Method:         http.MethodPost,
+			Method:         http.MethodGet,
 			Url:            fmt.Sprintf("%s/api/v1/queue", env.ScrapelessApiHost),
 			NeedMarshalReq: true,
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
