@@ -24,13 +24,13 @@ func (c *Client) ListBuckets(ctx context.Context, page, size int) (*Object, erro
 	})
 	log.Infof("list buckets body :%s\n", body)
 	if err != nil {
-		log.Errorf("list buckets err:%v\n", err)
+		log.Errorf("list buckets err:%v", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.Errorf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v", err)
 		return nil, err
 	}
 	if resp.Err {
@@ -40,7 +40,7 @@ func (c *Client) ListBuckets(ctx context.Context, page, size int) (*Object, erro
 	var respData Object
 	err = json.Unmarshal(marshal, &respData)
 	if err != nil {
-		log.Errorf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v", err)
 		return nil, err
 	}
 	return &respData, nil
@@ -61,13 +61,13 @@ func (c *Client) CreateBucket(ctx context.Context, req *CreateBucketRequest) (st
 	})
 	log.Infof("create bucket body :%s\n", body)
 	if err != nil {
-		log.Errorf("create bucket err:%v\n", err)
+		log.Errorf("create bucket err:%v", err)
 		return "", err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.Errorf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v", err)
 		return "", err
 	}
 	if resp.Err {
@@ -90,13 +90,13 @@ func (c *Client) DeleteBucket(ctx context.Context, bucketId string) (bool, error
 	})
 	log.Infof("del bucket body :%s\n", body)
 	if err != nil {
-		log.Errorf("del bucket err:%v\n", err)
+		log.Errorf("del bucket err:%v", err)
 		return false, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.Errorf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v", err)
 		return false, err
 	}
 	if resp.Err {
@@ -117,13 +117,13 @@ func (c *Client) GetBucket(ctx context.Context, bucketId string) (*Bucket, error
 	})
 	log.Infof("get bucket body :%s\n", body)
 	if err != nil {
-		log.Errorf("get bucket err:%v\n", err)
+		log.Errorf("get bucket err:%v", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.Errorf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v", err)
 		return nil, err
 	}
 	if resp.Err {
@@ -133,7 +133,7 @@ func (c *Client) GetBucket(ctx context.Context, bucketId string) (*Bucket, error
 	var respData Bucket
 	err = json.Unmarshal(marshal, &respData)
 	if err != nil {
-		log.Errorf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v", err)
 		return nil, err
 	}
 	return &respData, nil
@@ -149,13 +149,13 @@ func (c *Client) ListObjects(ctx context.Context, req *ListObjectsRequest) (*Obj
 	})
 	log.Infof("list objects body :%s\n", body)
 	if err != nil {
-		log.Errorf("list objects err:%v\n", err)
+		log.Errorf("list objects err:%v", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.Errorf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v", err)
 		return nil, err
 	}
 	if resp.Err {
@@ -165,7 +165,7 @@ func (c *Client) ListObjects(ctx context.Context, req *ListObjectsRequest) (*Obj
 	var respData ObjectList
 	err = json.Unmarshal(marshal, &respData)
 	if err != nil {
-		log.Errorf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v", err)
 		return nil, err
 	}
 	return &respData, nil
@@ -181,13 +181,13 @@ func (c *Client) GetObject(ctx context.Context, req *ObjectRequest) ([]byte, err
 	})
 	log.Infof("get object body :%s\n", body)
 	if err != nil {
-		log.Errorf("get object err:%v\n", err)
+		log.Errorf("get object err:%v", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.Errorf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v", err)
 		return []byte(body), nil
 	}
 	if resp.Err {
@@ -206,13 +206,13 @@ func (c *Client) DeleteObject(ctx context.Context, req *ObjectRequest) (bool, er
 	})
 	log.Infof("del object body :%s\n", body)
 	if err != nil {
-		log.Errorf("del object err:%v\n", err)
+		log.Errorf("del object err:%v", err)
 		return false, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.Errorf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v", err)
 		return false, err
 	}
 	if resp.Err {
@@ -242,13 +242,13 @@ func (c *Client) PutObject(ctx context.Context, req *PutObjectRequest) (string, 
 	all, _ := io.ReadAll(resp.Body)
 	log.Infof("put object body :%s\n", string(all))
 	if err != nil {
-		log.Errorf("request error :%v\n", err)
+		log.Errorf("request error :%v", err)
 		return "", err
 	}
 	var respInfo request2.RespInfo
 	err = json.Unmarshal(all, &respInfo)
 	if err != nil {
-		log.Errorf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v", err)
 		return "", err
 	}
 	if respInfo.Err {

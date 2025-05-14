@@ -46,7 +46,7 @@ func (q *QueueHttp) List(ctx context.Context, page int64, pageSize int64, desc b
 		Desc:     desc,
 	})
 	if err != nil {
-		log.Errorf("failed to list queues: %v\n", code.Format(err))
+		log.Errorf("failed to list queues: %v", code.Format(err))
 		return nil, code.Format(err)
 	}
 	var items []Item
@@ -85,7 +85,7 @@ func (q *QueueHttp) Create(ctx context.Context, req *CreateQueueReq) (queueId st
 		Description: req.Description,
 	})
 	if err != nil {
-		log.Errorf("failed to create queue: %v\n", code.Format(err))
+		log.Errorf("failed to create queue: %v", code.Format(err))
 		return "", "", code.Format(err)
 	}
 
@@ -104,7 +104,7 @@ func (q *QueueHttp) Get(ctx context.Context, name string) (*Item, error) {
 		Name: name,
 	})
 	if err != nil {
-		log.Errorf("failed to get queue: %v\n", code.Format(err))
+		log.Errorf("failed to get queue: %v", code.Format(err))
 		return nil, code.Format(err)
 	}
 	return &Item{
@@ -142,7 +142,7 @@ func (q *QueueHttp) Update(ctx context.Context, name string, description string)
 func (q *QueueHttp) Delete(ctx context.Context) error {
 	err := storage_http.Default().DelQueue(ctx, &storage_http.DelQueueRequest{QueueId: q.queueId})
 	if err != nil {
-		log.Errorf("failed to delete queue: %v\n", code.Format(err))
+		log.Errorf("failed to delete queue: %v", code.Format(err))
 		return code.Format(err)
 	}
 	return nil
@@ -176,7 +176,7 @@ func (q *QueueHttp) pushWithId(ctx context.Context, req PushQueue) (string, erro
 		Deadline: unix,
 	})
 	if err != nil {
-		log.Errorf("failed to push to queue: %v\n", code.Format(err))
+		log.Errorf("failed to push to queue: %v", code.Format(err))
 		return "", code.Format(err)
 	}
 	return queue.MsgId, nil
@@ -203,7 +203,7 @@ func (q *QueueHttp) pullWithId(ctx context.Context, size int32) (GetMsgResponse,
 		Limit:   size,
 	})
 	if err != nil {
-		log.Errorf("failed to pull from queue: %v\n", code.Format(err))
+		log.Errorf("failed to pull from queue: %v", code.Format(err))
 		return nil, code.Format(err)
 	}
 	if msgs == nil {
@@ -243,7 +243,7 @@ func (q *QueueHttp) ackWithId(ctx context.Context, msgId string) error {
 		MsgId:   msgId,
 	})
 	if err != nil {
-		log.Errorf("failed to ack msg: %v\n", code.Format(err))
+		log.Errorf("failed to ack msg: %v", code.Format(err))
 		return code.Format(err)
 	}
 	return nil

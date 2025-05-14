@@ -1,7 +1,7 @@
 package http
 
 import (
-	"fmt"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -10,7 +10,7 @@ var (
 )
 
 func Init() {
-	fmt.Println("browser init")
+	log.Info("browser init")
 	var err error
 	defaultGatewayClient, err = New()
 	if err != nil {

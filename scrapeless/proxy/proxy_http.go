@@ -36,7 +36,7 @@ func (ph *PHttp) Proxy(ctx context.Context, proxy ProxyActor) (string, error) {
 		TaskId:          env.GetActorEnv().RunId,
 	})
 	if err != nil {
-		log.Errorf("get proxy err:%v\n", err)
+		log.Errorf("get proxy err:%v", err)
 		return "", code.Format(err)
 	}
 	return proxyUrl, nil

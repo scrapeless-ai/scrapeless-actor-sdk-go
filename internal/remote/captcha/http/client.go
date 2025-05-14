@@ -1,7 +1,7 @@
 package http
 
 import (
-	"fmt"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"net/http"
 )
 
@@ -10,7 +10,7 @@ var (
 )
 
 func Init() {
-	fmt.Println("captcha init")
+	log.Info("captcha init")
 	var err error
 	defaultGatewayClient, err = New()
 	if err != nil {

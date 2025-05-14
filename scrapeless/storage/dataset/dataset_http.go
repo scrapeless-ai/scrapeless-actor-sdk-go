@@ -47,7 +47,7 @@ func (ds *DSHttp) ListDatasets(ctx context.Context, page int64, pageSize int64, 
 		Desc: desc,
 	})
 	if err != nil {
-		log.Errorf("failed to list datasets: %v\n", code.Format(err))
+		log.Errorf("failed to list datasets: %v", code.Format(err))
 		return nil, code.Format(err)
 	}
 	var itemArray []DatasetInfo
@@ -82,7 +82,7 @@ func (ds *DSHttp) CreateDataset(ctx context.Context, name string) (id string, da
 		RunId:   &env.GetActorEnv().RunId,
 	})
 	if err != nil {
-		log.Errorf("failed to create dataset: %v\n", code.Format(err))
+		log.Errorf("failed to create dataset: %v", code.Format(err))
 		return "", "", code.Format(err)
 	}
 	return dataset.Id, name, nil
@@ -98,7 +98,7 @@ func (ds *DSHttp) UpdateDataset(ctx context.Context, name string) (ok bool, data
 	name = name + "-" + env.GetActorEnv().RunId
 	ok, err = storage_http.Default().UpdateDataset(ctx, ds.datasetId, name)
 	if err != nil {
-		log.Errorf("failed to update dataset: %v\n", code.Format(err))
+		log.Errorf("failed to update dataset: %v", code.Format(err))
 		return false, "", code.Format(err)
 	}
 	return ok, name, nil
@@ -112,7 +112,7 @@ func (ds *DSHttp) UpdateDataset(ctx context.Context, name string) (ok bool, data
 func (ds *DSHttp) DelDataset(ctx context.Context) (bool, error) {
 	ok, err := storage_http.Default().DelDataset(ctx, ds.datasetId)
 	if err != nil {
-		log.Errorf("failed to delete dataset: %v\n", code.Format(err))
+		log.Errorf("failed to delete dataset: %v", code.Format(err))
 		return false, code.Format(err)
 	}
 	return ok, nil
@@ -121,7 +121,7 @@ func (ds *DSHttp) DelDataset(ctx context.Context) (bool, error) {
 func (ds *DSHttp) addItemsWithId(ctx context.Context, items []map[string]any) (bool, error) {
 	ok, err := storage_http.Default().AddDatasetItem(ctx, ds.datasetId, items)
 	if err != nil {
-		log.Errorf("failed to add items: %v\n", err)
+		log.Errorf("failed to add items: %v", err)
 		return false, code.Format(err)
 	}
 	return ok, nil
@@ -141,7 +141,7 @@ func (ds *DSHttp) getItemsWithId(ctx context.Context, page int, pageSize int, de
 		PageSize:  pageSize,
 	})
 	if err != nil {
-		log.Errorf("failed to get items: %v\n", code.Format(err))
+		log.Errorf("failed to get items: %v", code.Format(err))
 		return nil, code.Format(err)
 	}
 	var itemArray []map[string]any

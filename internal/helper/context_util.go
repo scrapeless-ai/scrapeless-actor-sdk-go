@@ -44,7 +44,7 @@ func FromContext(ctx context.Context) (*UserContext, error) {
 func EncodeUserContext(userCtx *UserContext) (string, error) {
 	jsonBytes, err := json.Marshal(userCtx)
 	if err != nil {
-		log.Errorf("Error marshaling user context: %v\n", err)
+		log.Errorf("Error marshaling user context: %v", err)
 		return "", err
 	}
 	return base64.StdEncoding.EncodeToString(jsonBytes), nil
@@ -53,13 +53,13 @@ func EncodeUserContext(userCtx *UserContext) (string, error) {
 func DecodeUserContext(encodedValue string) (*UserContext, error) {
 	jsonBytes, err := base64.StdEncoding.DecodeString(encodedValue)
 	if err != nil {
-		log.Errorf("Error decoding user context: %v\n", err)
+		log.Errorf("Error decoding user context: %v", err)
 		return nil, err
 	}
 
 	var userCtx UserContext
 	if err := json.Unmarshal(jsonBytes, &userCtx); err != nil {
-		log.Errorf("Error unmarshaling user context: %v\n", err)
+		log.Errorf("Error unmarshaling user context: %v", err)
 		return nil, err
 	}
 	return &userCtx, nil
@@ -91,12 +91,12 @@ func ClientContextInterceptor() grpc.UnaryClientInterceptor {
 
 		encodedValue, err := EncodeUserContext(userContext)
 		if err != nil {
-			log.Errorf("[Client Interceptor] Failed to encode UserContext: %v\n", err)
+			log.Errorf("[Client Interceptor] Failed to encode UserContext: %v", err)
 			return
 		}
 
 		ctx = metadata.AppendToOutgoingContext(ctx, UserContextKey, encodedValue)
-		log.Errorf("[Client Interceptor] Added UserContext to metadata, UserId: %s,TeamId:%s, method: %s\n", userContext.UserId, userContext.TeamId, method)
+		log.Errorf("[Client Interceptor] Added UserContext to metadata, UserId: %s,TeamId:%s, method: %s", userContext.UserId, userContext.TeamId, method)
 		return
 	}
 }
@@ -112,15 +112,15 @@ func ServerContextInterceptor(requireAuth bool) grpc.UnaryServerInterceptor {
 		}
 		userContext, ok := ExtractFromIncoming(md)
 		if requireAuth && (!ok || userContext == nil) {
-			log.Errorf("[Server Interceptor] Missing required UserId for method: %s\n", info.FullMethod)
+			log.Errorf("[Server Interceptor] Missing required UserId for method: %s", info.FullMethod)
 			return nil, status.Error(codes.Unauthenticated, "missing userContext")
 		}
 
 		if ok {
-			log.Infof("[Server Interceptor] Received request with UserId: %s, TeamId: %s, method: %s\n", userContext.UserId, userContext.TeamId, info.FullMethod)
+			log.Infof("[Server Interceptor] Received request with UserId: %s, TeamId: %s, method: %s", userContext.UserId, userContext.TeamId, info.FullMethod)
 			ctx = WithUserContext(ctx, userContext)
 		} else {
-			log.Infof("[Server Interceptor] Received request without valid UserContext, method: %s\n", info.FullMethod)
+			log.Infof("[Server Interceptor] Received request without valid UserContext, method: %s", info.FullMethod)
 		}
 		return handler(ctx, req)
 	}

@@ -40,7 +40,7 @@ func (bh *BHttp) Create(ctx context.Context, req Actor) (*CreateResp, error) {
 		},
 	})
 	if err != nil {
-		log.Errorf("scraping browser create err:%v\n", err)
+		log.Errorf("scraping browser create err:%v", err)
 		return nil, code.Format(err)
 	}
 	if create != nil {
