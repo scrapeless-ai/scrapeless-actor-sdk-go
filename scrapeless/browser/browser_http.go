@@ -53,7 +53,7 @@ func (bh *BHttp) Create(ctx context.Context, req Actor) (*CreateResp, error) {
 }
 
 func (bh *BHttp) CreateOnce(ctx context.Context, req ActorOnce) (*CreateResp, error) {
-	u, err := url.Parse(env.ScrapingBrowserApiHost)
+	u, err := url.Parse(env.Env.ScrapingBrowserApiHost)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "parse url error: %s", err.Error())
 	}

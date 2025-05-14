@@ -38,7 +38,7 @@ func (c *CaHttp) Solver(ctx context.Context, req *CaptchaSolverReq) (*CaptchaSol
 
 	// Submit the captcha solving task to the remote service with provided parameters
 	response, err := http.Default().CaptchaSolverSolverTask(ctx, &gateway_captcha.CreateTaskRequest{
-		ApiKey: env.Env.ApiKey,
+		ApiKey: env.GetActorEnv().ApiKey,
 		Actor:  req.Actor,
 		Input:  inputMap,
 		Proxy: &gateway_captcha.ProxyParams{
@@ -77,7 +77,7 @@ func (c *CaHttp) Create(ctx context.Context, req *CaptchaSolverReq) (string, err
 
 	// Submit captcha solving task to remote service with provided configuration
 	taskId, err := http.Default().CaptchaSolverCreateTask(ctx, &gateway_captcha.CreateTaskRequest{
-		ApiKey: env.Env.ApiKey,
+		ApiKey: env.GetActorEnv().ApiKey,
 		Actor:  req.Actor,
 		Input:  inputMap,
 		Proxy: &gateway_captcha.ProxyParams{
@@ -106,7 +106,7 @@ func (c *CaHttp) Create(ctx context.Context, req *CaptchaSolverReq) (string, err
 //	req: captcha solving request parameters containing the task ID
 func (c *CaHttp) ResultGet(ctx context.Context, req *CaptchaSolverReq) (*CaptchaSolverResp, error) {
 	response, err := http.Default().CaptchaSolverGetTaskResult(ctx, &gateway_captcha.GetTaskResultRequest{
-		ApiKey: env.Env.ApiKey,
+		ApiKey: env.GetActorEnv().ApiKey,
 		TaskId: req.TaskId,
 	})
 	if err != nil {
