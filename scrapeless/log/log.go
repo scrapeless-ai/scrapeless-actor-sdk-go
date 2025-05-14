@@ -3,7 +3,6 @@ package log
 import (
 	"compress/gzip"
 	"fmt"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"io"
 	"os"
 	"path/filepath"
@@ -11,6 +10,8 @@ import (
 	"time"
 
 	"github.com/rs/zerolog"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/helper"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
@@ -33,7 +34,8 @@ const (
 )
 
 const (
-	traceKey = "trace-id"
+	traceKey   = "trace-id"
+	timeFormat = "2006-01-02T15:04:05Z"
 )
 
 var (
@@ -47,11 +49,7 @@ func init() {
 		panic("scrapeless: runId is empty")
 	}
 
-	dir := env.GetLogEnv().LogRootDir
-	if dir == "" {
-		fmt.Println("env.LogRootDir_is_empty")
-		dir = logRootDir
-	}
+	dir := helper.Coalesce(env.GetLogEnv().LogRootDir, logRootDir)
 
 	logDir := filepath.Join(dir, runId)
 	filename := fmt.Sprintf("%s/%s", logDir, fileName)
@@ -61,52 +59,13 @@ func init() {
 		_ = os.MkdirAll(logDir, os.ModePerm)
 	}
 
-	maxSize := env.GetLogEnv().MaxSize
-	if maxSize == 0 {
-		maxSize = maxSizeOfLog
-	}
-	maxBackups := env.GetLogEnv().MaxBackups
-	if maxBackups == 0 {
-		maxBackups = maxBackupsOfLog
-	}
-	maxAge := env.GetLogEnv().MaxAge
-	if maxAge == 0 {
-		maxAge = maxAgeOfLog
-	}
+	// Set defaults
+	setDefaults()
 
-	// MultiWriter to write logs to both console and file simultaneously
-	lj = &lumberjack.Logger{
-		Filename:   filename,
-		MaxSize:    maxSize,
-		MaxBackups: maxBackups,
-		MaxAge:     maxAge,
-		Compress:   true,
-	}
+	// Get MultiWriter
+	multi := getWriter(filename)
 
-	// Set Lumberjack's Writer to zero log output
-	consoleWriter := &zerolog.ConsoleWriter{
-		Out:        os.Stdout,
-		TimeFormat: time.RFC3339,
-		NoColor:    true,
-	}
-	fileWriter := &zerolog.ConsoleWriter{
-		Out:        lj,
-		TimeFormat: time.RFC3339,
-		NoColor:    true,
-	}
-
-	multi := zerolog.MultiLevelWriter(consoleWriter, fileWriter)
-
-	// UNIX Time is faster and smaller than most timestamps
-	// zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-
-	zerolog.TimestampFieldName = "ts"
-	zerolog.MessageFieldName = "msg"
-
-	zerolog.CallerMarshalFunc = func(pc uintptr, file string, line int) string {
-		return filepath.Base(file) + ":" + strconv.Itoa(line)
-	}
-
+	// New logger
 	logger = zerolog.New(multi).
 		With().
 		Timestamp().
@@ -126,10 +85,6 @@ func (t tracingHook) Run(e *zerolog.Event, level zerolog.Level, msg string) {
 			e.Str(traceKey, val)
 		}
 	}
-}
-
-func GetLogger() *zerolog.Logger {
-	return &logger
 }
 
 func archiveCurrentLog() error {
@@ -179,4 +134,58 @@ func archiveCurrentLog() error {
 
 	fmt.Printf("Archived and removed: %s → %s\n", logPath, gzPath)
 	return nil
+}
+
+func customFormatLevel(i interface{}) string {
+	l, ok := i.(string)
+	if ok {
+		return l
+	}
+	return "unknown"
+}
+
+func getWriter(filename string) zerolog.LevelWriter {
+	maxSize := helper.Coalesce(env.GetLogEnv().MaxSize, maxSizeOfLog)
+	maxBackups := helper.Coalesce(env.GetLogEnv().MaxBackups, maxBackupsOfLog)
+	maxAge := helper.Coalesce(env.GetLogEnv().MaxAge, maxAgeOfLog)
+
+	// MultiWriter to write logs to both console and file simultaneously
+	lj = &lumberjack.Logger{
+		Filename:   filename,
+		MaxSize:    maxSize,
+		MaxBackups: maxBackups,
+		MaxAge:     maxAge,
+		Compress:   true,
+	}
+
+	// Set Lumberjack's Writer to zero log output
+	consoleWriter := &zerolog.ConsoleWriter{
+		Out:         os.Stdout,
+		TimeFormat:  timeFormat,
+		NoColor:     true,
+		FormatLevel: customFormatLevel,
+	}
+	fileWriter := &zerolog.ConsoleWriter{
+		Out:         lj,
+		TimeFormat:  timeFormat,
+		NoColor:     true,
+		FormatLevel: customFormatLevel,
+	}
+
+	multi := zerolog.MultiLevelWriter(consoleWriter, fileWriter)
+
+	return multi
+}
+
+func setDefaults() {
+	zerolog.TimestampFieldName = "ts"
+	zerolog.MessageFieldName = "msg"
+	zerolog.TimestampFunc = func() time.Time {
+		return time.Now().UTC()
+	}
+	zerolog.TimeFieldFormat = timeFormat
+
+	zerolog.CallerMarshalFunc = func(pc uintptr, file string, line int) string {
+		return filepath.Base(file) + ":" + strconv.Itoa(line)
+	}
 }
