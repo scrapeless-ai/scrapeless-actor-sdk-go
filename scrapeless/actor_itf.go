@@ -3,6 +3,8 @@ package scrapeless
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/browser"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/captcha"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/httpserver"
@@ -52,5 +54,5 @@ func (a *Actor) Input(data any) error {
 }
 
 func (a *Actor) Start() error {
-	return a.Server.Start(fmt.Sprintf(":%s", env.Env.HttpPort))
+	return a.Server.Start(fmt.Sprintf(":%s", env.Env.Actor.HttpPort))
 }

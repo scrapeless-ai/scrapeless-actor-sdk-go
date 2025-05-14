@@ -31,6 +31,8 @@ type actorEnv struct {
 	DatasetId     string `mapstructure:"SCRAPELESS_DATASET_ID"`
 	BucketId      string `mapstructure:"SCRAPELESS_BUCKET_ID"`
 	QueueId       string `mapstructure:"SCRAPELESS_QUEUE_ID"`
+
+	HttpPort string `mapstructure:"SCRAPELESS_HTTP_PORT"`
 }
 
 type logEnv struct {
@@ -65,6 +67,7 @@ func init() {
 	viper.SetDefault("SCRAPELESS_BROWSER_API_HOST", "https://api.scrapeless.com")
 	viper.SetDefault("SCRAPELESS_PROXY_SESSION_DURATION_MAX", 120)
 	viper.SetDefault("SCRAPELESS_PROXY_GATEWAY_HOST", "gw-us.scrapeless.io:8789")
+	viper.SetDefault("SCRAPELESS_HTTP_HEADER", "x-api-token")
 
 	viper.SetConfigFile(".env")
 	viper.AutomaticEnv()
