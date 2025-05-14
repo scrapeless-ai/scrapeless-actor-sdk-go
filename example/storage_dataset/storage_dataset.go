@@ -21,16 +21,16 @@ func main() {
 		},
 	})
 	if err != nil {
-		log.GetLogger().Error().Msg(err.Error())
+		log.Error(err.Error())
 		return
 	}
 	if success {
 		items, err := sl.Storage.GetDataset().GetItems(context.Background(), 1, 10, false)
 		if err != nil {
-			log.GetLogger().Error().Msg(err.Error())
+			log.Error(err.Error())
 			return
 		}
-		log.GetLogger().Info().Msgf("%v", items)
+		log.Infof("%v", items)
 	}
 
 }

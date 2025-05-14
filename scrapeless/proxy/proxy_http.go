@@ -13,7 +13,7 @@ type PHttp struct {
 }
 
 func NewPHttp() Proxy {
-	log.GetLogger().Info().Msgf("proxy http init")
+	log.Infof("proxy http init")
 	if http.Default() == nil {
 		http.Init()
 	}
@@ -36,7 +36,7 @@ func (ph *PHttp) Proxy(ctx context.Context, proxy ProxyActor) (string, error) {
 		TaskId:          env.GetActorEnv().RunId,
 	})
 	if err != nil {
-		log.GetLogger().Error().Msgf("get proxy err:%v\n", err)
+		log.Errorf("get proxy err:%v\n", err)
 		return "", code.Format(err)
 	}
 	return proxyUrl, nil

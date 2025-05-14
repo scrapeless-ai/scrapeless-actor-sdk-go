@@ -14,14 +14,14 @@ func main() {
 	// Set value use default namespace
 	ok, err := scrapeless.Storage.GetKv().SetValue(context.Background(), "key", "nice boy", 20)
 	if err != nil {
-		log.GetLogger().Error().Msg(err.Error())
+		log.Error(err.Error())
 	}
-	log.GetLogger().Info().Msgf("ok:%v", ok)
+	log.Infof("ok:%v", ok)
 
 	// Get value use default namespace
 	value, err := scrapeless.Storage.GetKv().GetValue(context.Background(), "key")
 	if err != nil {
-		log.GetLogger().Error().Msg(err.Error())
+		log.Error(err.Error())
 	}
-	log.GetLogger().Info().Msgf("value:%v", value)
+	log.Infof("value:%v", value)
 }

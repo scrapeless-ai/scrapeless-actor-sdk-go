@@ -18,5 +18,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	log.GetLogger().Info().Msgf("%+v", browserInfo)
+	log.Infof("%+v", browserInfo)
 }

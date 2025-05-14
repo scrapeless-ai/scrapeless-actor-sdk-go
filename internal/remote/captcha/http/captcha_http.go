@@ -59,7 +59,7 @@ func (c *Client) CaptchaSolverGetTaskResult(ctx context.Context, req *captcha.Ge
 		return nil, err
 	}
 	if ok := gjson.Parse(body).Get("success").Bool(); !ok {
-		log.GetLogger().Error().Msg(body)
+		log.Error(body)
 		return nil, fmt.Errorf("get task result err")
 	}
 	var solution map[string]any

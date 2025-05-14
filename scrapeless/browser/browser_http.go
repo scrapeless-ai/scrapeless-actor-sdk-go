@@ -18,7 +18,7 @@ type BHttp struct {
 }
 
 func NewBHttp() Browser {
-	log.GetLogger().Info().Msg("browser http init")
+	log.Info("browser http init")
 	if http.Default() == nil {
 		http.Init()
 	}
@@ -40,7 +40,7 @@ func (bh *BHttp) Create(ctx context.Context, req Actor) (*CreateResp, error) {
 		},
 	})
 	if err != nil {
-		log.GetLogger().Error().Msgf("scraping browser create err:%v\n", err)
+		log.Errorf("scraping browser create err:%v\n", err)
 		return nil, code.Format(err)
 	}
 	if create != nil {

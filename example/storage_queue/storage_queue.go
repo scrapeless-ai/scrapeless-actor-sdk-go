@@ -19,23 +19,23 @@ func main() {
 		Deadline: 0,
 	})
 	if err != nil {
-		log.GetLogger().Error().Msg("failed to push to queue")
+		log.Error("failed to push to queue")
 		return
 	}
-	log.GetLogger().Info().Msg(msgId)
+	log.Info(msgId)
 
 	// pull a message from queue
 	pullResp, err := sl.Storage.GetQueue().Pull(context.Background(), 100)
 	if err != nil {
-		log.GetLogger().Error().Msg(err.Error())
+		log.Error(err.Error())
 		return
 	}
-	log.GetLogger().Info().Msgf("%v", pullResp)
+	log.Infof("%v", pullResp)
 	for _, v := range pullResp {
 		// ack message
 		err = sl.Storage.GetQueue().Ack(context.Background(), v.QueueID)
 		if err != nil {
-			log.GetLogger().Error().Msg(err.Error())
+			log.Error(err.Error())
 		}
 	}
 

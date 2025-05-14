@@ -19,15 +19,15 @@ func (c *Client) ListDatasets(ctx context.Context, req *ListDatasetsRequest) (*L
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("list dataset body:%s\n", body)
+	log.Infof("list dataset body:%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("list dataset err:%v\n", err)
+		log.Errorf("list dataset err:%v\n", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	if resp.Err {
@@ -37,7 +37,7 @@ func (c *Client) ListDatasets(ctx context.Context, req *ListDatasetsRequest) (*L
 	var respData ListDatasetsResponse
 	err = json.Unmarshal(marshal, &respData)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	return &respData, nil
@@ -56,15 +56,15 @@ func (c *Client) CreateDataset(ctx context.Context, req *CreateDatasetRequest) (
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("create dataset body:%s\n", body)
+	log.Infof("create dataset body:%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("create dataset err:%v\n", err)
+		log.Errorf("create dataset err:%v\n", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	if resp.Err {
@@ -74,7 +74,7 @@ func (c *Client) CreateDataset(ctx context.Context, req *CreateDatasetRequest) (
 	var respData Dataset
 	err = json.Unmarshal(marshal, &respData)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	return &respData, nil
@@ -89,15 +89,15 @@ func (c *Client) UpdateDataset(ctx context.Context, datasetID, name string) (boo
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("up dataset body:%s\n", body)
+	log.Infof("up dataset body:%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("up dataset err:%v\n", err)
+		log.Errorf("up dataset err:%v\n", err)
 		return false, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return false, err
 	}
 	if resp.Err {
@@ -113,15 +113,15 @@ func (c *Client) DelDataset(ctx context.Context, datasetID string) (bool, error)
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("del dataset body:%s\n", body)
+	log.Infof("del dataset body:%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("del dataset err:%v\n", err)
+		log.Errorf("del dataset err:%v\n", err)
 		return false, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return false, err
 	}
 	if resp.Err {
@@ -138,15 +138,15 @@ func (c *Client) GetDataset(ctx context.Context, req *GetDataset) (*DatasetItem,
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("get dataset body:%s\n", body)
+	log.Infof("get dataset body:%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("get dataset err:%v\n", err)
+		log.Errorf("get dataset err:%v\n", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	if resp.Err {
@@ -156,7 +156,7 @@ func (c *Client) GetDataset(ctx context.Context, req *GetDataset) (*DatasetItem,
 	var respData DatasetItem
 	err = json.Unmarshal(marshal, &respData)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	return &respData, nil
@@ -167,7 +167,7 @@ func (c *Client) AddDatasetItem(ctx context.Context, datasetId string, data []ma
 		"items": data,
 	})
 	if err != nil {
-		log.GetLogger().Error().Msgf("marshal dataset item err:%v\n", err)
+		log.Errorf("marshal dataset item err:%v\n", err)
 		return false, err
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
@@ -178,19 +178,19 @@ func (c *Client) AddDatasetItem(ctx context.Context, datasetId string, data []ma
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("add dataset item body:%s\n", body)
+	log.Infof("add dataset item body:%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("add dataset item err:%v\n", err)
+		log.Errorf("add dataset item err:%v\n", err)
 		return false, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal dataset item err:%v\n", err)
+		log.Errorf("unmarshal dataset item err:%v\n", err)
 		return false, err
 	}
 	if resp.Err {
-		log.GetLogger().Error().Msgf("add dataset item err:%s\n", resp.Msg)
+		log.Errorf("add dataset item err:%s\n", resp.Msg)
 		return false, fmt.Errorf("add dataset item err:%s", resp.Msg)
 	}
 	return true, nil
