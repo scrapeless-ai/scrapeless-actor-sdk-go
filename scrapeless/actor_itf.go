@@ -3,11 +3,13 @@ package scrapeless
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/browser"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/captcha"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/httpserver"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxy"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/router"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage"
 	"github.com/spf13/viper"
 	"reflect"
@@ -19,6 +21,7 @@ type Actor struct {
 	Captcha  captcha.Captcha
 	Storage  storage.Storage
 	Server   httpserver.Server
+	Router   router.Router
 	CloseFun []func() error
 }
 
@@ -30,6 +33,7 @@ func New(opts ...Option) *Actor {
 	for _, opt := range opts {
 		opt.Apply(actor)
 	}
+	actor.Router = router.New()
 	return actor
 }
 
@@ -52,5 +56,5 @@ func (a *Actor) Input(data any) error {
 }
 
 func (a *Actor) Start() error {
-	return a.Server.Start(":8848")
+	return a.Server.Start(fmt.Sprintf(":%s", env.Env.HttpPort))
 }

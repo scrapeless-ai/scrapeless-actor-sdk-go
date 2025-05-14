@@ -25,6 +25,7 @@ const (
 	envDatasetId     = "SCRAPELESS_DATASET_ID"
 	envBucketId      = "SCRAPELESS_BUCKET_ID"
 	envQueueId       = "SCRAPELESS_QUEUE_ID"
+	envHttpPort      = "SCRAPELESS_HTTP_PORT"
 	envInput         = "SCRAPELESS_INPUT"
 	envXApiKey       = "SCRAPELESS_X_API_KEY"
 
@@ -59,6 +60,7 @@ func LoadEnv() {
 			DatasetId:     viper.GetString(envDatasetId),
 			BucketId:      viper.GetString(envBucketId),
 			QueueId:       viper.GetString(envQueueId),
+			HttpPort:      viper.GetString(envHttpPort),
 		}
 		ScrapingBrowserApiHost = viper.GetString(envBrowserApiHost)
 		Token = viper.GetString(envToken)
@@ -110,6 +112,8 @@ type actorEnv struct {
 	DatasetId     string
 	BucketId      string
 	QueueId       string
+
+	HttpPort string
 }
 
 type logEnv struct {

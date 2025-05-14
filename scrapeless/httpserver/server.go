@@ -39,6 +39,7 @@ func (s *Server) AddHandle(path string, f func(input []byte) (Response, error)) 
 	s.handler.(*gin.Engine).Handle(http.MethodPost, path, func(c *gin.Context) {
 		body := c.Request.Body
 		bodyByte, _ := io.ReadAll(body)
+		defer body.Close()
 		data, err := f(bodyByte)
 		if err != nil {
 			c.JSON(http.StatusOK, err.Error())
