@@ -27,7 +27,7 @@ func (c *Client) CaptchaSolverCreateTask(ctx context.Context, req *captcha.Creat
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodPost,
-		Url:    fmt.Sprintf("%s/api/v1/createTask", env.ScrapelessCaptchaHost),
+		Url:    fmt.Sprintf("%s/api/v1/createTask", env.Env.ScrapelessCaptchaHost),
 		Body:   string(reqBody),
 		Headers: map[string]string{
 			"x-api-key": req.ApiKey,
@@ -49,7 +49,7 @@ func (c *Client) CaptchaSolverCreateTask(ctx context.Context, req *captcha.Creat
 func (c *Client) CaptchaSolverGetTaskResult(ctx context.Context, req *captcha.GetTaskResultRequest) (map[string]any, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/getTaskResult/%s", env.ScrapelessCaptchaHost, req.TaskId),
+		Url:    fmt.Sprintf("%s/api/v1/getTaskResult/%s", env.Env.ScrapelessCaptchaHost, req.TaskId),
 		Headers: map[string]string{
 			"x-api-key": req.ApiKey,
 			"token":     req.ApiKey,

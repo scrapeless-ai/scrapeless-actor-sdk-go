@@ -19,7 +19,7 @@ func NewQueueHttp(queueId ...string) Queue {
 	if storage_http.Default() == nil {
 		storage_http.Init()
 	}
-	q := &QueueHttp{queueId: env.Env.QueueId}
+	q := &QueueHttp{queueId: env.GetActorEnv().QueueId}
 	if len(queueId) > 0 {
 		q.queueId = queueId[0]
 	}
@@ -77,10 +77,10 @@ func (q *QueueHttp) List(ctx context.Context, page int64, pageSize int64, desc b
 //	ctx: The context for the request.
 //	req: The request object containing queue configuration details.
 func (q *QueueHttp) Create(ctx context.Context, req *CreateQueueReq) (queueId string, queueName string, err error) {
-	name := req.Name + "-" + env.Env.RunId
+	name := req.Name + "-" + env.GetActorEnv().RunId
 	queue, err := storage_http.Default().CreateQueue(ctx, &storage_http.CreateQueueRequest{
-		ActorId:     env.Env.ActorId,
-		RunId:       env.Env.RunId,
+		ActorId:     env.GetActorEnv().ActorId,
+		RunId:       env.GetActorEnv().RunId,
 		Name:        name,
 		Description: req.Description,
 	})
@@ -98,7 +98,7 @@ func (q *QueueHttp) Create(ctx context.Context, req *CreateQueueReq) (queueId st
 //	ctx: The context for the request.
 //	name: The name of the queue to retrieve.
 func (q *QueueHttp) Get(ctx context.Context, name string) (*Item, error) {
-	name = name + "-" + env.Env.RunId
+	name = name + "-" + env.GetActorEnv().RunId
 	queue, err := storage_http.Default().GetQueue(ctx, &storage_http.GetQueueRequest{
 		Id:   q.queueId,
 		Name: name,
@@ -126,7 +126,7 @@ func (q *QueueHttp) Get(ctx context.Context, name string) (*Item, error) {
 //	name: The new name of the queue.
 //	description: The new description of the queue.
 func (q *QueueHttp) Update(ctx context.Context, name string, description string) error {
-	name = name + "-" + env.Env.RunId
+	name = name + "-" + env.GetActorEnv().RunId
 	err := storage_http.Default().UpdateQueue(ctx, &storage_http.UpdateQueueRequest{
 		QueueId:     q.queueId,
 		Name:        name,

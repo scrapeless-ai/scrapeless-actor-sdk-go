@@ -42,13 +42,12 @@ var (
 )
 
 func init() {
-	env.LoadEnv()
-	runId := env.Env.RunId
+	runId := env.GetActorEnv().RunId
 	if runId == "" {
 		panic("scrapeless: runId is empty")
 	}
 
-	dir := env.LogEnv.LogRootDir
+	dir := env.GetLogEnv().LogRootDir
 	if dir == "" {
 		fmt.Println("env.LogRootDir_is_empty")
 		dir = logRootDir
@@ -62,15 +61,15 @@ func init() {
 		_ = os.MkdirAll(logDir, os.ModePerm)
 	}
 
-	maxSize := env.LogEnv.MaxSize
+	maxSize := env.GetLogEnv().MaxSize
 	if maxSize == 0 {
 		maxSize = maxSizeOfLog
 	}
-	maxBackups := env.LogEnv.MaxBackups
+	maxBackups := env.GetLogEnv().MaxBackups
 	if maxBackups == 0 {
 		maxBackups = maxBackupsOfLog
 	}
-	maxAge := env.LogEnv.MaxAge
+	maxAge := env.GetLogEnv().MaxAge
 	if maxAge == 0 {
 		maxAge = maxAgeOfLog
 	}

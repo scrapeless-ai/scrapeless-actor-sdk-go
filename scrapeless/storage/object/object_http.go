@@ -18,7 +18,7 @@ func NewObjHttp(bucketId ...string) Object {
 	if storage_http.Default() == nil {
 		storage_http.Init()
 	}
-	oh := &ObjHttp{bucketId: env.Env.BucketId}
+	oh := &ObjHttp{bucketId: env.GetActorEnv().BucketId}
 	if len(bucketId) > 0 {
 		oh.bucketId = bucketId[0]
 	}
@@ -71,12 +71,12 @@ func (oh *ObjHttp) ListBuckets(ctx context.Context, page int, pageSize int) (*Li
 //	name: Bucket name, must comply with storage service naming rules.
 //	description: Optional description for the bucket.
 func (oh *ObjHttp) CreateBucket(ctx context.Context, name string, description string) (bucketId string, bucketName string, err error) {
-	name = name + "-" + env.Env.RunId
+	name = name + "-" + env.GetActorEnv().RunId
 	bucketId, err = storage_http.Default().CreateBucket(ctx, &storage_http.CreateBucketRequest{
 		Name:        name,
 		Description: description,
-		ActorId:     env.Env.ActorId,
-		RunId:       env.Env.RunId,
+		ActorId:     env.GetActorEnv().ActorId,
+		RunId:       env.GetActorEnv().RunId,
 	})
 	if err != nil {
 		log.GetLogger().Error().Msgf("failed to create bucket: %v\n", code.Format(err))
@@ -198,8 +198,8 @@ func (oh *ObjHttp) putWithId(ctx context.Context, filename string, data []byte) 
 		BucketId: oh.bucketId,
 		Filename: filename,
 		Data:     data,
-		ActorId:  env.Env.ActorId,
-		RunId:    env.Env.RunId,
+		ActorId:  env.GetActorEnv().ActorId,
+		RunId:    env.GetActorEnv().RunId,
 	})
 	if err != nil {
 		log.GetLogger().Error().Msgf("failed to put object: %v\n", code.Format(err))
