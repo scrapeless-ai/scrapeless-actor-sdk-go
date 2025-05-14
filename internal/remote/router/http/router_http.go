@@ -12,7 +12,7 @@ func (c *Client) Request(keyword string, method string, path string, body io.Rea
 	if path[0] == '/' {
 		path = path[1:]
 	}
-	u := fmt.Sprintf("%s/api/v1/%s/%s", env.ScrapelessApiHost, keyword, path)
+	u := fmt.Sprintf("%s/api/v1/%s/%s", env.Env.ScrapelessApiHost, keyword, path)
 	fmt.Println(u)
 	request, err := http.NewRequest(method, u, body)
 	if err != nil {
@@ -22,7 +22,7 @@ func (c *Client) Request(keyword string, method string, path string, body io.Rea
 	for k, v := range headers {
 		request.Header.Set(k, v)
 	}
-	request.Header.Set(env.HTTPHeader, env.Token)
+	request.Header.Set(env.Env.HTTPHeader, env.Env.Token)
 	do, err := c.client.Do(request)
 	if err != nil {
 		log.GetLogger().Error().Msgf("do request error :%v\n", err)
