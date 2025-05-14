@@ -67,7 +67,7 @@ func (c *Client) UpdateQueue(ctx context.Context, req *UpdateQueueRequest) error
 	}
 	handel, err := handel.setReq(req).sendRequest(ctx)
 	if err != nil {
-		log.GetLogger().Error().Msg(err.Error())
+		log.Error(err.Error())
 		return err
 	}
 

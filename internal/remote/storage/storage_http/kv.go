@@ -20,15 +20,15 @@ func (c *Client) ListNamespaces(ctx context.Context, page int, pageSize int, des
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("list namespaces body:%s\n", body)
+	log.Infof("list namespaces body:%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("list namespaces err:%v\n", err)
+		log.Errorf("list namespaces err:%v\n", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	if resp.Err {
@@ -38,7 +38,7 @@ func (c *Client) ListNamespaces(ctx context.Context, page int, pageSize int, des
 	var respData KvNamespace
 	err = json.Unmarshal(marshal, &respData)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	return &respData, nil
@@ -57,15 +57,15 @@ func (c *Client) CreateNamespace(ctx context.Context, req *CreateKvNamespaceRequ
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("create namespace body:%s\n", body)
+	log.Infof("create namespace body:%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("create namespace err:%v\n", err)
+		log.Errorf("create namespace err:%v\n", err)
 		return "", err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return "", err
 	}
 	if resp.Err {
@@ -82,15 +82,15 @@ func (c *Client) GetNamespace(ctx context.Context, namespaceId string) (*KvNames
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("get namespace body:%s\n", body)
+	log.Infof("get namespace body:%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("get namespace err:%v\n", err)
+		log.Errorf("get namespace err:%v\n", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	if resp.Err {
@@ -99,7 +99,7 @@ func (c *Client) GetNamespace(ctx context.Context, namespaceId string) (*KvNames
 	data := gjson.Parse(body).Get("data").String()
 	var kvi KvNamespaceItem
 	if err = json.Unmarshal([]byte(data), &kvi); err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	return &kvi, nil
@@ -113,9 +113,9 @@ func (c *Client) DelNamespace(ctx context.Context, namespaceId string) (bool, er
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("del namespace body:%s\n", body)
+	log.Infof("del namespace body:%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("del namespace err:%v\n", err)
+		log.Errorf("del namespace err:%v\n", err)
 		return false, err
 	}
 	var resp request2.RespInfo
@@ -140,15 +140,15 @@ func (c *Client) RenameNamespace(ctx context.Context, namespaceId string, name s
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("rename namespace body:%s\n", body)
+	log.Infof("rename namespace body:%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("rename namespace err:%v\n", err)
+		log.Errorf("rename namespace err:%v\n", err)
 		return false, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return false, err
 	}
 	if resp.Err {
@@ -167,7 +167,7 @@ func (c *Client) SetValue(ctx context.Context, req *SetValue) (bool, error) {
 	}
 	reqBodyStr, err := json.Marshal(reqBody)
 	if err != nil {
-		log.GetLogger().Info().Msgf("marshal reqBody error :%v\n", err)
+		log.Infof("marshal reqBody error :%v\n", err)
 		return false, err
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
@@ -178,20 +178,20 @@ func (c *Client) SetValue(ctx context.Context, req *SetValue) (bool, error) {
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("set value body :%s\n", body)
+	log.Infof("set value body :%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("request error :%v\n", err)
+		log.Errorf("request error :%v\n", err)
 		return false, err
 	}
-	log.GetLogger().Info().Msgf("set value body :%v\n", body)
+	log.Infof("set value body :%v\n", body)
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return false, err
 	}
 	if resp.Err {
-		log.GetLogger().Error().Msgf("set value err :%v\n", resp.Msg)
+		log.Errorf("set value err :%v\n", resp.Msg)
 		return false, fmt.Errorf("set value err:%s", resp.Msg)
 	}
 	ok := gjson.Parse(body).Get("data.success").Bool()
@@ -207,15 +207,15 @@ func (c *Client) ListKeys(ctx context.Context, req *ListKeyInfo) (*KvKeys, error
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("list keys body :%s\n", body)
+	log.Infof("list keys body :%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("request error :%v\n", err)
+		log.Errorf("request error :%v\n", err)
 		return nil, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	if resp.Err {
@@ -225,7 +225,7 @@ func (c *Client) ListKeys(ctx context.Context, req *ListKeyInfo) (*KvKeys, error
 	var respData KvKeys
 	err = json.Unmarshal(marshal, &respData)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return nil, err
 	}
 	return &respData, nil
@@ -239,15 +239,15 @@ func (c *Client) GetValue(ctx context.Context, namespaceId string, key string) (
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("get value body :%s\n", body)
+	log.Infof("get value body :%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("request error :%v\n", err)
+		log.Errorf("request error :%v\n", err)
 		return "", err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return "", err
 	}
 	if resp.Err {
@@ -265,15 +265,15 @@ func (c *Client) DelValue(ctx context.Context, namespaceId string, key string) (
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("del value body :%s\n", body)
+	log.Infof("del value body :%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("request error :%v\n", err)
+		log.Errorf("request error :%v\n", err)
 		return false, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return false, err
 	}
 	if resp.Err {
@@ -296,14 +296,14 @@ func (c *Client) BulkSetValue(ctx context.Context, req *BulkSet) (int64, error) 
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("bulk set value body :%s\n", body)
+	log.Infof("bulk set value body :%s\n", body)
 	if err != nil {
 		return 0, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return 0, err
 	}
 	if resp.Err {
@@ -326,15 +326,15 @@ func (c *Client) BulkDelValue(ctx context.Context, namespaceId string, keys []st
 			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
-	log.GetLogger().Info().Msgf("bulk del value body :%s\n", body)
+	log.Infof("bulk del value body :%s\n", body)
 	if err != nil {
-		log.GetLogger().Error().Msgf("request error :", err)
+		log.Errorf("request error :", err)
 		return false, err
 	}
 	var resp request2.RespInfo
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {
-		log.GetLogger().Error().Msgf("unmarshal resp error :%v\n", err)
+		log.Errorf("unmarshal resp error :%v\n", err)
 		return false, err
 	}
 	if resp.Err {

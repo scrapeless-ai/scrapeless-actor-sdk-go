@@ -13,7 +13,7 @@ func main() {
 	// Put object The supported types include JSON、html、png
 	objectId, err := sl.Storage.GetObject().Put(context.Background(), "object.json", []byte("data"))
 	if err != nil {
-		log.GetLogger().Error().Msg(err.Error())
+		log.Error(err.Error())
 		return
 	}
 	if objectId != "" {
@@ -22,6 +22,6 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		log.GetLogger().Info().Msg(string(resp))
+		log.Info(string(resp))
 	}
 }

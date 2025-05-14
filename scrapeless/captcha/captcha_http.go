@@ -15,7 +15,7 @@ type CaHttp struct {
 }
 
 func NewCaHttp() Captcha {
-	log.GetLogger().Info().Msg("captcha http init")
+	log.Info("captcha http init")
 	if http.Default() == nil {
 		http.Init()
 	}
@@ -52,7 +52,7 @@ func (c *CaHttp) Solver(ctx context.Context, req *CaptchaSolverReq) (*CaptchaSol
 		Timeout: req.TimeOut,
 	})
 	if err != nil {
-		log.GetLogger().Error().Msgf("captcha solver err:%v\n", err)
+		log.Errorf("captcha solver err:%v\n", err)
 		return nil, code.Format(err)
 	}
 	// Marshal the API response into JSON format and extract the 'token' field from the result
@@ -92,7 +92,7 @@ func (c *CaHttp) Create(ctx context.Context, req *CaptchaSolverReq) (string, err
 	})
 	if err != nil {
 		// Log error and return formatted error response
-		log.GetLogger().Error().Msgf("captcha creat err:%v\n", err)
+		log.Errorf("captcha creat err:%v\n", err)
 		return "", code.Format(err)
 	}
 	return taskId, nil
@@ -110,7 +110,7 @@ func (c *CaHttp) ResultGet(ctx context.Context, req *CaptchaSolverReq) (*Captcha
 		TaskId: req.TaskId,
 	})
 	if err != nil {
-		log.GetLogger().Error().Msgf("captcha result get err:%v\n", err)
+		log.Errorf("captcha result get err:%v\n", err)
 		return nil, err
 	}
 	marshal, _ := json.Marshal(response)

@@ -23,16 +23,16 @@ func main() {
 		},
 	})
 	if err != nil {
-		log.GetLogger().Error().Msg(err.Error())
+		log.Error(err.Error())
 	}
-	log.GetLogger().Info().Msgf("%v", captchaTaskId)
+	log.Infof("%v", captchaTaskId)
 	// Wait for captcha task to be solved
 	time.Sleep(time.Second * 20)
 	captchaResult, err := scrapeless.Captcha.ResultGet(context.TODO(), &captcha.CaptchaSolverReq{
 		TaskId: captchaTaskId,
 	})
 	if err != nil {
-		log.GetLogger().Error().Msg(err.Error())
+		log.Error(err.Error())
 	}
-	log.GetLogger().Info().Msgf("%v", captchaResult)
+	log.Infof("%v", captchaResult)
 }

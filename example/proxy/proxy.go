@@ -22,7 +22,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	log.GetLogger().Info().Msg(proxy)
+	log.Info(proxy)
 	parse, err := url.Parse(proxy)
 	if err != nil {
 		panic(err)
@@ -42,5 +42,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	log.GetLogger().Info().Msg(string(body))
+	log.Info(string(body))
 }

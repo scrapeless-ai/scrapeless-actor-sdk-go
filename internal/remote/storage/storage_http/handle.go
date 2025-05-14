@@ -192,10 +192,10 @@ func (h *HttpHandle[T]) sendRequest(ctx context.Context) (*HttpHandle[T], error)
 		},
 	})
 	if err != nil {
-		log.GetLogger().Error().Msgf("request err:%v\n", err)
+		log.Errorf("request err:%v\n", err)
 		return h, err
 	}
-	log.GetLogger().Info().Msgf("request body:%s\n", body)
+	log.Infof("request body:%s\n", body)
 	var resp T
 	err = json.Unmarshal([]byte(body), &resp)
 	if err != nil {

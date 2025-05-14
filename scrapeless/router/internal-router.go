@@ -10,7 +10,7 @@ import (
 type Internal struct{}
 
 func New() Router {
-	log.GetLogger().Info().Msg("Internal Router init")
+	log.Info("Internal Router init")
 	if rh.Default() == nil {
 		rh.Init()
 	}
