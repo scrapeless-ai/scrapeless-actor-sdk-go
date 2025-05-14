@@ -15,17 +15,17 @@ func (c *Client) ProxyGetProxy(ctx context.Context, req *proxy.GetProxyRequest) 
 		return "", status.Errorf(codes.InvalidArgument, "api key is required")
 	}
 	if req.Country == "" {
-		req.Country = env.ProxyCountry
+		req.Country = env.Env.ProxyCountry
 	}
-	if int64(req.SessionDuration) > env.ProxySessionDurationMax {
-		req.SessionDuration = uint64(env.ProxySessionDurationMax)
+	if int64(req.SessionDuration) > env.Env.ProxySessionDurationMax {
+		req.SessionDuration = uint64(env.Env.ProxySessionDurationMax)
 	}
 	if req.SessionId == "" {
 
 		req.SessionId = funk.RandomString(10)
 	}
 	if req.Gateway == "" {
-		req.Gateway = env.ProxyGatewayHost
+		req.Gateway = env.Env.ProxyGatewayHost
 	}
 
 	proxyURL := fmt.Sprintf(

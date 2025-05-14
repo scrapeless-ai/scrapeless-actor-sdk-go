@@ -13,10 +13,10 @@ import (
 func (c *Client) ListDatasets(ctx context.Context, req *ListDatasetsRequest) (*ListDatasetsResponse, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/dataset?actorId=%s&desc=%v&page=%d&pageSize=%d&runId=%s", env.ScrapelessApiHost, *req.ActorId, req.Desc, req.Page, req.PageSize, *req.RunId),
+		Url:    fmt.Sprintf("%s/api/v1/dataset?actorId=%s&desc=%v&page=%d&pageSize=%d&runId=%s", env.Env.ScrapelessApiHost, *req.ActorId, req.Desc, req.Page, req.PageSize, *req.RunId),
 		Body:   "",
 		Headers: map[string]string{
-			env.HTTPHeader: env.Token,
+			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
 	log.GetLogger().Info().Msgf("list dataset body:%s\n", body)
@@ -50,10 +50,10 @@ func (c *Client) CreateDataset(ctx context.Context, req *CreateDatasetRequest) (
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodPost,
-		Url:    fmt.Sprintf("%s/api/v1/dataset", env.ScrapelessApiHost),
+		Url:    fmt.Sprintf("%s/api/v1/dataset", env.Env.ScrapelessApiHost),
 		Body:   string(reqBody),
 		Headers: map[string]string{
-			env.HTTPHeader: env.Token,
+			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
 	log.GetLogger().Info().Msgf("create dataset body:%s\n", body)
@@ -83,10 +83,10 @@ func (c *Client) CreateDataset(ctx context.Context, req *CreateDatasetRequest) (
 func (c *Client) UpdateDataset(ctx context.Context, datasetID, name string) (bool, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodPut,
-		Url:    fmt.Sprintf("%s/api/v1/dataset/%s", env.ScrapelessApiHost, datasetID),
+		Url:    fmt.Sprintf("%s/api/v1/dataset/%s", env.Env.ScrapelessApiHost, datasetID),
 		Body:   fmt.Sprintf(`{"name":"%s"}`, name),
 		Headers: map[string]string{
-			env.HTTPHeader: env.Token,
+			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
 	log.GetLogger().Info().Msgf("up dataset body:%s\n", body)
@@ -108,9 +108,9 @@ func (c *Client) UpdateDataset(ctx context.Context, datasetID, name string) (boo
 func (c *Client) DelDataset(ctx context.Context, datasetID string) (bool, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodDelete,
-		Url:    fmt.Sprintf("%s/api/v1/dataset/%s", env.ScrapelessApiHost, datasetID),
+		Url:    fmt.Sprintf("%s/api/v1/dataset/%s", env.Env.ScrapelessApiHost, datasetID),
 		Headers: map[string]string{
-			env.HTTPHeader: env.Token,
+			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
 	log.GetLogger().Info().Msgf("del dataset body:%s\n", body)
@@ -133,9 +133,9 @@ func (c *Client) DelDataset(ctx context.Context, datasetID string) (bool, error)
 func (c *Client) GetDataset(ctx context.Context, req *GetDataset) (*DatasetItem, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/dataset/%s/items?page=%d&pageSize=%d&desc=%v", env.ScrapelessApiHost, req.DatasetId, req.Page, req.PageSize, req.Desc),
+		Url:    fmt.Sprintf("%s/api/v1/dataset/%s/items?page=%d&pageSize=%d&desc=%v", env.Env.ScrapelessApiHost, req.DatasetId, req.Page, req.PageSize, req.Desc),
 		Headers: map[string]string{
-			env.HTTPHeader: env.Token,
+			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
 	log.GetLogger().Info().Msgf("get dataset body:%s\n", body)
@@ -172,10 +172,10 @@ func (c *Client) AddDatasetItem(ctx context.Context, datasetId string, data []ma
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodPost,
-		Url:    fmt.Sprintf("%s/api/v1/dataset/%s/items", env.ScrapelessApiHost, datasetId),
+		Url:    fmt.Sprintf("%s/api/v1/dataset/%s/items", env.Env.ScrapelessApiHost, datasetId),
 		Body:   string(reqBody),
 		Headers: map[string]string{
-			env.HTTPHeader: env.Token,
+			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
 	log.GetLogger().Info().Msgf("add dataset item body:%s\n", body)

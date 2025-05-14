@@ -17,7 +17,7 @@ func NewDSHttp(datasetId ...string) Dataset {
 	if storage_http.Default() == nil {
 		storage_http.Init()
 	}
-	dh := &DSHttp{datasetId: env.Env.DatasetId}
+	dh := &DSHttp{datasetId: env.GetActorEnv().DatasetId}
 	if len(datasetId) > 0 {
 		dh.datasetId = datasetId[0]
 	}
@@ -41,8 +41,8 @@ func (ds *DSHttp) ListDatasets(ctx context.Context, page int64, pageSize int64, 
 	datasets, err := storage_http.Default().ListDatasets(ctx, &storage_http.ListDatasetsRequest{
 		Page:     page,
 		PageSize: pageSize,
-		ActorId:  &env.Env.ActorId,
-		RunId:    &env.Env.RunId,
+		ActorId:  &env.GetActorEnv().ActorId,
+		RunId:    &env.GetActorEnv().RunId,
 
 		Desc: desc,
 	})
@@ -75,11 +75,11 @@ func (ds *DSHttp) ListDatasets(ctx context.Context, page int64, pageSize int64, 
 //	ctx:The request context.
 //	name: The name of the dataset to create.
 func (ds *DSHttp) CreateDataset(ctx context.Context, name string) (id string, datasetName string, err error) {
-	name = name + "-" + env.Env.RunId
+	name = name + "-" + env.GetActorEnv().RunId
 	dataset, err := storage_http.Default().CreateDataset(ctx, &storage_http.CreateDatasetRequest{
 		Name:    name,
-		ActorId: &env.Env.ActorId,
-		RunId:   &env.Env.RunId,
+		ActorId: &env.GetActorEnv().ActorId,
+		RunId:   &env.GetActorEnv().RunId,
 	})
 	if err != nil {
 		log.GetLogger().Error().Msgf("failed to create dataset: %v\n", code.Format(err))
@@ -95,7 +95,7 @@ func (ds *DSHttp) CreateDataset(ctx context.Context, name string) (id string, da
 //	ctx: The request context.
 //	name: Original dataset name (will be combined with runtime ID internally)
 func (ds *DSHttp) UpdateDataset(ctx context.Context, name string) (ok bool, datasetName string, err error) {
-	name = name + "-" + env.Env.RunId
+	name = name + "-" + env.GetActorEnv().RunId
 	ok, err = storage_http.Default().UpdateDataset(ctx, ds.datasetId, name)
 	if err != nil {
 		log.GetLogger().Error().Msgf("failed to update dataset: %v\n", code.Format(err))

@@ -17,9 +17,9 @@ import (
 func (c *Client) ListBuckets(ctx context.Context, page, size int) (*Object, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/object/buckets?page=%d&pageSize=%d", env.ScrapelessApiHost, page, size),
+		Url:    fmt.Sprintf("%s/api/v1/object/buckets?page=%d&pageSize=%d", env.Env.ScrapelessApiHost, page, size),
 		Headers: map[string]string{
-			env.HTTPHeader: env.Token,
+			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
 	log.GetLogger().Info().Msgf("list buckets body :%s\n", body)
@@ -53,10 +53,10 @@ func (c *Client) CreateBucket(ctx context.Context, req *CreateBucketRequest) (st
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodPost,
-		Url:    fmt.Sprintf("%s/api/v1/object/buckets", env.ScrapelessApiHost),
+		Url:    fmt.Sprintf("%s/api/v1/object/buckets", env.Env.ScrapelessApiHost),
 		Body:   string(reqBody),
 		Headers: map[string]string{
-			env.HTTPHeader: env.Token,
+			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
 	log.GetLogger().Info().Msgf("create bucket body :%s\n", body)
@@ -83,9 +83,9 @@ func (c *Client) CreateBucket(ctx context.Context, req *CreateBucketRequest) (st
 func (c *Client) DeleteBucket(ctx context.Context, bucketId string) (bool, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodDelete,
-		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s", env.ScrapelessApiHost, bucketId),
+		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s", env.Env.ScrapelessApiHost, bucketId),
 		Headers: map[string]string{
-			env.HTTPHeader: env.Token,
+			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
 	log.GetLogger().Info().Msgf("del bucket body :%s\n", body)
@@ -110,9 +110,9 @@ func (c *Client) DeleteBucket(ctx context.Context, bucketId string) (bool, error
 func (c *Client) GetBucket(ctx context.Context, bucketId string) (*Bucket, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s", env.ScrapelessApiHost, bucketId),
+		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s", env.Env.ScrapelessApiHost, bucketId),
 		Headers: map[string]string{
-			env.HTTPHeader: env.Token,
+			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
 	log.GetLogger().Info().Msgf("get bucket body :%s\n", body)
@@ -142,9 +142,9 @@ func (c *Client) GetBucket(ctx context.Context, bucketId string) (*Bucket, error
 func (c *Client) ListObjects(ctx context.Context, req *ListObjectsRequest) (*ObjectList, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s/objects", env.ScrapelessApiHost, req.BucketId),
+		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s/objects", env.Env.ScrapelessApiHost, req.BucketId),
 		Headers: map[string]string{
-			env.HTTPHeader: env.Token,
+			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
 	log.GetLogger().Info().Msgf("list objects body :%s\n", body)
@@ -174,9 +174,9 @@ func (c *Client) ListObjects(ctx context.Context, req *ListObjectsRequest) (*Obj
 func (c *Client) GetObject(ctx context.Context, req *ObjectRequest) ([]byte, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s/%s", env.ScrapelessApiHost, req.BucketId, req.ObjectId),
+		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s/%s", env.Env.ScrapelessApiHost, req.BucketId, req.ObjectId),
 		Headers: map[string]string{
-			env.HTTPHeader: env.Token,
+			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
 	log.GetLogger().Info().Msgf("get object body :%s\n", body)
@@ -199,9 +199,9 @@ func (c *Client) GetObject(ctx context.Context, req *ObjectRequest) ([]byte, err
 func (c *Client) DeleteObject(ctx context.Context, req *ObjectRequest) (bool, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodDelete,
-		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s/%s", env.ScrapelessApiHost, req.BucketId, req.ObjectId),
+		Url:    fmt.Sprintf("%s/api/v1/object/buckets/%s/%s", env.Env.ScrapelessApiHost, req.BucketId, req.ObjectId),
 		Headers: map[string]string{
-			env.HTTPHeader: env.Token,
+			env.Env.HTTPHeader: env.Env.Token,
 		},
 	})
 	log.GetLogger().Info().Msgf("del object body :%s\n", body)
@@ -233,10 +233,10 @@ func (c *Client) PutObject(ctx context.Context, req *PutObjectRequest) (string, 
 	writer.WriteField("runId", req.RunId)
 	writer.Close()
 
-	url := fmt.Sprintf("%s/api/v1/object/buckets/%s/object", env.ScrapelessApiHost, req.BucketId)
+	url := fmt.Sprintf("%s/api/v1/object/buckets/%s/object", env.Env.ScrapelessApiHost, req.BucketId)
 	request, _ := http.NewRequestWithContext(ctx, http.MethodPost, url, body)
 	request.Header.Set("Content-Type", writer.FormDataContentType())
-	request.Header.Set(env.HTTPHeader, env.Token)
+	request.Header.Set(env.Env.HTTPHeader, env.Env.Token)
 	resp, err := c.client.Do(request)
 	defer resp.Body.Close()
 	all, _ := io.ReadAll(resp.Body)

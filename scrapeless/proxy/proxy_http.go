@@ -28,12 +28,12 @@ func NewPHttp() Proxy {
 //	proxy: ProxyActor - Struct containing proxy request parameters like country, session duration, etc.
 func (ph *PHttp) Proxy(ctx context.Context, proxy ProxyActor) (string, error) {
 	proxyUrl, err := http.Default().ProxyGetProxy(ctx, &proxy2.GetProxyRequest{
-		ApiKey:          env.Env.ApiKey,
+		ApiKey:          env.GetActorEnv().ApiKey,
 		Country:         proxy.Country,
 		SessionDuration: proxy.SessionDuration,
 		SessionId:       proxy.SessionId,
 		Gateway:         proxy.Gateway,
-		TaskId:          env.Env.RunId,
+		TaskId:          env.GetActorEnv().RunId,
 	})
 	if err != nil {
 		log.GetLogger().Error().Msgf("get proxy err:%v\n", err)
