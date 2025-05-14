@@ -26,7 +26,7 @@ func NewBHttp() Browser {
 }
 func (bh *BHttp) Create(ctx context.Context, req Actor) (*CreateResp, error) {
 	create, err := http.Default().ScrapingBrowserCreate(ctx, &remote_brwoser.CreateBrowserRequest{
-		ApiKey: env.Env.ApiKey,
+		ApiKey: env.GetActorEnv().ApiKey,
 		Input: map[string]string{
 			"session_ttl": req.Input.SessionTtl,
 		},
@@ -59,7 +59,7 @@ func (bh *BHttp) CreateOnce(ctx context.Context, req ActorOnce) (*CreateResp, er
 	}
 	devtoolsUrl := fmt.Sprintf("wss://%s/browser", u.Host)
 	value := &url.Values{}
-	value.Set("token", env.Env.ApiKey)
+	value.Set("token", env.GetActorEnv().ApiKey)
 	value.Set("session_ttl", req.Input.SessionTtl)
 	value.Set("proxy_country", strings.ToUpper(req.ProxyCountry))
 	return &CreateResp{

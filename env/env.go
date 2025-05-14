@@ -2,6 +2,8 @@ package env
 
 import (
 	"errors"
+	"path/filepath"
+	"runtime"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -69,7 +71,11 @@ func init() {
 	viper.SetDefault("SCRAPELESS_PROXY_GATEWAY_HOST", "gw-us.scrapeless.io:8789")
 	viper.SetDefault("SCRAPELESS_HTTP_HEADER", "x-api-token")
 
-	viper.SetConfigFile(".env")
+	// Retrieve the directory where the current file is located (env directory)
+	_, filename, _, _ := runtime.Caller(0)
+	dir := filepath.Dir(filename)
+
+	viper.SetConfigFile(filepath.Join(dir, ".env"))
 	viper.AutomaticEnv()
 
 	err := viper.ReadInConfig()
