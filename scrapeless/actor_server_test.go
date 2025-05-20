@@ -17,7 +17,8 @@ var (
 
 func TestWithServer(t *testing.T) {
 	actor = New(WithServer(httpserver.DebugMode))
-	actor.Server.AddHandle("", getData)
+	actor.Server.AddHandlePost("", getData)
+	actor.Server.AddHandleGet("", getData)
 	if err := actor.Start(); err != nil {
 	}
 }

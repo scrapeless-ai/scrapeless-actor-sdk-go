@@ -12,7 +12,7 @@ func (c *Client) Request(keyword string, method string, path string, body io.Rea
 	if path != "" && path[0] == '/' {
 		path = path[1:]
 	}
-	u := fmt.Sprintf("%s/api/v1/%s/%s", env.Env.ScrapelessApiHost, keyword, path)
+	u := fmt.Sprintf("%s/api/v1/run/%s/%s", env.Env.ScrapelessApiHost, keyword, path)
 	request, err := http.NewRequest(method, u, body)
 	if err != nil {
 		log.Errorf("new request error :%v", err)
