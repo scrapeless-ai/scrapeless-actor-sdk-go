@@ -44,14 +44,8 @@ var (
 )
 
 func init() {
-	runId := env.GetActorEnv().RunId
-	if runId == "" {
-		panic("scrapeless: runId is empty")
-	}
+	logDir := helper.Coalesce(env.GetLogEnv().LogRootDir, logRootDir)
 
-	dir := helper.Coalesce(env.GetLogEnv().LogRootDir, logRootDir)
-
-	logDir := filepath.Join(dir, runId)
 	filename := fmt.Sprintf("%s/%s", logDir, fileName)
 
 	_, err := os.Stat(logDir)
