@@ -1,4 +1,4 @@
-package scrapeless
+package actor
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/browser"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/captcha"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/httpserver"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxy"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxies"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/router"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage"
 	"github.com/spf13/viper"
@@ -17,7 +17,7 @@ import (
 
 type Actor struct {
 	Browser  browser.Browser
-	Proxy    proxy.Proxy
+	Proxy    proxies.Proxy
 	Captcha  captcha.Captcha
 	Storage  storage.Storage
 	Server   httpserver.Server
@@ -31,7 +31,7 @@ func New(opts ...Option) *Actor {
 	for _, opt := range opts {
 		opt.Apply(actor)
 	}
-	actor.Router = router.New()
+	actor.Router = router.New(env.Env.ScrapelessBaseApiUrl)
 	return actor
 }
 

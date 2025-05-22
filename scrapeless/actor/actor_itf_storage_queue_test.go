@@ -1,4 +1,4 @@
-package scrapeless
+package actor
 
 import (
 	"context"

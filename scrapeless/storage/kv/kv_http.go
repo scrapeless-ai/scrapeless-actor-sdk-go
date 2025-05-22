@@ -12,10 +12,10 @@ type KvHttp struct {
 	namespaceId string
 }
 
-func NewKVHttp(namespaceId ...string) KV {
+func NewKVHttp(baseUrl string, namespaceId ...string) KV {
 	log.Infof("kv http init")
 	if storage_http.Default() == nil {
-		storage_http.Init()
+		storage_http.Init(baseUrl)
 	}
 	kh := &KvHttp{namespaceId: env.GetActorEnv().KvNamespaceId}
 	if len(namespaceId) > 0 {

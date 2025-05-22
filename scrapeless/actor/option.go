@@ -1,10 +1,11 @@
-package scrapeless
+package actor
 
 import (
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/browser"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/captcha"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/httpserver"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxy"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxies"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage"
 )
 
@@ -26,7 +27,7 @@ func (o *BrowserOption) Apply(a *Actor) {
 		a.Browser = browser.NewBGrpc()
 		a.CloseFun = append(a.CloseFun, a.Browser.Close)
 	} else {
-		a.Browser = browser.NewBHttp()
+		a.Browser = browser.NewBHttp(env.Env.ScrapelessBrowserUrl)
 		a.CloseFun = append(a.CloseFun, a.Browser.Close)
 	}
 }
@@ -49,12 +50,12 @@ func (o *ProxyOption) Apply(a *Actor) {
 	if o.tp == typeGrpc {
 		a.CloseFun = append(a.CloseFun, a.Proxy.Close)
 	} else {
-		a.Proxy = proxy.NewPHttp()
+		a.Proxy = proxies.NewPHttp()
 		a.CloseFun = append(a.CloseFun, a.Proxy.Close)
 	}
 }
 
-// WithProxy choose proxy type.
+// WithProxy choose proxies type.
 func WithProxy(tp ...string) Option {
 	if len(tp) == 0 {
 		tp = append(tp, typeHttp)
@@ -72,7 +73,7 @@ func (o *CaptchaOption) Apply(a *Actor) {
 	if o.tp == typeGrpc {
 		a.CloseFun = append(a.CloseFun, a.Captcha.Close)
 	} else {
-		a.Captcha = captcha.NewCaHttp()
+		a.Captcha = captcha.NewCaHttp(env.Env.ScrapelessBaseApiUrl)
 		a.CloseFun = append(a.CloseFun, a.Captcha.Close)
 	}
 }

@@ -2,6 +2,7 @@ package request
 
 import (
 	"context"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"io"
 	"net/http"
@@ -51,6 +52,7 @@ func Request(ctx context.Context, reqInfo ReqInfo) (string, error) {
 	for k, v := range reqInfo.Headers {
 		request.Header.Set(k, v)
 	}
+	request.Header.Set(env.Env.HTTPHeader, env.GetActorEnv().ApiKey)
 	if reqInfo.Body != "" {
 		if reqInfo.Body[0] == '[' || reqInfo.Body[0] == '{' {
 			request.Header.Set("Content-Type", "application/json")

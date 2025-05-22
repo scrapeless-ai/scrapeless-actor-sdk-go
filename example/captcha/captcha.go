@@ -2,14 +2,14 @@ package main
 
 import (
 	"context"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/actor"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/captcha"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"time"
 )
 
 func main() {
-	scrapeless := scrapeless.New(scrapeless.WithCaptcha())
+	scrapeless := actor.New(actor.WithCaptcha())
 	//Create captcha task
 	captchaTaskId, err := scrapeless.Captcha.Create(context.TODO(), &captcha.CaptchaSolverReq{
 		Actor: "captcha.recaptcha",

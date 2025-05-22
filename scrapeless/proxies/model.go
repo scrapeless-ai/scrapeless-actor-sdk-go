@@ -1,4 +1,4 @@
-package proxy
+package proxies
 
 type ProxyActor struct {
 	Country         string `json:"country,omitempty"`

@@ -17,7 +17,7 @@ import (
 
 const (
 	// FileName is the log file name
-	fileName = "scrapeless.log" // 日志文件名
+	fileName = "scrapeless.log"
 	// MaxSize is the maximum size in megabytes of the log file before it gets
 	// rotated. It defaults to 100 megabytes.
 	maxSizeOfLog = 100

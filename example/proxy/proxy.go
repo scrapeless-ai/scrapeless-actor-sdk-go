@@ -2,16 +2,16 @@ package main
 
 import (
 	"context"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/actor"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
-	proxy2 "github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxy"
+	proxy2 "github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxies"
 	"io"
 	"net/http"
 	"net/url"
 )
 
 func main() {
-	sl := scrapeless.New(scrapeless.WithProxy())
+	sl := actor.New(actor.WithProxy())
 	defer sl.Close()
 	proxy, err := sl.Proxy.Proxy(context.TODO(), proxy2.ProxyActor{
 		Country:         "US",

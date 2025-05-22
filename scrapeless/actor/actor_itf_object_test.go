@@ -1,4 +1,4 @@
-package scrapeless
+package actor
 
 import (
 	"context"
@@ -43,7 +43,7 @@ func TestStorageListObjects(t *testing.T) {
 }
 
 func TestStoragePutObject(t *testing.T) {
-	oh := object.NewObjHttp()
+	oh := object.NewObjHttp("")
 	objects, err := oh.Put(context.Background(), "test.json", []byte(`{"name":"jack"}`)) //e87b6a6c-516d-4b6b-86ab-1d47c9a7fd36
 	t.Log(objects)
 	t.Error(err)

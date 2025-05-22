@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	request2 "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/request"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"net/http"
@@ -43,16 +42,17 @@ const (
 	ackMsg    = "ackMsg"
 )
 
-func regisHttpHandleFunc() {
+func (c *Client) regisHttpHandleFunc() {
+
 	queueHandel = map[HandleFuncName]*HttpHandle[request2.RespInfo]{
 		createQueue: {
 			Method:         http.MethodPost,
-			Url:            fmt.Sprintf("%s/api/v1/queue", env.Env.ScrapelessApiHost),
+			Url:            fmt.Sprintf("%s/api/v1/queue", c.BaseUrl),
 			NeedMarshalReq: true,
 		},
 		getQueue: {
 			Method:         http.MethodGet,
-			Url:            fmt.Sprintf("%s/api/v1/queue", env.Env.ScrapelessApiHost),
+			Url:            fmt.Sprintf("%s/api/v1/queue", c.BaseUrl),
 			NeedMarshalReq: false,
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*GetQueueRequest)
@@ -64,7 +64,7 @@ func regisHttpHandleFunc() {
 		},
 		getQueues: {
 			Method:         http.MethodGet,
-			Url:            fmt.Sprintf("%s/api/v1/queue/queues", env.Env.ScrapelessApiHost),
+			Url:            fmt.Sprintf("%s/api/v1/queue/queues", c.BaseUrl),
 			NeedMarshalReq: true,
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*GetQueuesRequest)
@@ -76,7 +76,7 @@ func regisHttpHandleFunc() {
 		},
 		updateQueue: {
 			Method:         http.MethodPut,
-			Url:            fmt.Sprintf("%s/api/v1/queue", env.Env.ScrapelessApiHost),
+			Url:            fmt.Sprintf("%s/api/v1/queue", c.BaseUrl),
 			NeedMarshalReq: true,
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*UpdateQueueRequest)
@@ -88,7 +88,7 @@ func regisHttpHandleFunc() {
 		},
 		delQueue: {
 			Method: http.MethodDelete,
-			Url:    fmt.Sprintf("%s/api/v1/queue", env.Env.ScrapelessApiHost),
+			Url:    fmt.Sprintf("%s/api/v1/queue", c.BaseUrl),
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*DelQueueRequest)
 				if !ok {
@@ -99,7 +99,7 @@ func regisHttpHandleFunc() {
 		},
 		createMsg: {
 			Method:         http.MethodPost,
-			Url:            fmt.Sprintf("%s/api/v1/queue", env.Env.ScrapelessApiHost),
+			Url:            fmt.Sprintf("%s/api/v1/queue", c.BaseUrl),
 			NeedMarshalReq: true,
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*CreateMsgRequest)
@@ -111,7 +111,7 @@ func regisHttpHandleFunc() {
 		},
 		getMsg: {
 			Method: http.MethodGet,
-			Url:    fmt.Sprintf("%s/api/v1/queue", env.Env.ScrapelessApiHost),
+			Url:    fmt.Sprintf("%s/api/v1/queue", c.BaseUrl),
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*GetMsgRequest)
 				if !ok {
@@ -122,7 +122,7 @@ func regisHttpHandleFunc() {
 		},
 		ackMsg: {
 			Method:         http.MethodPost,
-			Url:            fmt.Sprintf("%s/api/v1/queue", env.Env.ScrapelessApiHost),
+			Url:            fmt.Sprintf("%s/api/v1/queue", c.BaseUrl),
 			NeedMarshalReq: true,
 			FormatURL: func(h *HttpHandle[request2.RespInfo]) (string, error) {
 				req, ok := h.Req.(*AckMsgRequest)
@@ -184,12 +184,10 @@ func (h *HttpHandle[T]) sendRequest(ctx context.Context) (*HttpHandle[T], error)
 	}
 
 	body, err := request2.Request(ctx, request2.ReqInfo{
-		Method: h.Method,
-		Url:    url,
-		Body:   reqBody,
-		Headers: map[string]string{
-			env.Env.HTTPHeader: env.Env.Token,
-		},
+		Method:  h.Method,
+		Url:     url,
+		Body:    reqBody,
+		Headers: map[string]string{},
 	})
 	if err != nil {
 		log.Errorf("request err:%v", err)

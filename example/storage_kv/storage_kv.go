@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/actor"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 )
 
 func main() {
 	// new scrapeless with storage.
-	scrapeless := scrapeless.New(scrapeless.WithStorage())
+	scrapeless := actor.New(actor.WithStorage())
 	defer scrapeless.Close()
 
 	// Set value use default namespace

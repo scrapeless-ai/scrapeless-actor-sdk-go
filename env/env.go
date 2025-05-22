@@ -1,6 +1,7 @@
 package env
 
 import (
+	"fmt"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -24,6 +25,7 @@ func init() {
 	// Optionally read .env file (non-fatal)
 	_, filename, _, _ := runtime.Caller(0)
 	dir := filepath.Dir(filename)
+	fmt.Println(filepath.Join(dir, ".env"))
 	viper.SetConfigFile(filepath.Join(dir, ".env"))
 
 	err := viper.ReadInConfig()
@@ -37,10 +39,6 @@ func init() {
 		panic(err)
 	}
 
-	if Env.ScrapelessCaptchaHost == "" {
-		Env.ScrapelessCaptchaHost = Env.ScrapelessApiHost
-	}
-
 	// Validate required fields
 	err = Env.Validate()
 	if err != nil {
@@ -51,10 +49,14 @@ func init() {
 
 func setDefaults() {
 	viper.SetDefault("SCRAPELESS_PROXY_COUNTRY", "ANY")
-	viper.SetDefault("SCRAPELESS_BROWSER_API_HOST", "https://api.scrapeless.com")
+	//viper.SetDefault("SCRAPELESS_BROWSER_API_HOST", "https://api.scrapeless.com")
 	viper.SetDefault("SCRAPELESS_PROXY_SESSION_DURATION_MAX", 120)
 	viper.SetDefault("SCRAPELESS_PROXY_GATEWAY_HOST", "gw-us.scrapeless.io:8789")
 	viper.SetDefault("SCRAPELESS_HTTP_HEADER", "x-api-token")
+	viper.SetDefault("SCRAPELESS_BASE_API_URL", "https://api.scrapeless.com")
+	viper.SetDefault("SCRAPELESS_ACTOR_API_URL", "https://actor.scrapeless.com")
+	viper.SetDefault("SCRAPELESS_STORAGE_API_URL", "https://storage.scrapeless.com")
+	viper.SetDefault("SCRAPELESS_BROWSER_API_URL", "https://browser.scrapeless.com")
 }
 
 func bindEnvs(v *viper.Viper, iface any) error {

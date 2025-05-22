@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/actor"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage/queue"
 )
 
 func main() {
-	sl := scrapeless.New(scrapeless.WithStorage())
+	sl := actor.New(actor.WithStorage())
 
 	// push a message to queue
 	msgId, err := sl.Storage.GetQueue().Push(context.Background(), queue.PushQueue{

@@ -7,7 +7,7 @@ type CaptchaSolverResp struct {
 type CaptchaSolverReq struct {
 	Actor   string    `json:"actor"`
 	Input   Input     `json:"input"`
-	Proxy   ProxyInfo `json:"proxy"`
+	Proxy   ProxyInfo `json:"proxies"`
 	TimeOut int64     `json:"time_out"`
 	TaskId  string    `json:"task_id"`
 }

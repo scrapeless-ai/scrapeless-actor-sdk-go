@@ -1,11 +1,11 @@
-package scrapeless
+package actor
 
 import (
 	"context"
 	"fmt"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/browser"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/captcha"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxy"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxies"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage/kv"
 	"testing"
 )
@@ -22,8 +22,16 @@ func TestActor1(t *testing.T) {
 }
 
 func TestActorProxy(t *testing.T) {
+	//httpProxy := proxies.NewPHttp()
+	//create, err := httpProxy.Proxy(context.Background(), proxies.ProxyActor{
+	//	Country:         "US",
+	//	SessionDuration: 121,
+	//	SessionId:       "sessionId",
+	//})
+	//t.Log(create)
+	//t.Error(err)
 	ac := New(WithProxy())
-	create, err := ac.Proxy.Proxy(context.Background(), proxy.ProxyActor{
+	create, err := ac.Proxy.Proxy(context.Background(), proxies.ProxyActor{
 		Country:         "US",
 		SessionDuration: 121,
 		SessionId:       "sessionId",

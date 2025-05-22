@@ -9,10 +9,10 @@ import (
 
 type Internal struct{}
 
-func New() Router {
+func New(baseUrl string) Router {
 	log.Info("Internal Router init")
 	if rh.Default() == nil {
-		rh.Init()
+		rh.Init(baseUrl)
 	}
 	return Internal{}
 }

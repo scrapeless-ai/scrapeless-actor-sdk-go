@@ -1,4 +1,4 @@
-package scrapeless
+package actor
 
 import (
 	"fmt"
@@ -25,7 +25,7 @@ func TestWithServer(t *testing.T) {
 
 func getData(inputStruct []byte) (httpserver.Response, error) {
 	fmt.Println(string(inputStruct))
-	// proxy
+	// proxies
 	// browser
 	// get data
 	return httpserver.Response{

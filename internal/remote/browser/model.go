@@ -3,7 +3,7 @@ package browser
 type CreateBrowserRequest struct {
 	ApiKey string            `json:"apiKey,omitempty"`
 	Input  map[string]string `json:"input,omitempty"`
-	Proxy  *ProxyParams      `json:"proxy,omitempty"`
+	Proxy  *ProxyParams      `json:"proxies,omitempty"`
 }
 
 type CreateBrowserResponse struct {

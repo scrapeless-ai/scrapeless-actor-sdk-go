@@ -1,4 +1,4 @@
-package proxy
+package proxies
 
 import (
 	"context"
@@ -13,19 +13,19 @@ type PHttp struct {
 }
 
 func NewPHttp() Proxy {
-	log.Infof("proxy http init")
+	log.Infof("proxies http init")
 	if http.Default() == nil {
 		http.Init()
 	}
 	return &PHttp{}
 }
 
-// Proxy retrieves proxy information.
+// Proxy retrieves proxies information.
 //
 // Parameters:
 //
 //	ctx: context.Context - Context for the request.
-//	proxy: ProxyActor - Struct containing proxy request parameters like country, session duration, etc.
+//	proxies: ProxyActor - Struct containing proxies request parameters like country, session duration, etc.
 func (ph *PHttp) Proxy(ctx context.Context, proxy ProxyActor) (string, error) {
 	proxyUrl, err := http.Default().ProxyGetProxy(ctx, &proxy2.GetProxyRequest{
 		ApiKey:          env.GetActorEnv().ApiKey,
@@ -36,7 +36,7 @@ func (ph *PHttp) Proxy(ctx context.Context, proxy ProxyActor) (string, error) {
 		TaskId:          env.GetActorEnv().RunId,
 	})
 	if err != nil {
-		log.Errorf("get proxy err:%v", err)
+		log.Errorf("get proxies err:%v", err)
 		return "", code.Format(err)
 	}
 	return proxyUrl, nil

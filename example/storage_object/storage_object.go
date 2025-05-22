@@ -2,12 +2,12 @@ package main
 
 import (
 	"context"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/actor"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 )
 
 func main() {
-	sl := scrapeless.New(scrapeless.WithStorage())
+	sl := actor.New(actor.WithStorage())
 	defer sl.Close()
 
 	// Put object The supported types include JSON、html、png

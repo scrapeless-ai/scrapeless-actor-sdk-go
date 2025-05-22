@@ -2,12 +2,12 @@ package main
 
 import (
 	"context"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/actor"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 )
 
 func main() {
-	sl := scrapeless.New(scrapeless.WithStorage())
+	sl := actor.New(actor.WithStorage())
 	defer sl.Close()
 
 	success, err := sl.Storage.GetDataset().AddItems(context.Background(), []map[string]any{

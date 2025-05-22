@@ -14,10 +14,10 @@ import (
 type CaHttp struct {
 }
 
-func NewCaHttp() Captcha {
+func NewCaHttp(baseUrl string) Captcha {
 	log.Info("captcha http init")
 	if http.Default() == nil {
-		http.Init()
+		http.Init(baseUrl)
 	}
 	return &CaHttp{}
 }

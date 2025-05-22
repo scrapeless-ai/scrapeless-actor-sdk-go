@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/browser"
 	request2 "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/request"
 	"google.golang.org/grpc/codes"
@@ -27,7 +26,7 @@ func (c *Client) ScrapingBrowserCreate(ctx context.Context, req *browser.CreateB
 			value.Set(k, v)
 		}
 	}
-	parse, _ := url.Parse(fmt.Sprintf("%s/browser", env.Env.ScrapingBrowserApiHost))
+	parse, _ := url.Parse(fmt.Sprintf("%s/browser", c.BaseUrl))
 	parse.RawQuery = value.Encode()
 	request, err := request2.Request(ctx, request2.ReqInfo{
 		Method: http.MethodGet,
@@ -46,7 +45,7 @@ func (c *Client) ScrapingBrowserCreate(ctx context.Context, req *browser.CreateB
 		return nil, status.Errorf(codes.Internal, "create task failed, code: %d, message: %s", task.Code, task.Message)
 	}
 
-	u, err := url.Parse(env.Env.ScrapingBrowserApiHost)
+	u, err := url.Parse(c.BaseUrl)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "parse url error: %s", err.Error())
 	}

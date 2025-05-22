@@ -6,13 +6,19 @@ var Env config
 
 type config struct {
 	HTTPHeader              string `mapstructure:"SCRAPELESS_HTTP_HEADER"`
-	ScrapingBrowserApiHost  string `mapstructure:"SCRAPELESS_BROWSER_API_HOST"`
-	Token                   string `mapstructure:"SCRAPELESS_TOKEN"`
 	ProxyCountry            string `mapstructure:"SCRAPELESS_PROXY_COUNTRY"`
 	ProxySessionDurationMax int64  `mapstructure:"SCRAPELESS_PROXY_SESSION_DURATION_MAX"`
 	ProxyGatewayHost        string `mapstructure:"SCRAPELESS_PROXY_GATEWAY_HOST"`
-	ScrapelessApiHost       string `mapstructure:"SCRAPELESS_API_HOST"`
-	ScrapelessCaptchaHost   string `mapstructure:"SCRAPELESS_CAPTCHA_HOST"`
+
+	ScrapelessBaseApiUrl string `mapstructure:"SCRAPELESS_BASE_API_URL"`
+	ScrapelessStorageUrl string `mapstructure:"SCRAPELESS_STORAGE_API_URL"`
+	ScrapelessActorUrl   string `mapstructure:"SCRAPELESS_ACTOR_API_URL"`
+	ScrapelessBrowserUrl string `mapstructure:"SCRAPELESS_BROWSER_API_URL"`
+
+	//ScrapingBrowserUrl string `mapstructure:"SCRAPELESS_BROWSER_URL"`
+	//ScrapingBrowserApiHost  string `mapstructure:"SCRAPELESS_BROWSER_API_HOST"`
+	//ScrapelessApiHost     string `mapstructure:"SCRAPELESS_API_HOST"`
+	//ScrapelessCaptchaHost string `mapstructure:"SCRAPELESS_CAPTCHA_HOST"`
 
 	Actor actorEnv `mapstructure:",squash"`
 	Log   logEnv   `mapstructure:",squash"`

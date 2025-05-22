@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	request2 "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/request"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"github.com/tidwall/gjson"
@@ -13,12 +12,10 @@ import (
 
 func (c *Client) ListNamespaces(ctx context.Context, page int, pageSize int, desc bool) (*KvNamespace, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
-		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/kv/namespaces?desc=%v&page=%d&pageSize=%d", env.Env.ScrapelessApiHost, desc, page, pageSize),
-		Body:   "",
-		Headers: map[string]string{
-			env.Env.HTTPHeader: env.Env.Token,
-		},
+		Method:  http.MethodGet,
+		Url:     fmt.Sprintf("%s/api/v1/kv/namespaces?desc=%v&page=%d&pageSize=%d", c.BaseUrl, desc, page, pageSize),
+		Body:    "",
+		Headers: map[string]string{},
 	})
 	log.Infof("list namespaces body:%s", body)
 	if err != nil {
@@ -50,12 +47,10 @@ func (c *Client) CreateNamespace(ctx context.Context, req *CreateKvNamespaceRequ
 		return "", err
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
-		Method: http.MethodPost,
-		Url:    fmt.Sprintf("%s/api/v1/kv/namespaces", env.Env.ScrapelessApiHost),
-		Body:   string(reqBody),
-		Headers: map[string]string{
-			env.Env.HTTPHeader: env.Env.Token,
-		},
+		Method:  http.MethodPost,
+		Url:     fmt.Sprintf("%s/api/v1/kv/namespaces", c.BaseUrl),
+		Body:    string(reqBody),
+		Headers: map[string]string{},
 	})
 	log.Infof("create namespace body:%s", body)
 	if err != nil {
@@ -76,11 +71,9 @@ func (c *Client) CreateNamespace(ctx context.Context, req *CreateKvNamespaceRequ
 }
 func (c *Client) GetNamespace(ctx context.Context, namespaceId string) (*KvNamespaceItem, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
-		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/kv/%s", env.Env.ScrapelessApiHost, namespaceId),
-		Headers: map[string]string{
-			env.Env.HTTPHeader: env.Env.Token,
-		},
+		Method:  http.MethodGet,
+		Url:     fmt.Sprintf("%s/api/v1/kv/%s", c.BaseUrl, namespaceId),
+		Headers: map[string]string{},
 	})
 	log.Infof("get namespace body:%s\n", body)
 	if err != nil {
@@ -107,11 +100,9 @@ func (c *Client) GetNamespace(ctx context.Context, namespaceId string) (*KvNames
 
 func (c *Client) DelNamespace(ctx context.Context, namespaceId string) (bool, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
-		Method: http.MethodDelete,
-		Url:    fmt.Sprintf("%s/api/v1/kv/%s", env.Env.ScrapelessApiHost, namespaceId),
-		Headers: map[string]string{
-			env.Env.HTTPHeader: env.Env.Token,
-		},
+		Method:  http.MethodDelete,
+		Url:     fmt.Sprintf("%s/api/v1/kv/%s", c.BaseUrl, namespaceId),
+		Headers: map[string]string{},
 	})
 	log.Infof("del namespace body:%s\n", body)
 	if err != nil {
@@ -133,12 +124,10 @@ func (c *Client) DelNamespace(ctx context.Context, namespaceId string) (bool, er
 
 func (c *Client) RenameNamespace(ctx context.Context, namespaceId string, name string) (bool, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
-		Method: http.MethodPut,
-		Url:    fmt.Sprintf("%s/api/v1/kv/%s/rename", env.Env.ScrapelessApiHost, namespaceId),
-		Body:   fmt.Sprintf(`{"name":"%s"}`, name),
-		Headers: map[string]string{
-			env.Env.HTTPHeader: env.Env.Token,
-		},
+		Method:  http.MethodPut,
+		Url:     fmt.Sprintf("%s/api/v1/kv/%s/rename", c.BaseUrl, namespaceId),
+		Body:    fmt.Sprintf(`{"name":"%s"}`, name),
+		Headers: map[string]string{},
 	})
 	log.Infof("rename namespace body:%s\n", body)
 	if err != nil {
@@ -171,12 +160,10 @@ func (c *Client) SetValue(ctx context.Context, req *SetValue) (bool, error) {
 		return false, err
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
-		Method: http.MethodPut,
-		Url:    fmt.Sprintf("%s/api/v1/kv/%s/key", env.Env.ScrapelessApiHost, req.NamespaceId),
-		Body:   string(reqBodyStr),
-		Headers: map[string]string{
-			env.Env.HTTPHeader: env.Env.Token,
-		},
+		Method:  http.MethodPut,
+		Url:     fmt.Sprintf("%s/api/v1/kv/%s/key", c.BaseUrl, req.NamespaceId),
+		Body:    string(reqBodyStr),
+		Headers: map[string]string{},
 	})
 	log.Infof("set value body :%s\n", body)
 	if err != nil {
@@ -201,11 +188,9 @@ func (c *Client) SetValue(ctx context.Context, req *SetValue) (bool, error) {
 
 func (c *Client) ListKeys(ctx context.Context, req *ListKeyInfo) (*KvKeys, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
-		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/kv/%s/keys?page=%d&pageSize=%d", env.Env.ScrapelessApiHost, req.NamespaceId, req.Page, req.Size),
-		Headers: map[string]string{
-			env.Env.HTTPHeader: env.Env.Token,
-		},
+		Method:  http.MethodGet,
+		Url:     fmt.Sprintf("%s/api/v1/kv/%s/keys?page=%d&pageSize=%d", c.BaseUrl, req.NamespaceId, req.Page, req.Size),
+		Headers: map[string]string{},
 	})
 	log.Infof("list keys body :%s\n", body)
 	if err != nil {
@@ -233,11 +218,9 @@ func (c *Client) ListKeys(ctx context.Context, req *ListKeyInfo) (*KvKeys, error
 
 func (c *Client) GetValue(ctx context.Context, namespaceId string, key string) (string, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
-		Method: http.MethodGet,
-		Url:    fmt.Sprintf("%s/api/v1/kv/%s/%s", env.Env.ScrapelessApiHost, namespaceId, key),
-		Headers: map[string]string{
-			env.Env.HTTPHeader: env.Env.Token,
-		},
+		Method:  http.MethodGet,
+		Url:     fmt.Sprintf("%s/api/v1/kv/%s/%s", c.BaseUrl, namespaceId, key),
+		Headers: map[string]string{},
 	})
 	log.Infof("get value body :%s\n", body)
 	if err != nil {
@@ -259,11 +242,9 @@ func (c *Client) GetValue(ctx context.Context, namespaceId string, key string) (
 
 func (c *Client) DelValue(ctx context.Context, namespaceId string, key string) (bool, error) {
 	body, err := request2.Request(ctx, request2.ReqInfo{
-		Method: http.MethodDelete,
-		Url:    fmt.Sprintf("%s/api/v1/kv/%s/%s", env.Env.ScrapelessApiHost, namespaceId, key),
-		Headers: map[string]string{
-			env.Env.HTTPHeader: env.Env.Token,
-		},
+		Method:  http.MethodDelete,
+		Url:     fmt.Sprintf("%s/api/v1/kv/%s/%s", c.BaseUrl, namespaceId, key),
+		Headers: map[string]string{},
 	})
 	log.Infof("del value body :%s\n", body)
 	if err != nil {
@@ -289,12 +270,10 @@ func (c *Client) BulkSetValue(ctx context.Context, req *BulkSet) (int64, error) 
 		return 0, err
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
-		Method: http.MethodPost,
-		Url:    fmt.Sprintf("%s/api/v1/kv/%s/bulk", env.Env.ScrapelessApiHost, req.NamespaceId),
-		Body:   fmt.Sprintf(`{"Items":%s}`, reqBody),
-		Headers: map[string]string{
-			env.Env.HTTPHeader: env.Env.Token,
-		},
+		Method:  http.MethodPost,
+		Url:     fmt.Sprintf("%s/api/v1/kv/%s/bulk", c.BaseUrl, req.NamespaceId),
+		Body:    fmt.Sprintf(`{"Items":%s}`, reqBody),
+		Headers: map[string]string{},
 	})
 	log.Infof("bulk set value body :%s\n", body)
 	if err != nil {
@@ -319,12 +298,10 @@ func (c *Client) BulkDelValue(ctx context.Context, namespaceId string, keys []st
 		return false, err
 	}
 	body, err := request2.Request(ctx, request2.ReqInfo{
-		Method: http.MethodDelete,
-		Url:    fmt.Sprintf("%s/api/v1/kv/%s/bulk", env.Env.ScrapelessApiHost, namespaceId),
-		Body:   fmt.Sprintf(`{"keys":%s}`, reqBody),
-		Headers: map[string]string{
-			env.Env.HTTPHeader: env.Env.Token,
-		},
+		Method:  http.MethodDelete,
+		Url:     fmt.Sprintf("%s/api/v1/kv/%s/bulk", c.BaseUrl, namespaceId),
+		Body:    fmt.Sprintf(`{"keys":%s}`, reqBody),
+		Headers: map[string]string{},
 	})
 	log.Infof("bulk del value body :%s\n", body)
 	if err != nil {

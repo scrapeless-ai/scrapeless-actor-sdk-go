@@ -17,10 +17,10 @@ import (
 type BHttp struct {
 }
 
-func NewBHttp() Browser {
+func NewBHttp(baseUrl string) Browser {
 	log.Info("browser http init")
 	if http.Default() == nil {
-		http.Init()
+		http.Init(baseUrl)
 	}
 	return &BHttp{}
 }
@@ -53,7 +53,7 @@ func (bh *BHttp) Create(ctx context.Context, req Actor) (*CreateResp, error) {
 }
 
 func (bh *BHttp) CreateOnce(ctx context.Context, req ActorOnce) (*CreateResp, error) {
-	u, err := url.Parse(env.Env.ScrapingBrowserApiHost)
+	u, err := url.Parse(env.Env.ScrapelessBrowserUrl)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "parse url error: %s", err.Error())
 	}

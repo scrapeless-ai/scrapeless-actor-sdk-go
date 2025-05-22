@@ -4,7 +4,7 @@ type CreateTaskRequest struct {
 	ApiKey  string         `json:"apiKey,omitempty"`
 	Actor   string         `json:"actor,omitempty"`
 	Input   map[string]any `json:"input,omitempty"`
-	Proxy   *ProxyParams   `json:"proxy,omitempty"`
+	Proxy   *ProxyParams   `json:"proxies,omitempty"`
 	Timeout int64          `json:"timeout,omitempty"`
 }
 
