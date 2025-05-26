@@ -1,7 +1,6 @@
 package storage
 
 import (
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage/dataset"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage/kv"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage/object"
@@ -84,7 +83,7 @@ func (sh *StorageHttp) GetDataset(datasetId ...string) dataset.Dataset {
 	sh.lock.Lock()
 	defer sh.lock.Unlock()
 	if _, ok := sh.datasets[datasetId[0]]; !ok {
-		sh.datasets[datasetId[0]] = dataset.NewDSHttp(env.Env.ScrapelessStorageUrl, datasetId[0])
+		sh.datasets[datasetId[0]] = dataset.NewDSHttp(datasetId[0])
 	}
 	return sh.datasets[datasetId[0]]
 }
@@ -93,10 +92,10 @@ const Default = "default"
 
 // NewStorageHttp returns a storage instance with default key.
 func NewStorageHttp() Storage {
-	defaultKv := kv.NewKVHttp(env.Env.ScrapelessStorageUrl)
-	defaultObj := object.NewObjHttp(env.Env.ScrapelessStorageUrl)
-	defaultQueue := queue.NewQueueHttp(env.Env.ScrapelessStorageUrl)
-	defaultDataset := dataset.NewDSHttp(env.Env.ScrapelessStorageUrl)
+	defaultKv := kv.NewKVHttp()
+	defaultObj := object.NewObjHttp()
+	defaultQueue := queue.NewQueueHttp()
+	defaultDataset := dataset.NewDSHttp()
 	return &StorageHttp{
 		map[string]kv.KV{
 			Default: defaultKv,

@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	rh "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/router/http"
 	"io"
 
@@ -9,10 +10,10 @@ import (
 
 type Internal struct{}
 
-func New(baseUrl string) Router {
+func New() Router {
 	log.Info("Internal Router init")
 	if rh.Default() == nil {
-		rh.Init(baseUrl)
+		rh.Init(env.Env.ScrapelessBaseApiUrl)
 	}
 	return Internal{}
 }

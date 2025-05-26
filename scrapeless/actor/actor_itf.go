@@ -7,22 +7,28 @@ import (
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/browser"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/captcha"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/deepserp"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/httpserver"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxies"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/router"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/scraping"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/universal"
 	"github.com/spf13/viper"
 	"reflect"
 )
 
 type Actor struct {
-	Browser  browser.Browser
-	Proxy    proxies.Proxy
-	Captcha  captcha.Captcha
-	Storage  storage.Storage
-	Server   httpserver.Server
-	Router   router.Router
-	CloseFun []func() error
+	Browser   browser.Browser
+	Proxy     proxies.Proxy
+	Captcha   captcha.Captcha
+	Storage   storage.Storage
+	Server    httpserver.Server
+	Router    router.Router
+	DeepSerp  deepserp.Deepserp
+	Scraping  scraping.Scraping
+	Universal universal.Universal
+	CloseFun  []func() error
 }
 
 // New creates a new Actor with some options.
@@ -31,7 +37,7 @@ func New(opts ...Option) *Actor {
 	for _, opt := range opts {
 		opt.Apply(actor)
 	}
-	actor.Router = router.New(env.Env.ScrapelessBaseApiUrl)
+	actor.Router = router.New()
 	return actor
 }
 

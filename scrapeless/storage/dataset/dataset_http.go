@@ -12,10 +12,10 @@ type DSHttp struct {
 	datasetId string
 }
 
-func NewDSHttp(baseUrl string, datasetId ...string) Dataset {
+func NewDSHttp(datasetId ...string) Dataset {
 	log.Info("dataset http init")
 	if storage_http.Default() == nil {
-		storage_http.Init(baseUrl)
+		storage_http.Init(env.Env.ScrapelessStorageUrl)
 	}
 	dh := &DSHttp{datasetId: env.GetActorEnv().DatasetId}
 	if len(datasetId) > 0 {

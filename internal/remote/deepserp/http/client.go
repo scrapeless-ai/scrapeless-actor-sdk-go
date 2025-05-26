@@ -11,9 +11,9 @@ var (
 )
 
 func Init(baseUrl ...string) {
-	log.Info("browser init")
+	log.Info("deepserp init")
 	var err error
-	u := env.Env.ScrapelessBrowserUrl
+	u := env.Env.ScrapelessBaseApiUrl
 	if len(baseUrl) > 0 {
 		u = baseUrl[0]
 	}

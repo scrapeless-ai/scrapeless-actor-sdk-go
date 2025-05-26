@@ -13,10 +13,10 @@ type ObjHttp struct {
 	bucketId string
 }
 
-func NewObjHttp(baseUrl string, bucketId ...string) Object {
+func NewObjHttp(bucketId ...string) Object {
 	log.Info("object http init")
 	if storage_http.Default() == nil {
-		storage_http.Init(baseUrl)
+		storage_http.Init(env.Env.ScrapelessStorageUrl)
 	}
 	oh := &ObjHttp{bucketId: env.GetActorEnv().BucketId}
 	if len(bucketId) > 0 {

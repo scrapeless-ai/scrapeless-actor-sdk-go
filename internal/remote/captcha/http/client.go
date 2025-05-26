@@ -13,7 +13,7 @@ var (
 func Init(baseUrl ...string) {
 	log.Info("captcha init")
 	var err error
-	u := env.Env.ScrapelessStorageUrl
+	u := env.Env.ScrapelessBaseApiUrl
 	if len(baseUrl) > 0 {
 		u = baseUrl[0]
 	}

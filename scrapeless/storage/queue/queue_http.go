@@ -14,10 +14,10 @@ type QueueHttp struct {
 }
 
 // NewQueueHttp new queue http
-func NewQueueHttp(baseUrl string, queueId ...string) Queue {
+func NewQueueHttp(queueId ...string) Queue {
 	log.Info("queue http init")
 	if storage_http.Default() == nil {
-		storage_http.Init(baseUrl)
+		storage_http.Init(env.Env.ScrapelessStorageUrl)
 	}
 	q := &QueueHttp{queueId: env.GetActorEnv().QueueId}
 	if len(queueId) > 0 {

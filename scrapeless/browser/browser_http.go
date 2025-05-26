@@ -17,10 +17,10 @@ import (
 type BHttp struct {
 }
 
-func NewBHttp(baseUrl string) Browser {
+func NewBHttp() Browser {
 	log.Info("browser http init")
 	if http.Default() == nil {
-		http.Init(baseUrl)
+		http.Init(env.Env.ScrapelessBrowserUrl)
 	}
 	return &BHttp{}
 }

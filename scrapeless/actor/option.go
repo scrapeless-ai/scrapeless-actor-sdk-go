@@ -1,12 +1,14 @@
 package actor
 
 import (
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/browser"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/captcha"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/deepserp"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/httpserver"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxies"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/scraping"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/universal"
 )
 
 const (
@@ -27,7 +29,7 @@ func (o *BrowserOption) Apply(a *Actor) {
 		a.Browser = browser.NewBGrpc()
 		a.CloseFun = append(a.CloseFun, a.Browser.Close)
 	} else {
-		a.Browser = browser.NewBHttp(env.Env.ScrapelessBrowserUrl)
+		a.Browser = browser.NewBHttp()
 		a.CloseFun = append(a.CloseFun, a.Browser.Close)
 	}
 }
@@ -73,7 +75,7 @@ func (o *CaptchaOption) Apply(a *Actor) {
 	if o.tp == typeGrpc {
 		a.CloseFun = append(a.CloseFun, a.Captcha.Close)
 	} else {
-		a.Captcha = captcha.NewCaHttp(env.Env.ScrapelessBaseApiUrl)
+		a.Captcha = captcha.NewCaHttp()
 		a.CloseFun = append(a.CloseFun, a.Captcha.Close)
 	}
 }
@@ -94,7 +96,7 @@ type StorageOption struct {
 
 func (o *StorageOption) Apply(a *Actor) {
 	if o.tp == typeGrpc {
-		a.CloseFun = append(a.CloseFun, a.Captcha.Close)
+		a.CloseFun = append(a.CloseFun, a.Storage.Close)
 	} else {
 		a.Storage = storage.NewStorageHttp()
 		a.CloseFun = append(a.CloseFun, a.Storage.Close)
@@ -125,4 +127,73 @@ func WithServer(mode ...httpserver.ServerMode) Option {
 		mode = append(mode, httpserver.ReleaseMode)
 	}
 	return &ServerOption{mode: mode[0]}
+}
+
+type DeepSerpOption struct {
+	tp string
+}
+
+func (d *DeepSerpOption) Apply(a *Actor) {
+	if d.tp == typeGrpc {
+		a.CloseFun = append(a.CloseFun, a.DeepSerp.Close)
+	} else {
+		a.DeepSerp = deepserp.New()
+		a.CloseFun = append(a.CloseFun, a.DeepSerp.Close)
+	}
+}
+
+// WithDeepSerp choose DeepSerp type.
+func WithDeepSerp(tp ...string) Option {
+	if len(tp) == 0 {
+		tp = append(tp, typeHttp)
+	}
+	return &DeepSerpOption{
+		tp: tp[0],
+	}
+}
+
+type ScrapingOption struct {
+	tp string
+}
+
+func (s *ScrapingOption) Apply(a *Actor) {
+	if s.tp == typeGrpc {
+		a.CloseFun = append(a.CloseFun, a.Scraping.Close)
+	} else {
+		a.Scraping = scraping.New()
+		a.CloseFun = append(a.CloseFun, a.Scraping.Close)
+	}
+}
+
+// WithScraping choose scraping type.
+func WithScraping(tp ...string) Option {
+	if len(tp) == 0 {
+		tp = append(tp, typeHttp)
+	}
+	return &ScrapingOption{
+		tp: tp[0],
+	}
+}
+
+type UniversalOption struct {
+	tp string
+}
+
+func (s *UniversalOption) Apply(a *Actor) {
+	if s.tp == typeGrpc {
+		a.CloseFun = append(a.CloseFun, a.Universal.Close)
+	} else {
+		a.Universal = universal.New()
+		a.CloseFun = append(a.CloseFun, a.Universal.Close)
+	}
+}
+
+// WithUniversal choose universal type.
+func WithUniversal(tp ...string) Option {
+	if len(tp) == 0 {
+		tp = append(tp, typeHttp)
+	}
+	return &UniversalOption{
+		tp: tp[0],
+	}
 }

@@ -2,7 +2,6 @@ package http
 
 import (
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -11,9 +10,8 @@ var (
 )
 
 func Init(baseUrl ...string) {
-	log.Info("browser init")
 	var err error
-	u := env.Env.ScrapelessBrowserUrl
+	u := env.Env.ScrapelessBaseApiUrl
 	if len(baseUrl) > 0 {
 		u = baseUrl[0]
 	}
