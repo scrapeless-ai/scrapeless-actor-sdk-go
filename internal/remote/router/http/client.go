@@ -11,7 +11,7 @@ var (
 
 func Init(baseUrl ...string) {
 	var err error
-	u := env.Env.ScrapelessActorUrl
+	u := env.Env.ScrapelessActorActorApiHttpUrl
 	if len(baseUrl) > 0 {
 		u = baseUrl[0]
 	}
