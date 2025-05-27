@@ -13,7 +13,7 @@ type Internal struct{}
 func New() Router {
 	log.Info("Internal Router init")
 	if rh.Default() == nil {
-		rh.Init(env.Env.ScrapelessBaseApiUrl)
+		rh.Init(env.Env.ScrapelessActorUrl)
 	}
 	return Internal{}
 }
