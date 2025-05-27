@@ -21,7 +21,7 @@ func (c *Client) Request(keyword string, method string, path string, body io.Rea
 	for k, v := range headers {
 		request.Header.Set(k, v)
 	}
-	request.Header.Set(env.Env.HTTPHeader, env.GetActorEnv().ActorId)
+	request.Header.Set(env.Env.HTTPHeader, env.GetActorEnv().ApiKey)
 	do, err := c.client.Do(request)
 	if err != nil {
 		log.Errorf("do request error :%v", err)

@@ -288,7 +288,7 @@ func (c *Client) BulkSetValue(ctx context.Context, req *BulkSet) (int64, error) 
 	if resp.Err {
 		return 0, fmt.Errorf("bulk set value err:%s", resp.Msg)
 	}
-	successfulKeyCount := gjson.Parse(body).Get("data.successful_key_count").Int()
+	successfulKeyCount := gjson.Parse(body).Get("data.successfulKeyCount").Int()
 	return successfulKeyCount, nil
 }
 

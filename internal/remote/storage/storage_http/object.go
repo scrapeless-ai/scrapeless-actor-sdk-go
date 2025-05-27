@@ -240,7 +240,7 @@ func (c *Client) PutObject(ctx context.Context, req *PutObjectRequest) (string, 
 	if respInfo.Err {
 		return "", fmt.Errorf("put object err:%s", respInfo.Msg)
 	}
-	objectId := gjson.Parse(string(all)).Get("data.object_id").String()
+	objectId := gjson.Parse(string(all)).Get("data.objectId").String()
 	if objectId == "" {
 		return "", fmt.Errorf("put object err:%s", respInfo.Msg)
 	}
