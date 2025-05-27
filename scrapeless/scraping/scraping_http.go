@@ -7,6 +7,8 @@ import (
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/scraping"
 	sh "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/scraping/http"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
+	"github.com/tidwall/gjson"
+	"time"
 )
 
 type ScrapingHttp struct{}
@@ -43,4 +45,22 @@ func (s ScrapingHttp) GetTaskResult(ctx context.Context, taskId string) ([]byte,
 		return nil, code.Format(err)
 	}
 	return result, nil
+}
+
+func (s ScrapingHttp) Scrape(ctx context.Context, req ScrapingTaskRequest) ([]byte, error) {
+	task, err := s.CreateTask(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	taskId := gjson.Parse(string(task)).Get("taskId").String()
+	if taskId != "" {
+		for {
+			result, err := s.GetTaskResult(ctx, taskId)
+			if err == nil {
+				return result, nil
+			}
+			time.Sleep(time.Millisecond * 200)
+		}
+	}
+	return task, nil
 }

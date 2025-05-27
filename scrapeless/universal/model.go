@@ -6,7 +6,7 @@ var (
 	ScraperUniversal Actor = "unlocker.webunlocker"
 )
 
-type ScrapingTaskRequest struct {
+type UniversalTaskRequest struct {
 
 	// Input parameters for the scraper
 	Input map[string]any `json:"input"`

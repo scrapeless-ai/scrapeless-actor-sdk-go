@@ -7,6 +7,8 @@ import (
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/deepserp"
 	dh "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/deepserp/http"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
+	"github.com/tidwall/gjson"
+	"time"
 )
 
 type DeepserpHttp struct{}
@@ -43,4 +45,22 @@ func (s DeepserpHttp) GetTaskResult(ctx context.Context, taskId string) ([]byte,
 		return nil, code.Format(err)
 	}
 	return result, nil
+}
+
+func (s DeepserpHttp) Scrape(ctx context.Context, req DeepserpTaskRequest) ([]byte, error) {
+	task, err := s.CreateTask(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	taskId := gjson.Parse(string(task)).Get("taskId").String()
+	if taskId != "" {
+		for {
+			result, err := s.GetTaskResult(ctx, taskId)
+			if err == nil {
+				return result, nil
+			}
+			time.Sleep(time.Millisecond * 200)
+		}
+	}
+	return task, nil
 }

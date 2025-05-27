@@ -73,7 +73,7 @@ type CreateMsgRequest struct {
 }
 
 type CreateMsgResponse struct {
-	MsgId string `json:"msg_id"`
+	MsgId string `json:"msgId"`
 }
 
 type GetMsgRequest struct {

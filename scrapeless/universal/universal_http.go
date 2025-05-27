@@ -6,6 +6,8 @@ import (
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/universal"
 	sh "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/universal/http"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
+	"github.com/tidwall/gjson"
+	"time"
 )
 
 type UniversalHttp struct{}
@@ -18,7 +20,7 @@ func New() Universal {
 	return UniversalHttp{}
 }
 
-func (us UniversalHttp) CreateTask(ctx context.Context, req ScrapingTaskRequest) ([]byte, error) {
+func (us UniversalHttp) CreateTask(ctx context.Context, req UniversalTaskRequest) ([]byte, error) {
 	response, err := sh.Default().CreateTask(ctx, universal.UniversalTaskRequest{
 		Actor: string(ScraperUniversal),
 		Input: req.Input,
@@ -42,4 +44,22 @@ func (us UniversalHttp) GetTaskResult(ctx context.Context, taskId string) ([]byt
 		return nil, err
 	}
 	return result, nil
+}
+
+func (us UniversalHttp) Scrape(ctx context.Context, req UniversalTaskRequest) ([]byte, error) {
+	task, err := us.CreateTask(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	taskId := gjson.Parse(string(task)).Get("taskId").String()
+	if taskId != "" {
+		for {
+			result, err := us.GetTaskResult(ctx, taskId)
+			if err == nil {
+				return result, nil
+			}
+			time.Sleep(time.Millisecond * 200)
+		}
+	}
+	return task, nil
 }

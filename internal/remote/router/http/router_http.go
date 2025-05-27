@@ -32,7 +32,7 @@ func (c *Client) Request(keyword string, method string, path string, body io.Rea
 		log.Errorf("read body error :%v", err)
 		return nil, err
 	}
-	log.Info("request body :%s", string(b))
+	log.Infof("request body :%s", string(b))
 	defer do.Body.Close()
 	return b, nil
 }
