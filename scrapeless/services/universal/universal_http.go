@@ -2,11 +2,13 @@ package universal
 
 import (
 	"context"
+	"errors"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/universal"
 	sh "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/universal/http"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"github.com/tidwall/gjson"
+	"strings"
 	"time"
 )
 
@@ -21,10 +23,16 @@ func New() Universal {
 }
 
 func (us UniversalHttp) CreateTask(ctx context.Context, req UniversalTaskRequest) ([]byte, error) {
+	if req.ProxyCountry == "" {
+		req.ProxyCountry = env.Env.ProxyCountry
+	}
+	if req.Actor == "" {
+		return nil, errors.New("actor do not be empty")
+	}
 	response, err := sh.Default().CreateTask(ctx, universal.UniversalTaskRequest{
-		Actor: string(ScraperUniversal),
+		Actor: string(req.Actor),
 		Input: req.Input,
-		Proxy: universal.TaskProxy{Country: req.ProxyCountry},
+		Proxy: universal.TaskProxy{Country: strings.ToUpper(req.ProxyCountry)},
 	})
 	if err != nil {
 		log.Errorf("scraping create err:%v", err)

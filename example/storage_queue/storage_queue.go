@@ -2,16 +2,16 @@ package main
 
 import (
 	"context"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/actor"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage/queue"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/services/storage/queue"
 )
 
 func main() {
-	sl := actor.New(actor.WithStorage())
+	client := scrapeless.New(scrapeless.WithStorage())
 
 	// push a message to queue
-	msgId, err := sl.Storage.GetQueue().Push(context.Background(), queue.PushQueue{
+	msgId, err := client.Storage.GetQueue().Push(context.Background(), queue.PushQueue{
 		Name:     "test-cy",
 		Payload:  []byte("aaaa"),
 		Retry:    0,
@@ -25,7 +25,7 @@ func main() {
 	log.Info(msgId)
 
 	// pull a message from queue
-	pullResp, err := sl.Storage.GetQueue().Pull(context.Background(), 100)
+	pullResp, err := client.Storage.GetQueue().Pull(context.Background(), 100)
 	if err != nil {
 		log.Error(err.Error())
 		return
@@ -33,7 +33,7 @@ func main() {
 	log.Infof("%v", pullResp)
 	for _, v := range pullResp {
 		// ack message
-		err = sl.Storage.GetQueue().Ack(context.Background(), v.QueueID)
+		err = client.Storage.GetQueue().Ack(context.Background(), v.QueueID)
 		if err != nil {
 			log.Error(err.Error())
 		}

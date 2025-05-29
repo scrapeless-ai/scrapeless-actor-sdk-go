@@ -7,7 +7,8 @@ import (
 
 func TestUniversalHttp_CreateTask(t *testing.T) {
 	universal := New()
-	task, err := universal.CreateTask(context.Background(), ScrapingTaskRequest{
+	task, err := universal.CreateTask(context.Background(), UniversalTaskRequest{
+		Actor: ScraperUniversal,
 		Input: map[string]any{
 			"url":       "https://www.google.com/",
 			"js_render": true,

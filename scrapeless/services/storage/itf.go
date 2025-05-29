@@ -1,10 +1,10 @@
 package storage
 
 import (
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage/dataset"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage/kv"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage/object"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/storage/queue"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/services/storage/dataset"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/services/storage/kv"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/services/storage/object"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/services/storage/queue"
 	"sync"
 )
 
@@ -15,6 +15,11 @@ type Storage interface {
 	GetDataset(datasetId ...string) dataset.Dataset
 	Close() error
 }
+
+var (
+	once           = &sync.Once{}
+	defaultStorage Storage
+)
 
 type StorageHttp struct {
 	kvs      map[string]kv.KV
@@ -92,25 +97,29 @@ const Default = "default"
 
 // NewStorageHttp returns a storage instance with default key.
 func NewStorageHttp() Storage {
-	defaultKv := kv.NewKVHttp()
-	defaultObj := object.NewObjHttp()
-	defaultQueue := queue.NewQueueHttp()
-	defaultDataset := dataset.NewDSHttp()
-	return &StorageHttp{
-		map[string]kv.KV{
-			Default: defaultKv,
-		},
-		map[string]object.Object{
-			Default: defaultObj,
-		},
-		map[string]queue.Queue{
-			Default: defaultQueue,
-		},
-		map[string]dataset.Dataset{
-			Default: defaultDataset,
-		},
-		sync.Mutex{},
-	}
+	once.Do(func() {
+		defaultKv := kv.NewKVHttp()
+		defaultObj := object.NewObjHttp()
+		defaultQueue := queue.NewQueueHttp()
+		defaultDataset := dataset.NewDSHttp()
+		sh := &StorageHttp{
+			map[string]kv.KV{
+				Default: defaultKv,
+			},
+			map[string]object.Object{
+				Default: defaultObj,
+			},
+			map[string]queue.Queue{
+				Default: defaultQueue,
+			},
+			map[string]dataset.Dataset{
+				Default: defaultDataset,
+			},
+			sync.Mutex{},
+		}
+		defaultStorage = sh
+	})
+	return defaultStorage
 }
 
 func (sh *StorageHttp) Close() error {

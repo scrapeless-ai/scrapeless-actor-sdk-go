@@ -2,15 +2,15 @@ package main
 
 import (
 	"context"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/actor"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 )
 
 func main() {
-	sl := actor.New(actor.WithStorage())
-	defer sl.Close()
+	client := scrapeless.New(scrapeless.WithStorage())
+	defer client.Close()
 
-	success, err := sl.Storage.GetDataset().AddItems(context.Background(), []map[string]any{
+	success, err := client.Storage.GetDataset().AddItems(context.Background(), []map[string]any{
 		{
 			"name": "John",
 			"age":  20,
@@ -25,7 +25,7 @@ func main() {
 		return
 	}
 	if success {
-		items, err := sl.Storage.GetDataset().GetItems(context.Background(), 1, 10, false)
+		items, err := client.Storage.GetDataset().GetItems(context.Background(), 1, 10, false)
 		if err != nil {
 			log.Error(err.Error())
 			return

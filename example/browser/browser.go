@@ -2,16 +2,16 @@ package main
 
 import (
 	"context"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/actor"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/browser"
+	scrapeless "github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/services/browser"
 )
 
 func main() {
-	sl := actor.New(actor.WithBrowser())
-	defer sl.Close()
+	client := scrapeless.New(scrapeless.WithBrowser())
+	defer client.Close()
 
-	browserInfo, err := sl.Browser.Create(context.Background(), browser.Actor{
+	browserInfo, err := client.Browser.Create(context.Background(), browser.Actor{
 		Input:        browser.Input{SessionTtl: "180"},
 		ProxyCountry: "US",
 	})

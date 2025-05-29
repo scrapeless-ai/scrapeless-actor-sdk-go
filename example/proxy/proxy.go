@@ -2,18 +2,18 @@ package main
 
 import (
 	"context"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/actor"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
-	proxy2 "github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/proxies"
+	proxy2 "github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/services/proxies"
 	"io"
 	"net/http"
 	"net/url"
 )
 
 func main() {
-	sl := actor.New(actor.WithProxy())
-	defer sl.Close()
-	proxy, err := sl.Proxy.Proxy(context.TODO(), proxy2.ProxyActor{
+	client := scrapeless.New(scrapeless.WithProxy())
+	defer client.Close()
+	proxy, err := client.Proxy.Proxy(context.TODO(), proxy2.ProxyActor{
 		Country:         "US",
 		SessionDuration: 180,
 		SessionId:       "YOUR SESSION ID",
@@ -32,8 +32,8 @@ func main() {
 		panic(err)
 	}
 	request.Header.Set("HEADER KEY", "HEADER VALUE")
-	client := &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(parse)}}
-	resp, err := client.Do(request)
+	clientHttp := &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(parse)}}
+	resp, err := clientHttp.Do(request)
 	defer resp.Body.Close()
 	if err != nil {
 		panic(err)

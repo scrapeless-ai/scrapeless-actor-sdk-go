@@ -2,24 +2,24 @@ package main
 
 import (
 	"context"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/actor"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 )
 
 func main() {
-	// new scrapeless with storage.
-	scrapeless := actor.New(actor.WithStorage())
-	defer scrapeless.Close()
+	// new client with storage.
+	client := scrapeless.New(scrapeless.WithStorage())
+	defer client.Close()
 
 	// Set value use default namespace
-	ok, err := scrapeless.Storage.GetKv().SetValue(context.Background(), "key", "nice boy", 20)
+	ok, err := client.Storage.GetKv().SetValue(context.Background(), "key", "nice boy", 20)
 	if err != nil {
 		log.Error(err.Error())
 	}
 	log.Infof("ok:%v", ok)
 
 	// Get value use default namespace
-	value, err := scrapeless.Storage.GetKv().GetValue(context.Background(), "key")
+	value, err := client.Storage.GetKv().GetValue(context.Background(), "key")
 	if err != nil {
 		log.Error(err.Error())
 	}

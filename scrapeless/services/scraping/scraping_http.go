@@ -8,6 +8,7 @@ import (
 	sh "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/scraping/http"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"github.com/tidwall/gjson"
+	"strings"
 	"time"
 )
 
@@ -22,10 +23,13 @@ func New() Scraping {
 }
 
 func (s ScrapingHttp) CreateTask(ctx context.Context, req ScrapingTaskRequest) ([]byte, error) {
+	if req.ProxyCountry == "" {
+		req.ProxyCountry = env.Env.ProxyCountry
+	}
 	response, err := sh.Default().CreateTask(ctx, scraping.ScrapingTaskRequest{
 		Actor: string(req.Actor),
 		Input: req.Input,
-		Proxy: scraping.TaskProxy{Country: req.ProxyCountry},
+		Proxy: scraping.TaskProxy{Country: strings.ToUpper(req.ProxyCountry)},
 	})
 	if err != nil {
 		log.Errorf("scraping create err:%v", err)

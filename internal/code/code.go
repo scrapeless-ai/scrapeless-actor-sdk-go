@@ -71,7 +71,7 @@ func ErrParamInvalidMsg(msg string) error {
 
 func Format(err error) error {
 	if err == nil {
-		return errors.New("no error messages")
+		return nil
 	}
 
 	s, ok := status.FromError(err)

@@ -2,6 +2,8 @@ package request
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"io"
@@ -72,4 +74,46 @@ func Request(ctx context.Context, reqInfo ReqInfo) (string, error) {
 	}
 	defer do.Body.Close()
 	return string(all), nil
+}
+
+// RequestData return request data
+func RequestData(ctx context.Context, reqInfo ReqInfo) ([]byte, error) {
+	request, err := http.NewRequestWithContext(ctx, reqInfo.Method, reqInfo.Url, strings.NewReader(reqInfo.Body))
+	if err != nil {
+		log.Error(err.Error())
+		return nil, err
+	}
+	for k, v := range reqInfo.Headers {
+		request.Header.Set(k, v)
+	}
+	request.Header.Set(env.Env.HTTPHeader, env.GetActorEnv().ApiKey)
+	if reqInfo.Body != "" {
+		if reqInfo.Body[0] == '[' || reqInfo.Body[0] == '{' {
+			request.Header.Set("Content-Type", "application/json")
+		} else {
+			request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		}
+	}
+	do, err := c.Do(request)
+	if err != nil {
+		log.Error(err.Error())
+		return nil, err
+	}
+	all, err := io.ReadAll(do.Body)
+	if err != nil {
+		log.Error(err.Error())
+		return nil, err
+	}
+	defer do.Body.Close()
+	log.Infof("request data :%s", string(all))
+	var resp RespInfo
+	err = json.Unmarshal(all, &resp)
+	if err != nil {
+		log.Errorf("unmarshal resp error :%v", err)
+		return nil, err
+	}
+	if resp.Err {
+		return nil, fmt.Errorf("resp err:%s", resp.Msg)
+	}
+	return json.Marshal(resp.Data)
 }

@@ -3,11 +3,12 @@ package universal
 type Actor string
 
 var (
-	ScraperUniversal Actor = "unlocker.webunlocker"
+	ScraperUniversal          Actor = "unlocker.webunlocker"
+	ScraperAkamaiwebUniversal Actor = "unlocker.akamaiweb"
 )
 
 type UniversalTaskRequest struct {
-
+	Actor Actor `json:"actor"`
 	// Input parameters for the scraper
 	Input map[string]any `json:"input"`
 

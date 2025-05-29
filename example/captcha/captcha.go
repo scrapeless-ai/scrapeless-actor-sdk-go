@@ -2,16 +2,16 @@ package main
 
 import (
 	"context"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/actor"
-	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/captcha"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/services/captcha"
 	"time"
 )
 
 func main() {
-	scrapeless := actor.New(actor.WithCaptcha())
+	client := scrapeless.New(scrapeless.WithCaptcha())
 	//Create captcha task
-	captchaTaskId, err := scrapeless.Captcha.Create(context.TODO(), &captcha.CaptchaSolverReq{
+	captchaTaskId, err := client.Captcha.Create(context.TODO(), &captcha.CaptchaSolverReq{
 		Actor: "captcha.recaptcha",
 		Input: captcha.Input{
 			Version: captcha.RecaptchaVersionV2,
@@ -28,7 +28,7 @@ func main() {
 	log.Infof("%v", captchaTaskId)
 	// Wait for captcha task to be solved
 	time.Sleep(time.Second * 20)
-	captchaResult, err := scrapeless.Captcha.ResultGet(context.TODO(), &captcha.CaptchaSolverReq{
+	captchaResult, err := client.Captcha.ResultGet(context.TODO(), &captcha.CaptchaSolverReq{
 		TaskId: captchaTaskId,
 	})
 	if err != nil {

@@ -8,6 +8,7 @@ import (
 	dh "github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/deepserp/http"
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 	"github.com/tidwall/gjson"
+	"strings"
 	"time"
 )
 
@@ -22,10 +23,13 @@ func New() Deepserp {
 }
 
 func (s DeepserpHttp) CreateTask(ctx context.Context, req DeepserpTaskRequest) ([]byte, error) {
+	if req.ProxyCountry == "" {
+		req.ProxyCountry = env.Env.ProxyCountry
+	}
 	response, err := dh.Default().CreateTask(ctx, deepserp.DeepserpTaskRequest{
 		Actor: string(req.Actor),
 		Input: req.Input,
-		Proxy: deepserp.TaskProxy{Country: req.ProxyCountry},
+		Proxy: deepserp.TaskProxy{Country: strings.ToUpper(req.ProxyCountry)},
 	})
 	if err != nil {
 		log.Errorf("deepserp create err:%v", err)
