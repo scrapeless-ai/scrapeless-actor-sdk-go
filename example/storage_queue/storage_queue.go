@@ -12,11 +12,8 @@ func main() {
 
 	// push a message to queue
 	msgId, err := client.Storage.GetQueue().Push(context.Background(), queue.PushQueue{
-		Name:     "test-cy",
-		Payload:  []byte("aaaa"),
-		Retry:    0,
-		Timeout:  0,
-		Deadline: 0,
+		Name:    "test-cy",
+		Payload: []byte("aaaa"),
 	})
 	if err != nil {
 		log.Error("failed to push to queue")

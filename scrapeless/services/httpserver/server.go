@@ -3,6 +3,7 @@ package httpserver
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/env"
 	"io"
 	"net/http"
 )
@@ -77,6 +78,9 @@ func (s *Server) AddHandleGet(path string, f func(input []byte) (Response, error
 	})
 }
 
-func (s *Server) Start(addr string) error {
-	return http.ListenAndServe(addr, s.handler)
+func (s *Server) Start(addr ...string) error {
+	if len(addr) == 0 {
+		addr = append(addr, env.Env.Actor.HttpPort)
+	}
+	return http.ListenAndServe(addr[0], s.handler)
 }
