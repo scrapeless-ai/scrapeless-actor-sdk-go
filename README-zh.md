@@ -14,8 +14,7 @@
 - [📖 使用示例](#-使用示例)
 - [🔧 API 参考](#-api-参考)
 - [📚 示例](#-示例)
-- [🧪 测试](#-测试)
-- [🛠️ 贡献&开发指南](#️-贡献开发指南)
+- [🛠️ 贡献&开发指南](#-贡献开发指南)
 - [📄 许可证](#-许可证)
 - [📞 支持](#-支持)
 - [🏢 关于 Scrapeless](#-关于-scrapeless)
@@ -116,9 +115,9 @@ import (
 )
 
 func main() {
-	actor := scrapeless.New(scrapeless.WithScraping())
+	client := scrapeless.New(scrapeless.WithScraping())
 
-	scrape, err := actor.Scraping.Scrape(context.Background(), scraping.ScrapingTaskRequest{
+	scrape, err := client.Scraping.Scrape(context.Background(), scraping.ScrapingTaskRequest{
 		Actor: "scraper.google.search",
 		Input: map[string]interface{}{
 			"q": "nike site:www.nike.com",
@@ -147,9 +146,9 @@ import (
 )
 
 func main() {
-	actor := scrapeless.New(scrapeless.WithDeepSerp())
+	client := scrapeless.New(scrapeless.WithDeepSerp())
 
-	scrape, err := actor.DeepSerp.Scrape(context.Background(), deepserp.DeepserpTaskRequest{
+	scrape, err := client.DeepSerp.Scrape(context.Background(), deepserp.DeepserpTaskRequest{
 		Actor: "scraper.google.search",
 		Input: map[string]interface{}{
 			"q": "nike site:www.nike.com",
@@ -238,16 +237,6 @@ SDK 提供以下服务：
 - [路由调用](./example/router/router.go)
 - [http服务](./example/httpserver/httpserver.go)
 
-## 🧪 测试
-
-运行测试套件：
-
-```bash
-go test ./...
-```
-
-SDK 包含所有服务和工具的全面测试。
-
 ## 🛠️ 贡献&开发指南
 
 欢迎所有形式的贡献！关于如何提交 issue、PR、代码规范、本地开发等详细内容，请参见[贡献与开发指南](./CONTRIBUTING-zh.md)。
@@ -255,13 +244,11 @@ SDK 包含所有服务和工具的全面测试。
 **快速开始：**
 
 ```bash
-git clone https://github.com/your-repo-path/scrapeless-actor-sdk-go.git
+git clone https://github.com/scrapeless-ai/scrapeless-actor-sdk-go.git
 cd scrapeless-actor-sdk-go
 go mod tidy
-go test ./...
+go run ./example/actor/actor.go
 ```
-
-请将 `github.com/your-repo-path` 替换为实际的仓库路径。
 
 更多项目结构、最佳实践等内容请参见 [CONTRIBUTING-zh.md](./CONTRIBUTING-zh.md)。
 

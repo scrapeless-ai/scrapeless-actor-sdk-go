@@ -5,7 +5,7 @@ import (
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/internal/remote/actor"
 )
 
-type Actor interface {
+type ActorService interface {
 	Run(ctx context.Context, req actor.IRunActorData) (string, error)
 	GetRunInfo(ctx context.Context, runId string) (*actor.RunInfo, error)
 	AbortRun(ctx context.Context, actorId, runId string) (bool, error)

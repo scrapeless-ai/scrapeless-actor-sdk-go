@@ -23,7 +23,7 @@ type Client struct {
 	DeepSerp  deepserp.Deepserp
 	Scraping  scraping.Scraping
 	Universal universal.Universal
-	Actor     actor.Actor
+	Actor     actor.ActorService
 	CloseFun  []func() error
 }
 

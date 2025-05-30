@@ -9,7 +9,7 @@ import (
 	"github.com/scrapeless-ai/scrapeless-actor-sdk-go/scrapeless/log"
 )
 
-func NewActorHttp() Actor {
+func NewActorHttp() ActorService {
 	log.Info("Actor http init")
 	if actor_http.Default() == nil {
 		actor_http.Init(env.Env.ScrapelessActorUrl)
