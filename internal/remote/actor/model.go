@@ -24,14 +24,13 @@ type RunInfo struct {
 	RunOptions  ResourceOptions `json:"runOptions"`
 	SchedulerID string          `json:"schedulerId"`
 	StartedAt   string          `json:"startedAt"`
-	Stats       ResourceOptions `json:"stats"`
 	Status      string          `json:"status"`
 	Storage     StorageInfo     `json:"storage"`
 	TeamID      string          `json:"teamId"`
 }
 
 type ResourceOptions struct {
-	CPU          int    `json:"CPU"`
+	CPU          int    `json:"cpu"`
 	Memory       int    `json:"memory"`
 	ServerMode   int    `json:"serverMode"`
 	SurvivalTime int    `json:"survivalTime"`
@@ -63,7 +62,6 @@ type Payload struct {
 	RunOptions  ResourceOptions `json:"runOptions"`
 	SchedulerID string          `json:"schedulerId"`
 	StartedAt   string          `json:"startedAt"`
-	Stats       ResourceOptions `json:"stats"`
 	Status      string          `json:"status"`
 	Storage     StorageInfo     `json:"storage"`
 	TeamID      string          `json:"teamId"`
